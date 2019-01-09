@@ -273,6 +273,7 @@
     <string name="request_for_blood">Request for blood</string>
     <string name="map_option">Map Option</string>
     <string name="icon_explanation">Icon Explanation</string>
+    <string name="go_there">Go There</string>
 
 
 </resources>

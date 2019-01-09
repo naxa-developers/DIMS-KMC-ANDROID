@@ -36,7 +36,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             android:background="@android:color/transparent"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/multipolygon"
@@ -47,7 +47,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
             android:background="@android:color/transparent"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/multiLineString"
@@ -58,7 +58,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             android:background="@android:color/transparent"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
 
         <Button

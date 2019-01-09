@@ -242,7 +242,7 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
     @Override
     public boolean onInfoWindowClick(@NonNull Marker marker) {
         String snippest = marker.getSnippet();
-        EventBus.getDefault().post(new MarkerClickEvent.MarkerItemClick(snippest));
+        EventBus.getDefault().post(new MarkerClickEvent.MarkerItemClick(snippest, marker.getPosition()));
 
         Log.d(TAG, "onMarkerClick: "+snippest);
         return false;
