@@ -119,7 +119,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
     ArrayList<LatLng> points = null;
     StringBuilder geoJsonString;
 
-    String imageName;
+//    String imageName;
 
 
     String markerImageId = "MARKER_IMAGE_ID_";
@@ -144,7 +144,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
     GeoJsonLayer geoJsonLayer ;
     List<String> filenameList ;
 
-    boolean isChecked;
+//    boolean isChecked;
 
     public DrawGeoJsonOnMap(OpenSpaceMapActivity context, MapboxMap mapboxMap, MapView mapView) {
         this.context = context;
@@ -157,8 +157,8 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
 
     public void readAndDrawGeoSonFileOnMap(String geoJsonFileName, Boolean isChecked, String imageName) {
 
-        this.imageName = imageName;
-        this.isChecked = isChecked;
+//        this.imageName = imageName;
+//        this.isChecked = isChecked;
         filename = geoJsonFileName;
 
         try {
@@ -206,6 +206,10 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                             geoJsonString = sb;
 
                             inputStream.close();
+
+                            drawGeoJsonOnMap(geoJsonString, isChecked, imageName);
+
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -219,12 +223,11 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                     @Override
                     public void onComplete() {
 
-                        drawGeoJsonOnMap(geoJsonString, isChecked);
                     }
                 });
     }
 
-    private void drawGeoJsonOnMap(StringBuilder geoJsonString, Boolean isChecked) {
+    private void drawGeoJsonOnMap(StringBuilder geoJsonString, Boolean isChecked, String imageName) {
         GeoJsonSource source = new GeoJsonSource(geojsonSourceId, geoJsonString.toString());
         String type = "";
             try {
@@ -246,7 +249,15 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
 //                    plotMarkerOnMap(geoJsonString, context);
 
                     if(geoJsonString != null) {
-                        drawMarkerOnMap.AddMarkerOnMap(filename, geoJsonString, imageName);
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Do something after 100ms
+                                drawMarkerOnMap.AddMarkerOnMap(filename, geoJsonString, imageName);
+
+                            }
+                        }, 100);
                     }
 
 
@@ -292,7 +303,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
     StringBuilder stringBuilderGeoJson;
 
 //    int featureCollectionCount = 0;
-    private void plotMarkerOnMap(StringBuilder geoJsonString, OpenSpaceMapActivity activity) {
+    private void plotMarkerOnMap(StringBuilder geoJsonString, OpenSpaceMapActivity activity, String imageName , boolean isChecked) {
         this.activityRef = new WeakReference<>(activity);
 
 //        featureCollectionCount++;
@@ -348,7 +359,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                             singleFeature.addBooleanProperty(PROPERTY_SELECTED, false);
                         }
 
-                        setUpData(featureCollection[0]);
+                        setUpData(featureCollection[0] , imageName, isChecked );
 
                         new GenerateViewIconTask(activity).execute(featureCollection);
 
@@ -597,14 +608,14 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
      *
      * @param collection the FeatureCollection to set equal to the globally-declared FeatureCollection
      */
-    public void setUpData(final FeatureCollection collection) {
+    public void setUpData(final FeatureCollection collection, String imageName , boolean isChecked) {
         if (mapboxMap == null) {
             return;
         }
         featureCollection = collection;
         setupSource();
-        setUpImage();
-        setUpMarkerLayer();
+        setUpImage(imageName);
+        setUpMarkerLayer(isChecked);
         setUpInfoWindowLayer();
     }
 
@@ -627,7 +638,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
     /**
      * Adds the marker image to the map for use as a SymbolLayer icon
      */
-    private void setUpImage() {
+    private void setUpImage(String imageName) {
 
         Bitmap icon = BitmapFactory.decodeResource(
                 context.getResources(), LoadImageUtils.getImageFromDrawable(context, imageName));
@@ -644,7 +655,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
     /**
      * Setup a layer with maki icons, eg. west coast city.
      */
-    private void setUpMarkerLayer() {
+    private void setUpMarkerLayer(boolean isChecked) {
 //        mapboxMap.removeLayer(MARKER_LAYER_ID);
         if(isChecked) {
             if(mapboxMap.getLayer(MARKER_LAYER_ID) == null) {

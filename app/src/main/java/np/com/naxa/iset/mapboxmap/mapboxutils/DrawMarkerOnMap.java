@@ -54,6 +54,7 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
 
     public void AddMarkerOnMap(String geoJsonFileName ,StringBuilder stringBuilder, String imageName){
 
+
         Log.d(TAG, "AddMarkerOnMap: "+stringBuilder.toString());
 
         final int[] count = {0};
@@ -128,19 +129,12 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
                         }
 
 
-
-                        MarkerOptions marker = new MarkerOptions().position(location)
-                                .title(title).snippet(snippest).icon(icon);
-
-                        // Add the custom icon marker to the map
-//                        Marker marker = mapboxMap.addMarker(new MarkerOptions()
-//                                .position(new LatLng(location))
-//                                .title(title)
-//                                .snippet(snippest)
-//                                .icon(icon));
-//                        marker.setTitle(geoJsonFileName+count[0]);
-
-                        mapboxMap.addMarker(marker);
+//                         Add the custom icon marker to the map
+                        Marker marker = mapboxMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(location))
+                                .title(title)
+                                .snippet(snippest)
+                                .icon(icon));
 
                         mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                             @Override
