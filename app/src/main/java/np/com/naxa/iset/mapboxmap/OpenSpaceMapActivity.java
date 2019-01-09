@@ -16,8 +16,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +28,6 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -61,9 +58,10 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.detailspage.MarkerDetailedDisplayAdapter;
+import np.com.naxa.iset.detailspage.MarkerDetailsKeyValue;
 import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
-import np.com.naxa.iset.home.model.MapDataCategory;
+import np.com.naxa.iset.event.MarkerClickEvent;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawRouteOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
@@ -71,9 +69,9 @@ import np.com.naxa.iset.mapboxmap.mapboxutils.MapboxBaseStyleUtils;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryListAdapter;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryModel;
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.QueryBuildWithSplitter;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.DataServer;
-import np.com.naxa.iset.utils.sectionmultiitemUtils.MultiItemSectionModel;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
 
 import static np.com.naxa.iset.utils.SharedPreferenceUtils.KEY_MUNICIPAL_BOARDER;
@@ -148,8 +146,8 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         sharedPreferenceUtils = new SharedPreferenceUtils(OpenSpaceMapActivity.this);
         setupToolBar();
-//        setupBottomSlidingPanel();
-//        setupListRecycler();
+        setupBottomSlidingPanel();
+        setupListMarkerDetailsRecycler();
         mData = DataServer.getMapDatacategoryList(OpenSpaceMapActivity.this);
 
 
@@ -200,6 +198,13 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
     }
 
+    private void setupListMarkerDetailsRecycler() {
+        MarkerDetailedDisplayAdapter markerDetailedDisplayAdapter = new MarkerDetailedDisplayAdapter(R.layout.marker_detailed_info_display_layout, null);
+        recyclerViewMapCategory.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMapCategory.setAdapter(markerDetailedDisplayAdapter);
+
+    }
+
     private void setupListRecycler() {
         MapCategoryListAdapter mapCategoryListAdapter = new MapCategoryListAdapter(R.layout.openspace_map_category_list_item_row_layout, null);
         recyclerViewMapCategory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -222,6 +227,8 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
 
     }
+
+
 
     private Dialog setupMapOptionsDialog() {
         // launch new intent instead of loading fragment
@@ -363,13 +370,6 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         this.mapboxMap = mapboxMap;
         setMapCameraPosition();
-
-//        mapboxMap.setStyleUrl("mapbox://styles/samirdangal/cjqc6swc681go2rpjwnpdtm7y");
-//        mapView.setStyleUrl("mapbox://styles/samirdangal/cjqc6swc681go2rpjwnpdtm7y");
-//        mapView.setStyleUrl("https://api.mapbox.com/styles/v1/samirdangal/cjqc6swc681go2rpjwnpdtm7y.html?fresh=true&title=true&access_token=pk.eyJ1Ijoic2FtaXJkYW5nYWwiLCJhIjoiY2pwZHNjaXNpMDJrNjNxbWFlaDZobnZ1MyJ9.ASQwLRwoQeTp3PkVqHh2hw#16.5/48.766736/2.329968/0");
-//        mapboxMap.setStyleUrl("https://api.mapbox.com/styles/v1/samirdangal/cjqc6swc681go2rpjwnpdtm7y.html?fresh=true&title=true&access_token=pk.eyJ1Ijoic2FtaXJkYW5nYWwiLCJhIjoiY2pwZHNjaXNpMDJrNjNxbWFlaDZobnZ1MyJ9.ASQwLRwoQeTp3PkVqHh2hw#16.5/48.766736/2.329968/0");
-
-
         mapboxMap.addOnMapClickListener(this);
 
 
@@ -637,6 +637,12 @@ List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCh
                 if(mapDataLayerListCheckedEventList.get(i).getMultiItemSectionModel().getData_key() . equals(itemClick.getMultiItemSectionModel().getData_key())){
                     alreadyExist = true;
                 }
+
+                if(alreadyExist){
+                    if(!itemClick.getChecked()) {
+                        mapDataLayerListCheckedEventList.remove(itemClick);
+                    }
+                }
             }
             if(!alreadyExist){
                 if(itemClick.getChecked()) {
@@ -644,13 +650,34 @@ List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCh
                 }
             }
 
-            if(alreadyExist){
-                if(!itemClick.getChecked()) {
-                    mapDataLayerListCheckedEventList.remove(itemClick);
-                }
-            }
+
         }
         Toast.makeText(this, "add to your circle button clicked "+name, Toast.LENGTH_SHORT).show();
+
+    }
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMarkerItemClick(MarkerClickEvent.MarkerItemClick itemClick) {
+        List<MarkerDetailsKeyValue> markerDetailsKeyValueListCommn = new ArrayList<MarkerDetailsKeyValue>();
+
+        String markerPropertiesJson = itemClick.getMarkerProperties();
+        QueryBuildWithSplitter queryBuildWithSplitter = new QueryBuildWithSplitter();
+        markerDetailsKeyValueListCommn = queryBuildWithSplitter.splitedKeyValueList(
+                queryBuildWithSplitter.splitedStringList(markerPropertiesJson));
+
+        ((MarkerDetailedDisplayAdapter) recyclerViewMapCategory.getAdapter()).replaceData(markerDetailsKeyValueListCommn);
+
+//        if (mLayout.getAnchorPoint() == 1.0f) {
+            mLayout.setAnchorPoint(0.55f);
+            mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+//        } else {
+//            mLayout.setAnchorPoint(1.0f);
+//            mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+//        }
+//
+//        Toast.makeText(this, "add to your circle button clicked "+markerPropertiesJson, Toast.LENGTH_SHORT).show();
 
     }
 

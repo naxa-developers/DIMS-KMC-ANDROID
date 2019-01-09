@@ -263,7 +263,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
 
                 }else {
                     if(geoJsonString != null) {
-                        drawMarkerOnMap.RemoveMarkerOnMap(filename, geoJsonString, imageName);
+//                        drawMarkerOnMap.RemoveMarkerOnMap(filename, geoJsonString, imageName);
                     }
                     mapboxMap.removeLayer(geojsonLayerId);
                     mapboxMap.removeLayer(MARKER_LAYER_ID);

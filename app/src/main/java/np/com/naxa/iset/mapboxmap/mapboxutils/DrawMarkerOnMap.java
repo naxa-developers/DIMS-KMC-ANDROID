@@ -1,5 +1,6 @@
 package np.com.naxa.iset.mapboxmap.mapboxutils;
 
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,10 +13,13 @@ import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +33,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.event.EmergenctContactCallEvent;
+import np.com.naxa.iset.event.MarkerClickEvent;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 
@@ -56,18 +62,7 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
 
 
         Log.d(TAG, "AddMarkerOnMap: "+stringBuilder.toString());
-
-        final int[] count = {0};
-
-//      Icon icon = IconFactory.getInstance(context).fromResource(R.drawable.ic_marker_hospital);
-
         Icon icon ;
-
-//        if(LoadImageUtils.getImageIconFroDrawable(context, imageName) == null){
-//            icon = IconFactory.getInstance(context).fromResource(R.drawable.mapbox_marker_icon_default);
-//        }else {
-//            icon = LoadImageUtils.getImageIconFroDrawable(context, imageName);
-//        }
 
         if((LoadImageUtils.getImageBitmapFromDrawable(context, imageName)) == null){
             icon = IconFactory.getInstance(context).fromResource(R.drawable.mapbox_marker_icon_default);
@@ -106,18 +101,13 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
                     @Override
                     public void onNext(Feature feature) {
 
-                        count[0]++;
-
                         String title = feature.getStringProperty("name");
-
-//                        String snippest = feature.getProperty("properties").getAsString();
                         String snippest = feature.toString();
                         Log.d(TAG, "onNext: JSON Object "+snippest);
                         Log.d(TAG, "onNext: JSON Object Geometry "+feature.geometry().toJson());
 
 
                         LatLng location = new LatLng(0.0, 0.0);
-
                         try {
                             JSONObject jsonObject = new JSONObject(feature.geometry().toJson());
                             Log.d(TAG, "onNext: JSON Object Co-ordinates "+jsonObject.getJSONArray("coordinates").getString(0));
@@ -141,14 +131,10 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
                             public boolean onMarkerClick(@NonNull Marker marker) {
                                 Toast.makeText(context, "Marker tapped: " + marker.getTitle(), Toast.LENGTH_LONG).show();
                                 onInfoWindowClick(marker);
+                                animateCameraPosition(marker.getPosition());
                                 return true;
                             }
                         });
-
-
-//                        marker.setMapboxMap(mapboxMap);
-
-
                     }
 
                     @Override
@@ -256,7 +242,25 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
     @Override
     public boolean onInfoWindowClick(@NonNull Marker marker) {
         String snippest = marker.getSnippet();
+        EventBus.getDefault().post(new MarkerClickEvent.MarkerItemClick(snippest));
+
         Log.d(TAG, "onMarkerClick: "+snippest);
         return false;
+    }
+
+
+    public void animateCameraPosition(LatLng location) {
+        CameraPosition position = new CameraPosition.Builder()
+                .target(new LatLng(location)) // Sets the new camera position
+//                .zoom(14) // Sets the zoom
+                .bearing(0) // Rotate the camera
+                .tilt(10) // Set the camera tilt
+                .build(); // Creates a CameraPosition from the builder
+
+        Log.d("MapBox", "animateCameraPosition: ");
+
+
+        mapboxMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(position), 1000);
     }
 }

@@ -43,18 +43,21 @@
             app:floatingSearch_leftActionMode="showSearch"
             app:floatingSearch_searchHint="Search by Category"
             android:layout_margin="@dimen/activity_horizontal_margin"
+            android:visibility="gone"
 
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select by Category"
+            android:text="Detailed Information"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:textColor="@color/slate_black"
-            android:textSize="@dimen/material_text_body1"/>
+            android:textSize="@dimen/material_text_body1"
+            android:padding="@dimen/default_padding"
+            />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewMapCategory"
@@ -62,7 +65,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
         </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
