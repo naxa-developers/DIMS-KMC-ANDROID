@@ -1,0 +1,179 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorWindowBackground</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="CustomFloatingSearchViewTheme" parent="AppTheme">
+        <item name="editTextStyle">@style/searchViewEditTextStyle</item>
+        <item name="android:divider">#c9c9c9</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="colorControlNormal">#696969</item>
+    </style>
+
+    <style name="searchViewEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:imeOptions">actionSearch</item>
+    </style>
+
+
+    <style name="MyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:displayOptions">homeAsUp</item>
+    </style>
+
+
+
+    <style name="RiseUpDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor"> @color/black </item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+
+    </style>
+
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_slide_up</item>
+        <item name="android:windowExitAnimation">@anim/dialog_slide_bottom</item>
+    </style>
+
+
+    <!--<style name="NavigationMapRoute">-->
+        <!--&lt;!&ndash; Colors &ndash;&gt;-->
+        <!--<item name="routeColor">@color/mapboxBlue</item>-->
+        <!--<item name="routeModerateCongestionColor">@color/mapboxYellow</item>-->
+        <!--<item name="routeSevereCongestionColor">@color/mapboxPink</item>-->
+        <!--<item name="routeShieldColor">@color/mapboxWhite</item>-->
+        <!--&lt;!&ndash; Scales &ndash;&gt;-->
+        <!--<item name="routeScale">1.0</item>-->
+    <!--</style>-->
+
+    <!--<style name="NavigationView" parent="Theme.AppCompat.NoActionBar">-->
+        <!--<item name="navigationViewPrimary">@color/mapboxWhite</item>-->
+        <!--<item name="navigationViewSecondary">@color/mapboxBlue</item>-->
+        <!--<item name="navigationViewAccent">@color/mapboxPink</item>-->
+    <!--</style>-->
+
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--sudur style resources-->
+    <!-- ToolBar -->
+    <!--<style name="ActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
+        <!--<item name="titleTextColor">@color/accent</item>-->
+        <!--<item name="colorControlNormal">@color/black</item>-->
+        <!--<item name="android:textColorSecondary">@color/accent</item>-->
+    <!--</style>-->
+
+    <!--spinner -->
+    <style name="SpinnerDropDownItem">
+        <item name="android:textColor">@color/nliveo_black</item>
+        <item name="android:background">@color/nliveo_white</item>
+        <item name="android:selectableItemBackground">@color/accent</item>
+        <item name="android:listSelector">@color/accent</item>
+        <item name="android:dropDownSelector">@color/accent</item>
+    </style>
+
+    <!--Suggestion_Help-->
+    <style name="AppTheme.Suggestion.Help" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/nliveo_black</item>
+        <item name="android:textColorHint">@color/accent</item>
+        <item name="android:background">@color/nliveo_white</item>
+    </style>
+
+
+    <style name="Widget.CardContent" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+
+    <!--add your office theme-->
+    <style name="AppTheme.AddYourOffice" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowBackground">@color/white</item>
+
+        <item name="colorControlNormal">@color/accent</item>
+        <item name="colorControlActivated">@color/accent</item>
+        <item name="colorControlHighlight">@color/accent</item>
+        <item name="android:textColorHint">@color/accent</item>
+        <item name="colorButtonNormal">@color/primary_darker</item>
+    </style>
+
+    <!-- collapsed ToolBar -->
+    <style name="CollapsedActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/accent</item>
+        <item name="titleTextColor">@color/accent</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <!-- end of sudur style resource-->
+
+
+    <!-- custom style quiz radio button -->
+    <style name="radionbuttonMaChupBasdina" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/rb_drawable_ma_chup_basdina</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+
+    <style name="BloodCustomToggleButtonStyle">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:background">@drawable/blood_group_toggle_custom_drawable</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_margin">12dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/blood_group_button_text_toggle</item>
+        <item name="android:textOff"></item>
+        <item name="android:textOn"></item>
+    </style>
+
+
+
+
+<!--Navigation-->
+    <style name="NavigationMapRoute">
+        <!-- Colors -->
+        <item name="routeColor">@color/mapboxBlue</item>
+        <item name="routeModerateCongestionColor">@color/mapboxYellow</item>
+        <item name="routeSevereCongestionColor">@color/mapboxPink</item>
+        <item name="routeShieldColor">@color/lightPurple</item>
+        <!-- Scales -->
+        <item name="routeScale">1.0</item>
+    </style>
+
+    <style name="NavigationView" parent="Theme.AppCompat.NoActionBar">
+        <item name="navigationViewPrimary">@color/lightPurple</item>
+        <item name="navigationViewSecondary">@color/mapboxBlue</item>
+        <item name="navigationViewAccent">@color/mapboxPink</item>
+    </style>
+
+
+</resources>

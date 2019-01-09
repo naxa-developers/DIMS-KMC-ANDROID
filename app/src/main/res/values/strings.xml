@@ -1,0 +1,278 @@
+<resources>
+
+    <string name="app_name">Kathmandu Metropolitan DIMS</string>
+    <string name="search_hint">Search Places</string>
+
+    <string name="speech_prompt">Say Something</string>
+    <string name="speech_not_supported">speech to text doesn\'t seems supported</string>
+    <string name="menu.clear">clear</string>
+    <string name="menu.tts">text to speech</string>
+    <string name="menu.toggle.icon">Icon Visible</string>
+    <string name="menu.icon.type">Icon Type</string>
+    <string name="rationale_gps">Access to device gps is required for this feature.</string>
+    <string name="access_token" translatable="false">pk.eyJ1Ijoibml5byIsImEiOiJjamt1emc1YW4wa2NsM3dvZGE5OTJvaTB1In0.0-mzyJsaFU-dEeBHE42jhw</string>
+    <string name="browse_data_by_categories">Browse data by sub categories</string>
+    <string name="dataset_overview">%1$s dataset found</string>
+    <string name="failed_to_load_geojson">Failed to load data on map.</string>
+    <string name="title_activity_home_new_new">HomeActivityNewNew</string>
+    <string name="browse_data_category">Browse data category</string>
+    <string name="select_ward">Select Ward</string>
+    <string name="incident_type">Incident Type</string>
+    <string name="filter">Filter</string>
+
+
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_error_title">Unexpected Error Occured.</string>
+    <string name="dialog_error_title_sync_failed">Data Sync Failed (Code: %1$s)</string>
+
+    <string name="dialog_action_hide">Hide</string>
+    <string name="specify_other">Specify Other</string>
+    <string name="ask_for_help">Ask For Help</string>
+    <string name="emergency_contacts">Emergency contacts</string>
+    <string name="hospital">Hospital</string>
+    <string name="open_space">Open Spaces</string>
+    <string name="educational_institute">Educational Institution</string>
+    <string name="financial_institute">Financial Institution</string>
+    <string name="public_toilets">Public Toilets</string>
+    <string name="industries">Industries</string>
+    <string name="transportation_utilities">Transportation Utilities</string>
+    <string name="water_bodies">Water Bodies</string>
+    <string name="earthquake">Earthquake</string>
+    <string name="land_slides">Land Slides</string>
+    <string name="fire_hazards">Fire Hazards</string>
+    <string name="flood">Flood</string>
+    <string name="fault_lines">Fault Lines</string>
+    <string name="road_accidents">Road Accidents</string>
+    <string name="epidemic">Epidemic</string>
+    <string name="animal_attacks">Animal Attacks</string>
+    <string name="municipality_boundary_name">Changunarayan Municipality Boundary</string>
+    <string name="municipality_ward_name">Changunarayan Municipality Wards</string>
+    <string name="road_network">Road Network</string>
+    <string name="river_network">River Network</string>
+    <string name="chairpersons_of_local_units">Chairpersons of Local Units</string>
+    <string name="chief_of_local_level_offices">Chief of Local Level Offices</string>
+    <string name="elected_representatives">Elected Representatives</string>
+    <string name="municipal_executive_members">Municipal Executive Members</string>
+    <string name="municipality_level_disaster_management">Municipality Level Disaster Management Committee</string>
+    <string name="nntds_executive_commitee">NNTDS\'s Executive Committee</string>
+    <string name="full_name">Full Name</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="photo">Photo</string>
+    <string name="location">Location</string>
+    <string name="capture">Capture</string>
+    <string name="record">Record</string>
+    <string name="message">Message</string>
+    <string name="submit">Submit</string>
+    <string name="ward_boundary">Ward Boundary</string>
+    <string name="municipal_boundary">Municipal Boundary</string>
+    <string name="ward_office">Ward Office</string>
+    <string name="nearest_open_space">Nearest open space</string>
+    <string name="resources">Resources</string>
+    <string name="hazard_and_vulnerability">Hazard and Vulnerability</string>
+    <string name="base_data">Base data</string>
+    <string name="community_centres">Community Centres</string>
+    <string name="religious_and_heritage">Religious and Heritage</string>
+    <string name="atm">ATM</string>
+    <string name="security_force">Security Force</string>
+    <string name="gas_depo">Gas Depo</string>
+    <string name="urban_utilities">Urban Utilities</string>
+    <string name="pharmacies_and_health_clinics">Pharmacies And Health Clinics</string>
+    <string name="government_agencies">Government Agencies</string>
+
+    <string-array name="array_ward">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+
+    <string-array name="array_ward_no_locale">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+
+    <string-array name="array_incident_type">
+        <item>Flood</item>
+        <item>Fire</item>
+        <item>Landslide</item>
+        <item>Lightning</item>
+        <item>Waste</item>
+        <item>Road</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="array_incident_type_no_locale">
+        <item>Flood</item>
+        <item>Fire</item>
+        <item>Landslide</item>
+        <item>Lightning</item>
+        <item>Waste</item>
+        <item>Road</item>
+        <item>Others</item>
+    </string-array>
+
+    <string name="messageActivity">Messages</string>
+    <string name="search">Search...</string>
+    <string name="view_messages">View Messages</string>
+
+
+    <!-- sudur string resource -->
+    <string name="app_homepage_name">गृह पृष्ठ</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
+    cheese caerphilly bavarian bergkase cheese and biscuits mascarpone. Cheeseburger swiss bavarian
+    bergkase cream cheese fromage frais cheesy feet port-salut airedale.</string>
+    <string name="form_sent_np">फारम पठाइयो</string>
+    <string name="form_not_sent_np">Unexpected error occured. </string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="about_us">About Us</string>
+    <string name="expand">पुरा पढ्नुहोस</string>
+    <string name="collapse">बन्द गर्नुहोस </string>
+
+    <!--expandable list view items-->
+    <string name="mission">सुदूरपश्चिम क्षेत्रमा रहेका विकासका अवसर र सम्भावनाहरुको पहिचान गरि उपलब्ध श्रोत साधनहरुको सन्तुलित रुपमा अधिकतम परिचालनबाट यस क्षेत्रलाई समग्र राष्ट्रिय विकास प्रवाहको समान स्तरमा पुर्याई सामाजिक, आर्थिक एवं मानविय विकासको दृष्टिले आत्मनिर्भर, गतिशिल तथा विकासोन्मुख क्षेत्रको रुपमा स्थापित गर्ने ।</string>
+    <string name="vision">क्षेत्रमा विद्यमान गरिबी, पछौटेपन र विकासका बाधा अवरोधहरुलाई हटाउँदै प्राप्त अवसर र संभावनाहरुको महत्तम (Optimum) उपयोगद्वारा २०२२ सम्ममा बिकासको राष्ट्रिय स्तर मा पुर्याई २०३० सम्ममा “सुन्दर सुदूरपश्चिमलाई समृद्ध सुदूरपश्चिम” बनाउने । </string>
+    <string name="objective">यस आयोगको गठनको उद्देश्य निम्नानुसार रहेको छ ।  </string>
+    <string name="objective1">&#8226; सुदूरपश्चिम क्षेत्रको सर्वाङ्गीण एवं दिगो विकासका लागि आवश्यक विकास नीति एवं योजनाहरु तर्जुमा गर्ने तथा सो को कार्यान्वयनमा प्रमुख भूमिका खेल्ने ।</string>
+    <string name="objective2">&#8226;  मुलुकको समग्र विकासको आवधिक योजना अनुरुप सुदूरपश्चिम क्षेत्रको विकास लक्ष्य र प्राथमिकता निर्धारण गरी यस क्षेत्रको समग्र विकासको सम्भावना र अवसरहरुको पहिचान गरि तदनुरुपको योजना तर्जूमा, कार्यान्वयन, अनुगमन, मूल्यांकन तथा आवश्यक समन्वय गर्ने ।</string>
+    <string name="main_works">आयोगको मुख्य मुख्य कामहरु </string>
+    <string name="main_works1">&#8226; अल्पकालिन, मध्यकलिन र दीर्धकालिन योजनाको तर्जुमा, अनुगमन र मूल्याङ्कन गर्ने ।  </string>
+    <string name="main_works2">&#8226; विकास योजनाको तर्जुमा, कार्यन्वयन, अनुगमन र मूल्याङ्कन गर्नको लागि उपयुक्त संरचना तथा संयन्त्रको निर्माण र विकास गर्ने । </string>
+    <string name="main_works3">&#8226; क्षेत्रको समग्र आर्थिक एवं सामाजिक विकसका लागि क्षेत्रगत निति तर्जुमा, अनुगमन तथा मूल्याङ्कन गर्ने ।</string>
+    <string name="main_works4">&#8226; क्षेत्रको आर्थिक, सामाजिक विकासका समग्र पक्षका बारेमा तथ्यांक संकलन, प्रशोधन, अध्ययन, अनुसन्धान गरी-गराई सम्प्रेसण गर्ने गराउने ।   </string>
+    <string name="main_works5">&#8226; क्षेत्रको समग्र विकासको लागि अवलम्बन गर्नुपर्ने नितिका सम्बन्धमा नेपाल सरकारलाई सुझाव दिनु ।  </string>
+    <string name="main_works6">&#8226; गरिबी निवारणको रणनिती तर्जुमा गरी निश्चित अवधी भित्र निरपेक्ष गरिबी अन्त्य गर्न कार्यक्रम सञ्चालन गराउन । </string>
+    <string name="main_works7">&#8226; विभिन्न विकास आयोजनाको कार्यन्वयन र प्रतिफलको समिक्षा गरी नेपाल सरकार समक्ष प्रतिवेदन पेश गर्ने ।  </string>
+    <string name="main_works8">&#8226; मुलुकको आवधिक योजना अनुरुप सुदूरपश्चिम क्षेत्रको वार्षिक विकास कार्यक्रम, लक्ष्य तथा प्राथमिकता निर्धारण गर्ने ।  </string>
+    <string name="main_works9">&#8226; नेपाल सरकारका विभिन्न निकायहरु संग समन्वय गरी वार्षिक विकास कार्यक्रमका लागि वजेट सिमा निर्धारण गर्ने । </string>
+    <string name="main_works10">&#8226; क्षेत्रगत मन्त्रालय, सचिवालय, विभाग तथा निकायहरुले तयार गरेका सुदूर पश्चिम क्षेत्रको योजनाको स्वीकृतिका लागि सहमति दिने र क्षेत्रगत नीति तर्जुमा गर्न सहयोग पुर्याई कार्यान्वयनका लागि सुझाव तथा निर्देशन दिन । </string>
+    <string name="main_works11">&#8226; स्वीकृत कार्यक्रम प्रभावकारी रुपमा कार्यान्वयन गर्न सम्बन्धित निकायलाई निर्देशन दिने ।</string>
+
+
+    <string name="earthquake_details_body">Shaking from the large earthquake that shuddered through Anchorage, Alaska last week was strong enough to turn smooth asphalt roads into broken, jagged depressions of rubble. But within just a few days, crews managed to repair the worst of the damage, unsnarling traffic in Alaska’s largest city.\nAnchorage has a population of nearly 300,000 people spread across more than 1,900 square miles — an area larger than the state of Rhode Island. That space is threaded by roads, asphalt lifelines of the population. When the magnitude 7.0 earthquake struck last week, some of the most visceral images showed roads that had broken apart. But within days, many of these same cracked highways had been smoothed back into ribbons of pavement by crews working around the clock. </string>
+
+    <string-array name="business_type">
+        <item>"होटल व्यवसाय"</item>
+        <item>"खुद्रा व्यापार"</item>
+        <item>"होलसेल पसल"</item>
+        <item>"औषधि व्यवसाय"</item>
+        <item>"स्वास्थ्य केन्द्र"</item>
+        <item>"शैक्षिक संस्था"</item>
+        <item>"परामर्श सेवा केन्द्र"</item>
+        <item>"निर्माण व्यवसाय कार्यालय"</item>
+        <item>"अन्य"</item>
+    </string-array>
+
+    <string-array name="district_name">
+        <item>"आछाम"</item>
+        <item>"कन्चनपुर"</item>
+        <item>"कैलाली"</item>
+        <item>"डडेल्धुरा"</item>
+        <item>"डोटी"</item>
+        <item>"दार्चुला"</item>
+        <item>"बझांग"</item>
+        <item>"बाजुरा"</item>
+        <item>"बैतडी"</item>
+    </string-array>
+
+    <string name="facebook_app_id">392524947816591</string>
+    <string name="fb_login_protocol_scheme">fb392524947816591</string>
+    <string name="searching_nearest_open_space">Searching Nearest Open Space</string>
+    <string name="fetching_file">Getting %1$s.\n\Geojson data %2$s of %3$s file(s)</string>
+    <string name="toll_free_number">Toll Free Number</string>
+    <string name="feel_free_to_call_us">Feel free to call us\nWe are always there to help you</string>
+    <string name="emergency_no">Emergency No</string>
+    <string name="title">Title</string>
+    <string name="play_quiz">play Quiz</string>
+    <string name="body">body</string>
+    <string name="select_specific_ward_for_more_specific_information">Select specific ward for more specific information</string>
+    <!-- end of sudur resource -->
+
+
+    <!--Iset Resources-->
+
+    <string-array name="ward_no">
+        <item>Select Ward number</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="hazard_type">
+        <item>Hazard Type</item>
+        <item>Flood</item>
+        <item>Landslide</item>
+        <item>Fire</item>
+        <item>Gas</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_category_and_start_playing_quiz">Choose category and start playing quiz</string>
+    <string name="quiz_category">Quiz category</string>
+
+
+    <!-- Navigation Drawer menu labels -->
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_ask_for_help">Ask for Help</string>
+    <string name="nav_report">Report</string>
+    <string name="nav_Notify_others">Notify Others</string>
+    <string name="nav_hazard_info">Hazard Info</string>
+    <string name="nav_play_quiz">Play Quiz</string>
+    <string name="nav_settings">settings</string>
+    <string name="nav_map">Map</string>
+    <string name="select_base_layer">Select Base Layer</string>
+    <string name="select_overlay_layer">Select Overlay Layer</string>
+    <string name="your_circle_is_empty_LBL">Your circle is Empty. Please add your nearest people to your circle and know their status in case of danger!!!</string>
+    <string name="add_people">Add people</string>
+    <string name="alert_settings">Alert Setting</string>
+    <string name="people_in_your_circle">People in your \'Circle\'</string>
+    <string name="enter_name_or_phone_no">Enter name or Phone no</string>
+    <string name="close">Close</string>
+    <string name="make_a_blood_request">Make a blood request</string>
+    <string name="choose_your_blood_type">Choose your blood type</string>
+    <string name="message_with_contact_information">Message with contact information</string>
+
+    <string-array name="choose_language">
+        <item>English</item>
+        <item>नेपाली</item>
+    </string-array>
+
+
+    <!--sliding panel Mapbox test-->
+    <string name="action_settings">Settings</string>
+    <string name="action_hide">Hide Panel</string>
+    <string name="action_show">Show Panel</string>
+    <string name="action_anchor_enable">Enable Anchor Point</string>
+    <string name="action_anchor_disable">Disable Anchor Point</string>
+    <string name="hello"><![CDATA[<b>The Awesome Sliding Up Panel</b><br/> Brought to you by<br/><a href="http://umanoapp.com">http://umanoapp.com</a>]]></string>
+    <string name="follow"><![CDATA[Follow us<br/>on <a href="http://twitter.com/umanoapp">Twitter</a>]]></string>
+    <string name="request_for_blood">Request for blood</string>
+    <string name="map_option">Map Option</string>
+    <string name="icon_explanation">Icon Explanation</string>
+
+
+</resources>

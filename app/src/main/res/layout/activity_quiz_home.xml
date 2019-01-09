@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".quiz.QuizHomeActivity"
+    android:background="@color/white">
+
+    <include layout="@layout/toolbar_purple"
+        android:id="@+id/toolbar">
+    </include>
+
+    <TextView
+        android:layout_below="@id/toolbar"
+        android:id="@+id/txtLBL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/choose_category_and_start_playing_quiz"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/txtLBL"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

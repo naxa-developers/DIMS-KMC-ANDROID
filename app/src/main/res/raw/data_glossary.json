@@ -1,0 +1,37 @@
+[
+  {
+    "category": "A",
+    "title": "Acceptable Risk",
+    "desc": "The level of potential losses that a society or community considers acceptable given existing social, economic, political, cultural, technical and environmental conditions."
+  },
+  {
+    "category": "A",
+    "title": "Adaptation",
+    "desc": "The adjustment in natural or human systems in response to actual or expected climatic stimuli or their effects, which moderates harm or exploits beneficial opportunities."
+  },
+  {
+    "category": "B",
+    "title": "Biological Hazard",
+    "desc": "Process or phenomenon of organic origin or conveyed by biological vectors, including exposure to pathogenic microorganisms, toxins and bioactive substances that may cause loss of life, injury, illness or other health impacts, property damage, loss of livelihood and services, social and economic disruption, or environmental damage."
+  },
+  {
+    "category": "B",
+    "title": "Building Code",
+    "desc": "A set of ordinances or regulations and associated standards intended to control aspects of the design, construction, materials, alteration and occupancy of structures that are necessary to ensure human safety and welfare, including resistance to collapse and damage."
+  },
+  {
+    "category": "C",
+    "title": "Capacity",
+    "desc": "The combination of all the strengths, attributes and resources available within a community, society or organization that can be used to achieve agreed goals."
+  },
+  {
+    "category": "C",
+    "title": "Capacity Development",
+    "desc": "The process by which people, organizations and society systematically stimulate and develop their capacities over time to achieve social and economic goals, including through improvement of knowledge, skills, systems, and institutions."
+  },
+  {
+    "category": "C",
+    "title": "Climate Change",
+    "desc": "The Inter-governmental Panel on Climate Change (IPCC) defines climate change as: \"a change in the state of the climate that can be identified (e.g., by using statistical tests) by changes in the mean and/or the variability of its properties, and that persists for an extended period, typically decades or longer. Climate change may be due to natural internal processes or external forcing, or to persistent anthropogenic changes in the composition of the atmosphere or in land use\".\nThe United Nations Framework Convention on Climate Change (UNFCCC) defines climate change as \"a change of climate which is attributed directly or indirectly to human activity that alters the composition of the global atmosphere and which is in addition to natural climate variability observed over comparable time periods\"."
+  }
+]

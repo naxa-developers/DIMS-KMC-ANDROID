@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bonuspack_bubble_background_color"/>
+
+            <corners android:bottomLeftRadius="15dp"
+                android:topLeftRadius="15dp"
+                android:bottomRightRadius="15dp"
+                android:topRightRadius="15dp" />
+
+            <stroke android:width="5px"
+                android:color="@color/secondaryTextColor" />
+        </shape>
+    </item>
+</selector>

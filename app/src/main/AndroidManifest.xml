@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="np.com.naxa.iset">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" />
+
+    <application
+        android:name=".home.ISET"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".activity.SplashActivity"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".firebase.VSOFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".utils.maputils.MyLocationService"
+            android:process=":my_service" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".TestFlowChart"
+            android:exported="true" />
+        <activity
+            android:name=".activity.ReportActivityOld"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.home.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".home.HomeActivity"
+            android:exported="true"
+            android:label="@string/title_activity_home_new_new"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".emergencyContacts.ExpandableUseActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.home.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ContactActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.OpenSpaceActivity"
+            android:exported="true" />
+        <activity
+            android:name=".gps.GeoPointActivity"
+            android:exported="true" />
+        <activity
+            android:name=".hospitalfilter.HospitalFilterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".detailspage.MarkerDetailsDisplayActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.MapActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.MapBoxActivity"
+            android:exported="true" />
+        <activity android:name=".firebase.MessageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.home.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".youtubeplayer.YoutubePlayerActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".youtubeplayer.YoutubeVideoListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".newhomepage.SectionGridHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.NotifyOthersActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".disasterinfo.HazardInfoActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".emergencynumbers.EmergencyNumbersActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.MyCircleProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.ReportActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".quiz.QuizTestActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".drr_dictionary.data_glossary.GlossaryListActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".drr_dictionary.data_glossary.DataGlossaryWordDetailsActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity
+            android:name=".disasterinfo.HazardInfoDetailsActivity"
+            android:exported="true" />
+        <activity android:name=".disasterinfo.HazardThingsToDoActivity" />
+        <activity
+            android:name=".profile.municipalityprofile.MunicipalityProfileActivity"
+            android:exported="true" />
+        <activity android:name=".profile.wardprofile.WardProfileActivity" />
+        <activity
+            android:name=".quiz.QuizHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".bloodrequest.BloodRequestActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mapboxmap.OpenSpaceMapActivity"
+            android:exported="true" />
+        <activity android:name=".TerminologiesActivity"></activity>
+    </application>
+
+</manifest>

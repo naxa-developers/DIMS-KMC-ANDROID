@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".disasterinfo.HazardInfoActivity"
+    android:background="@color/white">
+
+    <include layout="@layout/toolbar_purple"
+        android:id="@+id/toolbar">
+
+    </include>
+
+    <TextView
+        android:id="@+id/txtHazardLBL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Available Hazard List"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/floating_search_hazards"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/hazardListrecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/floating_search_hazards"
+        app:layout_constraintVertical_bias="1.0">
+    </android.support.v7.widget.RecyclerView>
+
+
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_hazards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:floatingSearch_actionMenuOverflowColor="@color/background"
+        app:floatingSearch_backgroundColor="@color/searchViewBackground"
+        app:floatingSearch_hintTextColor="@color/textColorSearchHint"
+        app:floatingSearch_leftActionColor="@color/textColorSearchHint"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_leftActionMode="showSearch"
+        app:floatingSearch_searchHint="Search hazards..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHazardLBL"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

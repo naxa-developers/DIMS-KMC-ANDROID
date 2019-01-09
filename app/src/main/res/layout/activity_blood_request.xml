@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".bloodrequest.BloodRequestActivity"
+    >
+
+    <include layout="@layout/toolbar_purple"
+        android:id="@+id/toolbar">
+    </include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@id/btnMakeBloodRequest"
+        android:layout_marginBottom="@dimen/spacing_xxxsmall">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/imgHeaderLBL"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@id/tvChooseBloodLBL"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_blood" />
+
+                    <TextView
+                        android:id="@+id/tvChooseBloodLBL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:text="@string/choose_your_blood_type"
+                        android:textColor="@color/slate_black"
+                        android:textSize="@dimen/material_text_subhead"
+                        android:layout_marginBottom="@dimen/spacing_xxxsmall"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bloodGroupLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:id="@+id/blood_A_positive"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="A+" />
+
+                    <ToggleButton
+                        android:id="@+id/blood_B_positive"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="B+" />
+
+                    <ToggleButton
+                        android:id="@+id/blood_O_positive"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="O+" />
+
+                    <ToggleButton
+                        android:id="@+id/blood_AB_positive"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="AB+" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:id="@+id/blood_A_negative"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="A-" />
+
+                    <ToggleButton
+                        android:id="@+id/blood_B_negative"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="B-" />
+
+                    <ToggleButton
+                        android:id="@+id/blood_O_negative"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="O-" />
+
+                    <ToggleButton
+                        android:id="@+id/blood_AB_negative"
+                        style="@style/BloodCustomToggleButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="AB-" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bloodHelpText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/activity_horizontal_margin"
+                    android:text="@string/message_with_contact_information"
+                    android:textColor="@color/slate_black"
+                    android:textSize="@dimen/material_text_subhead" />
+
+                <EditText
+                    android:id="@+id/tvMessageDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:gravity="top|left"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbars="vertical" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        android:id="@+id/btnMakeBloodRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/button_rounded_purple"
+        android:text="@string/make_a_blood_request"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>
+

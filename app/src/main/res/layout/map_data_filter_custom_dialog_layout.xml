@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    >
+
+
+
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@color/white"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_xxsmall">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/isetPurple"
+            android:textColor="@color/white"
+            android:text="@string/icon_explanation"
+            android:gravity="center"
+            android:textSize="@dimen/material_text_headline"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/dotted_line">
+        </View>
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewDialogMapDataCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_close_dialog"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:background="@drawable/ic_circlular_purple_close_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        />
+</RelativeLayout>
+

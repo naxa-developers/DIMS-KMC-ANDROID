@@ -1,0 +1,30 @@
+<vector android:height="24dp" android:viewportHeight="97.313"
+    android:viewportWidth="97.661" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#00000000"
+        android:pathData="M46.656,47.989m-36.325,0a36.325,36.325 0,1 1,72.65 0a36.325,36.325 0,1 1,-72.65 0"
+        android:strokeColor="#673ab7" android:strokeWidth="2"/>
+    <path android:fillColor="#fff"
+        android:pathData="M49.322,13.33m-13.33,0a13.33,13.33 0,1 1,26.66 0a13.33,13.33 0,1 1,-26.66 0"
+        android:strokeColor="#00000000" android:strokeWidth="2"/>
+    <path android:fillColor="#00000000"
+        android:pathData="M49.322,13.33m-12.33,0a12.33,12.33 0,1 1,24.66 0a12.33,12.33 0,1 1,-24.66 0"
+        android:strokeColor="#673ab7" android:strokeWidth="2"/>
+    <path android:fillColor="#fff"
+        android:pathData="M49.322,83.982m-13.33,0a13.33,13.33 0,1 1,26.66 0a13.33,13.33 0,1 1,-26.66 0"
+        android:strokeColor="#00000000" android:strokeWidth="2"/>
+    <path android:fillColor="#00000000"
+        android:pathData="M49.322,83.982m-12.33,0a12.33,12.33 0,1 1,24.66 0a12.33,12.33 0,1 1,-24.66 0"
+        android:strokeColor="#673ab7" android:strokeWidth="2"/>
+    <path android:fillColor="#fff"
+        android:pathData="M13.33,47.989m-13.33,0a13.33,13.33 0,1 1,26.66 0a13.33,13.33 0,1 1,-26.66 0"
+        android:strokeColor="#00000000" android:strokeWidth="2"/>
+    <path android:fillColor="#00000000"
+        android:pathData="M13.33,47.989m-12.33,0a12.33,12.33 0,1 1,24.66 0a12.33,12.33 0,1 1,-24.66 0"
+        android:strokeColor="#673ab7" android:strokeWidth="2"/>
+    <path android:fillColor="#fff"
+        android:pathData="M84.33,47.989m-13.33,0a13.33,13.33 0,1 1,26.66 0a13.33,13.33 0,1 1,-26.66 0"
+        android:strokeColor="#00000000" android:strokeWidth="2"/>
+    <path android:fillColor="#00000000"
+        android:pathData="M84.33,47.989m-12.33,0a12.33,12.33 0,1 1,24.66 0a12.33,12.33 0,1 1,-24.66 0"
+        android:strokeColor="#673ab7" android:strokeWidth="2"/>
+</vector>

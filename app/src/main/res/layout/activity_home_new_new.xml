@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:sofour="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoFlingVelocity="500"
+    sothree:umanoInitialState="collapsed"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="125dp"
+    sothree:umanoParallaxOffset="150dp"
+    sothree:umanoScrollableView="@+id/recylcer_view_categories_detail"
+    sothree:umanoShadowHeight="0dp">
+
+    <include layout="@layout/main_content_activitiy_main" />
+
+    <include layout="@layout/bottom_content_activity_main"/>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

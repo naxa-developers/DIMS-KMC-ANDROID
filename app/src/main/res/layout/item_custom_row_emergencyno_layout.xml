@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/item_card"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_10"
+    card_view:cardBackgroundColor="#E9E0FE"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="5dp"
+    card_view:contentPaddingTop="@dimen/spacing_xxsmall"
+    card_view:contentPaddingLeft="@dimen/spacing_xxsmall"
+    card_view:contentPaddingRight="@dimen/spacing_xxsmall"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="@color/textColorPurple"
+            android:textSize="@dimen/material_text_caption"
+            android:textStyle="bold"
+            android:text="@string/emergency_no"
+            android:background="@color/transparent"
+            android:drawableRight="@drawable/ic_call_white_24dp"
+            android:drawableTint="@color/isetPurple"/>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

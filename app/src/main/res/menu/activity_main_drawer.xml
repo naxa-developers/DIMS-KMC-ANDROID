@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_nav_home"
+            android:title="@string/nav_home" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_nav_profile"
+            android:title="@string/nav_profile" />
+        <item
+            android:id="@+id/nav_ask_for_help"
+            android:icon="@drawable/ic_nav_ask_for_help"
+            android:title="@string/nav_ask_for_help" />
+
+        <item
+            android:id="@+id/nav_report"
+            android:icon="@drawable/ic_nav_report"
+            android:title="@string/nav_report" />
+
+        <item
+            android:id="@+id/nav_notify_oithers"
+            android:icon="@drawable/ic_nav_notify_others"
+            android:title="@string/nav_Notify_others" />
+
+        <item
+            android:id="@+id/nav_hazard_info"
+            android:icon="@drawable/ic_nav_hazard_info"
+            android:title="@string/nav_hazard_info" />
+
+        <item
+            android:id="@+id/nav_play_quiz"
+            android:icon="@drawable/ic_nav_quiz"
+            android:title="@string/nav_play_quiz" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_nav_settings"
+            android:title="@string/nav_settings" />
+
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_nav_map"
+            android:title="@string/nav_map" />
+    </group>
+
+</menu>

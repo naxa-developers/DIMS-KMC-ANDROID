@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/hazard_list_item_row_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_medium"
+    android:background="@color/listItemFirstBG"
+    android:padding="@dimen/spacing_xsmall"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_hazard_list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|left"
+        android:padding="@dimen/dp_10"
+        android:text="Hazard Title"
+        android:textSize="@dimen/material_text_body1"
+        android:textColor="@color/textColorPurple"
+        android:textStyle="bold"
+        android:drawableRight="@drawable/rect_with_arrow_right"/>
+
+</LinearLayout>

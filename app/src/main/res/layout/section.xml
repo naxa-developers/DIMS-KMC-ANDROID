@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView_section_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/card_zero_margin"
+    android:layout_marginLeft="@dimen/card_side_margin"
+    android:layout_marginRight="@dimen/card_side_margin"
+    android:layout_marginTop="@dimen/card_side_margin"
+    android:background="@android:drawable/list_selector_background"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="0dp"
+    app:cardPreventCornerOverlap="false">
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:singleLine="true"
+    android:textAllCaps="true"
+    android:textColor="@color/textColorPurple"
+    android:background="@android:color/transparent"
+    android:textSize="@dimen/material_text_subhead"
+    android:id="@+id/section_text"
+    android:text="test test"
+    android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="bottom"
+        android:background="#22424242"/>
+
+</android.support.v7.widget.CardView>

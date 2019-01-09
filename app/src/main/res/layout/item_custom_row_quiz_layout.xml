@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_card"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginBottom="@dimen/dp_10"
+    card_view:cardBackgroundColor="@color/white"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="0dp"
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+
+        <ImageButton
+            android:id="@+id/item_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_quiz_circle_outline"
+            android:scaleType="fitCenter"
+            android:text="@string/quiz_category"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorPurple"
+            android:textSize="@dimen/material_text_caption"
+            android:padding="@dimen/spacing_xxxsmall"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/item_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/earthquake"
+            android:textColor="@color/isetPurple"
+            android:textStyle="bold"
+            android:padding="@dimen/spacing_xsmall"
+            android:textSize="@dimen/material_text_caption"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/quiz_percentage"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/button_rounded_purple"
+            android:gravity="center"
+            android:padding="@dimen/spacing_xxxsmall"
+            android:text="12.5%"
+            android:textColor="@color/white"
+            android:textSize="@dimen/material_text_small_caption"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/spacing_large"
+            tools:ignore="MissingConstraints" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
