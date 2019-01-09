@@ -50,22 +50,30 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.home.model.MapDataCategory;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawRouteOnMap;
+import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapboxBaseStyleUtils;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryListAdapter;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryModel;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.DataServer;
+import np.com.naxa.iset.utils.sectionmultiitemUtils.MultiItemSectionModel;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
 
 import static np.com.naxa.iset.utils.SharedPreferenceUtils.KEY_MUNICIPAL_BOARDER;
@@ -272,6 +280,69 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         });
     }
 
+    private Dialog setupMapDataLayerDialog(boolean isFirstTime) {
+
+        if (mapboxMap == null) {
+            Toast.makeText(this, "Your map is not ready yet", Toast.LENGTH_SHORT).show();
+        }
+
+        return DialogFactory.createMapDataLayerDialog(OpenSpaceMapActivity.this, mData, drawGeoJsonOnMap, isFirstTime ,new MapDataLayerDialogCloseListen() {
+                    @Override
+                    public void onDialogClose() {
+                        drawGeoJsonOnMap();
+                    }
+
+                    @Override
+                    public void isFirstTime() {
+                        drawGeoJsonOnMap();
+
+                    }
+                }
+        );
+    }
+
+    private void drawGeoJsonOnMap(){
+
+        Observable.just(mapDataLayerListCheckedEventList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapIterable(new Function<List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>, Iterable<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>>() {
+                    @Override
+                    public Iterable<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> apply(List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCheckedEvents) throws Exception {
+                        return mapDataLayerListCheckedEvents;
+                    }
+                })
+                .map(new Function<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent, MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>() {
+                    @Override
+                    public MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent apply(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent mapDataLayerListCheckedEvent) throws Exception {
+                        return mapDataLayerListCheckedEvent;
+                    }
+                })
+                .subscribe(new DisposableObserver<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>() {
+                    @Override
+                    public void onNext(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent mapDataLayerListCheckedEvent) {
+
+                        drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(mapDataLayerListCheckedEvent.getMultiItemSectionModel().getData_value(),
+                                mapDataLayerListCheckedEvent.getChecked(), mapDataLayerListCheckedEvent.getMultiItemSectionModel().getImage());
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
+    }
+
+
+
     @Override
     public void onBackPressed() {
         if (mLayout != null &&
@@ -314,8 +385,10 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
             drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_wards.json", true, "");
             count = 2;
         }
+
         setupMapOptionsDialog();
-        DialogFactory.createMapDataLayerDialog(OpenSpaceMapActivity.this, mData, drawGeoJsonOnMap);
+
+       setupMapDataLayerDialog(true);
 
         mapView.invalidate();
         }
@@ -538,7 +611,10 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                 if(mapboxMap == null){
                     return;
                 }
-                DialogFactory.createMapDataLayerDialog(OpenSpaceMapActivity.this, mData, drawGeoJsonOnMap).show();
+                mapboxMap.clear();
+                setupMapOptionsDialog();
+                mapDataLayerListCheckedEventList.clear();
+                setupMapDataLayerDialog(false).show();
                 break;
 
             case R.id.btnMapLayerSwitch:
@@ -547,13 +623,32 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-
+List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCheckedEventList = new ArrayList<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>();
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent itemClick) {
         String name = itemClick.getMultiItemSectionModel().getData_value();
 //        if(itemClick.getChecked()){
-            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(itemClick.getMultiItemSectionModel().getData_value(), itemClick.getChecked(), itemClick.getMultiItemSectionModel().getImage());
-//        }
+        if(mapDataLayerListCheckedEventList.size() == 0){
+            mapDataLayerListCheckedEventList.add(itemClick);
+        }else {
+            boolean alreadyExist = false;
+            for(int i = 0 ; i <mapDataLayerListCheckedEventList.size(); i++){
+                if(mapDataLayerListCheckedEventList.get(i).getMultiItemSectionModel().getData_key() . equals(itemClick.getMultiItemSectionModel().getData_key())){
+                    alreadyExist = true;
+                }
+            }
+            if(!alreadyExist){
+                if(itemClick.getChecked()) {
+                    mapDataLayerListCheckedEventList.add(itemClick);
+                }
+            }
+
+            if(alreadyExist){
+                if(!itemClick.getChecked()) {
+                    mapDataLayerListCheckedEventList.remove(itemClick);
+                }
+            }
+        }
         Toast.makeText(this, "add to your circle button clicked "+name, Toast.LENGTH_SHORT).show();
 
     }

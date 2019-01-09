@@ -34,6 +34,7 @@ import java.util.List;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
+import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
@@ -346,7 +347,8 @@ public final class DialogFactory {
         return dialog;
     }
 
-    public static Dialog createMapDataLayerDialog(@NonNull Context context, List<SectionMultipleItem> mapDataCategoryArrayList, DrawGeoJsonOnMap drawGeoJsonOnMap) {
+    public static Dialog createMapDataLayerDialog(@NonNull Context context, List<SectionMultipleItem> mapDataCategoryArrayList,
+                                                  DrawGeoJsonOnMap drawGeoJsonOnMap,boolean isFirsttime ,@NonNull MapDataLayerDialogCloseListen listner) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -367,6 +369,7 @@ public final class DialogFactory {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listner.onDialogClose();
                 dialog.dismiss();
             }
         });
@@ -396,6 +399,10 @@ public final class DialogFactory {
             }
         });
         recyclerView.setAdapter(sectionAdapter);
+
+        if(isFirsttime){
+            listner.isFirstTime();
+        }
 
 //        Toast.makeText(context, "createMapDataLayerDialog set adapter", Toast.LENGTH_SHORT).show();
 //        dialog.getWindow().setAttributes(lp);
