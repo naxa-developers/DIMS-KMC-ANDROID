@@ -2,6 +2,7 @@ package np.com.naxa.iset.mapboxmap.mapboxutils;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -31,7 +32,8 @@ import np.com.naxa.iset.R;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 
-public class DrawMarkerOnMap implements MapboxMap.OnMarkerClickListener {
+public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
+        MapboxMap.OnMarkerClickListener {
     private static final String TAG = "DrawMarkerOnMap";
 
     OpenSpaceMapActivity context;
@@ -126,13 +128,31 @@ public class DrawMarkerOnMap implements MapboxMap.OnMarkerClickListener {
                         }
 
 
+
+                        MarkerOptions marker = new MarkerOptions().position(location)
+                                .title(title).snippet(snippest).icon(icon);
+
                         // Add the custom icon marker to the map
-                        Marker marker = mapboxMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location))
-                                .title(title)
+//                        Marker marker = mapboxMap.addMarker(new MarkerOptions()
+//                                .position(new LatLng(location))
+//                                .title(title)
 //                                .snippet(snippest)
-                                .icon(icon));
+//                                .icon(icon));
 //                        marker.setTitle(geoJsonFileName+count[0]);
+
+                        mapboxMap.addMarker(marker);
+
+                        mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(@NonNull Marker marker) {
+                                Toast.makeText(context, "Marker tapped: " + marker.getTitle(), Toast.LENGTH_LONG).show();
+                                onInfoWindowClick(marker);
+                                return true;
+                            }
+                        });
+
+
+//                        marker.setMapboxMap(mapboxMap);
 
 
                     }
@@ -144,6 +164,7 @@ public class DrawMarkerOnMap implements MapboxMap.OnMarkerClickListener {
 
                     @Override
                     public void onComplete() {
+
 
                     }
                 });
@@ -233,7 +254,15 @@ public class DrawMarkerOnMap implements MapboxMap.OnMarkerClickListener {
     public boolean onMarkerClick(@NonNull Marker marker) {
 
         String snippest = marker.getSnippet();
+        Log.d(TAG, "onMarkerClick: "+snippest);
 
+        return false;
+    }
+
+    @Override
+    public boolean onInfoWindowClick(@NonNull Marker marker) {
+        String snippest = marker.getSnippet();
+        Log.d(TAG, "onMarkerClick: "+snippest);
         return false;
     }
 }
