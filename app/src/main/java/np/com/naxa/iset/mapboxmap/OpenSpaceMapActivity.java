@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -118,7 +119,6 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
     private PermissionsManager permissionsManager;
     private MapView mapView;
     private MapboxMap mapboxMap;
-    int count = 0;
 
 
     String filename = "";
@@ -276,20 +276,36 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onMetropolitanClick() {
                 filename = "kathmandu_boundary.json";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
+                removeLayerFromMap("kathmandu_wards.json");
             }
 
             @Override
             public void onWardClick() {
                 filename = "kathmandu_wards.json";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
+                removeLayerFromMap("kathmandu_boundary.json");
+
 
             }
+
+            private void removeLayerFromMap(String filename) {
+
+                if(filename != null) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, false, "");
+
+                        }
+                    }, 50);
+                }
+            }
         });
+
+
     }
 
     private Dialog setupMapDataLayerDialog(boolean isFirstTime) {
@@ -376,21 +392,17 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         mapboxMap.addOnMapClickListener(this);
 
 
-
-
         drawGeoJsonOnMap = new DrawGeoJsonOnMap(OpenSpaceMapActivity.this, mapboxMap, mapView);
         drawRouteOnMap = new DrawRouteOnMap(OpenSpaceMapActivity.this, mapboxMap, mapView);
         mapboxBaseStyleUtils = new MapboxBaseStyleUtils(OpenSpaceMapActivity.this, mapboxMap, mapView);
         mapboxBaseStyleUtils.changeBaseColor();
 
-        if (sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == -1 ||
-                sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == KEY_MUNICIPAL_BOARDER) {
-            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_boundary.json", true, "");
-            count = 2;
-        } else {
-            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_wards.json", true, "");
-            count = 2;
-        }
+//        if (sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == -1 ||
+//                sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == KEY_MUNICIPAL_BOARDER) {
+//            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_boundary.json", true, "");
+//        } else {
+//            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_wards.json", true, "");
+//        }
 
         setupMapOptionsDialog();
 
@@ -590,23 +602,17 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         switch (view.getId()) {
             case R.id.point:
                 filename = "financial_institution.geojson";
-                count++;
-                point = true;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "ic_marker_openspace");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "ic_marker_openspace");
                 break;
 
             case R.id.multipolygon:
                 filename = "wards.geojson";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
                 break;
 
             case R.id.multiLineString:
                 filename = "road_network.geojson";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
                 break;
 
             case R.id.navigation:
@@ -620,7 +626,6 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                     Toast.makeText(this, "Your map is not ready yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mapboxMap.clear();
                 setupMapOptionsDialog();
                 mapDataLayerListCheckedEventList.clear();
                 setupMapDataLayerDialog(false).show();
@@ -636,14 +641,15 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
 
                     generateRouteToGoThere(selectedMarkerPosition);
-                }else {
+                } else {
                     Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
 
-private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
+    private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
+
     public void generateRouteToGoThere(@NonNull LatLng latLngPoint) {
 
         destinationCoord = latLngPoint;
@@ -678,6 +684,7 @@ private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
 
 
     List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCheckedEventList = new ArrayList<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>();
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent itemClick) {
         String name = itemClick.getMultiItemSectionModel().getData_value();
@@ -687,16 +694,16 @@ private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
 
 //            hashMapDataLayer.put(itemClick.getMultiItemSectionModel().getData_key(), itemClick);
 
-        } else if(mapDataLayerListCheckedEventList.size() > 0) {
+        } else if (mapDataLayerListCheckedEventList.size() > 0) {
             boolean alreadyExist = false;
-            int itemPosition = 0 ;
+            int itemPosition = 0;
             for (int i = 0; i < mapDataLayerListCheckedEventList.size(); i++) {
                 itemPosition = i;
                 if (mapDataLayerListCheckedEventList.get(i).getMultiItemSectionModel().getData_key().equals(itemClick.getMultiItemSectionModel().getData_key())) {
                     alreadyExist = true;
                     break;
 
-                }else {
+                } else {
                     alreadyExist = false;
                 }
             }
@@ -720,18 +727,14 @@ private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
     }
 
 
-
-
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMarkerItemClick(MarkerClickEvent.MarkerItemClick itemClick) {
 
         List<MarkerDetailsKeyValue> markerDetailsKeyValueListCommn = new ArrayList<MarkerDetailsKeyValue>();
         selectedMarkerPosition = itemClick.getLocation();
-        if(selectedMarkerPosition == null){
+        if (selectedMarkerPosition == null) {
             btnGoThere.setVisibility(View.GONE);
-        }else {
+        } else {
             btnGoThere.setVisibility(View.VISIBLE);
         }
 

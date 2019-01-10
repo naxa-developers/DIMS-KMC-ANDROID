@@ -290,7 +290,9 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                 );
 
                 if(isChecked) {
-                    mapboxMap.addLayer(lineLayer);
+                    if(mapboxMap.getLayer(geojsonLayerId) == null){
+                        mapboxMap.addLayer(lineLayer);
+                    }
                 }else {
                     mapboxMap.removeLayer(lineLayer);
                 }
