@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -46,7 +48,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -319,7 +323,6 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                         return mapDataLayerListCheckedEvents;
                     }
                 })
-                .delay(500, TimeUnit.MILLISECONDS, Schedulers.io())
                 .map(new Function<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent, MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>() {
                     @Override
                     public MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent apply(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent mapDataLayerListCheckedEvent) throws Exception {
@@ -389,7 +392,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         setupMapOptionsDialog();
 
-        setupMapDataLayerDialog(true);
+        setupMapDataLayerDialog(true).hide();
 
         mapView.invalidate();
     }
@@ -606,11 +609,13 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
             case R.id.navigation:
                 drawRouteOnMap.enableNavigationUiLauncher(OpenSpaceMapActivity.this);
+
                 navigation.setVisibility(View.GONE);
                 break;
 
             case R.id.btnMapLayerData:
                 if (mapboxMap == null) {
+                    Toast.makeText(this, "Your map is not ready yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mapboxMap.clear();
@@ -624,7 +629,14 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                 break;
 
             case R.id.btnGoThere:
-                generateRouteToGoThere(selectedMarkerPosition);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+
+                    generateRouteToGoThere(selectedMarkerPosition);
+                }else {
+                    Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -664,37 +676,50 @@ private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
 
 
     List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCheckedEventList = new ArrayList<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>();
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent itemClick) {
         String name = itemClick.getMultiItemSectionModel().getData_value();
 //        if(itemClick.getChecked()){
         if (mapDataLayerListCheckedEventList.size() == 0) {
             mapDataLayerListCheckedEventList.add(itemClick);
-        } else {
+
+//            hashMapDataLayer.put(itemClick.getMultiItemSectionModel().getData_key(), itemClick);
+
+        } else if(mapDataLayerListCheckedEventList.size() > 0) {
             boolean alreadyExist = false;
+            int itemPosition = 0 ;
             for (int i = 0; i < mapDataLayerListCheckedEventList.size(); i++) {
+                itemPosition = i;
                 if (mapDataLayerListCheckedEventList.get(i).getMultiItemSectionModel().getData_key().equals(itemClick.getMultiItemSectionModel().getData_key())) {
                     alreadyExist = true;
-                }
+                    break;
 
-                if (alreadyExist) {
-                    if (!itemClick.getChecked()) {
-                        mapDataLayerListCheckedEventList.remove(itemClick);
-                    }
+                }else {
+                    alreadyExist = false;
+                }
+            }
+
+            if (alreadyExist) {
+                if (!itemClick.getChecked()) {
+                    mapDataLayerListCheckedEventList.remove(itemPosition);
+                    Log.d(TAG, "onRVItemClick: Item Removed");
+
                 }
             }
             if (!alreadyExist) {
                 if (itemClick.getChecked()) {
                     mapDataLayerListCheckedEventList.add(itemClick);
+                    Log.d(TAG, "onRVItemClick: Item Added");
                 }
             }
 
-
         }
-        Toast.makeText(this, "add to your circle button clicked " + name, Toast.LENGTH_SHORT).show();
-
+//        Toast.makeText(this, "add to your circle button clicked " + name, Toast.LENGTH_SHORT).show();
     }
+
+
+
+
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
