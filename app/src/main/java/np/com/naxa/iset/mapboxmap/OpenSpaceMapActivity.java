@@ -68,6 +68,7 @@ import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
 import np.com.naxa.iset.event.MarkerClickEvent;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawRouteOnMap;
+import np.com.naxa.iset.mapboxmap.mapboxutils.DrawRouteOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapboxBaseStyleUtils;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryListAdapter;
@@ -132,7 +133,6 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
     // variables for calculating and drawing a route
     private Point originPosition;
     private Point destinationPosition;
-    private DirectionsRoute currentRoute;
     private NavigationMapRoute navigationMapRoute;
     SharedPreferenceUtils sharedPreferenceUtils;
 
@@ -374,6 +374,8 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         this.mapboxMap = mapboxMap;
         setMapCameraPosition();
         mapboxMap.addOnMapClickListener(this);
+
+
 
 
         drawGeoJsonOnMap = new DrawGeoJsonOnMap(OpenSpaceMapActivity.this, mapboxMap, mapView);
@@ -724,8 +726,8 @@ private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMarkerItemClick(MarkerClickEvent.MarkerItemClick itemClick) {
-        List<MarkerDetailsKeyValue> markerDetailsKeyValueListCommn = new ArrayList<MarkerDetailsKeyValue>();
 
+        List<MarkerDetailsKeyValue> markerDetailsKeyValueListCommn = new ArrayList<MarkerDetailsKeyValue>();
         selectedMarkerPosition = itemClick.getLocation();
         if(selectedMarkerPosition == null){
             btnGoThere.setVisibility(View.GONE);
@@ -742,6 +744,8 @@ private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
 
         mLayout.setAnchorPoint(0.52f);
         mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+
+        drawRouteOnMap.removeRoute();
 
     }
 
