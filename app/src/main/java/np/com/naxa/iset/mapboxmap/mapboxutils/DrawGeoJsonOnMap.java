@@ -257,12 +257,21 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                                 drawMarkerOnMap.AddMarkerOnMap(filename, geoJsonString, imageName);
 
                             }
-                        }, 100);
+                        }, 50);
                     }
 
 
                 }else {
                     if(geoJsonString != null) {
+//                        final Handler handler = new Handler();
+//                        handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                //Do something after 100ms
+//                                drawMarkerOnMap.RemoveMarkerOnMap(filename, geoJsonString, imageName);
+//
+//                            }
+//                        }, 50);
 //                        drawMarkerOnMap.RemoveMarkerOnMap(filename, geoJsonString, imageName);
                     }
                     mapboxMap.removeLayer(geojsonLayerId);

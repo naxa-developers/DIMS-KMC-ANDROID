@@ -626,6 +626,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                     Toast.makeText(this, "Your map is not ready yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                mapboxMap.clear();
                 setupMapOptionsDialog();
                 mapDataLayerListCheckedEventList.clear();
                 setupMapDataLayerDialog(false).show();

@@ -211,10 +211,17 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
                         }
 
 
-                        mapboxMap.removeMarker(new Marker(new MarkerOptions()
-                                .position(new LatLng(location))
+                        MarkerOptions marker = new MarkerOptions()
+                                .position(location)
                                 .title(title)
-                                ));
+                                .snippet(snippest)
+                                .icon(icon);
+//
+                        Marker marker1 = new Marker(marker);
+//
+//                        if(mapboxMap.getMarkers().contains(marker1)){
+                            mapboxMap.removeMarker(marker1);
+//                        }
                     }
 
                     @Override
