@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,7 +38,6 @@ import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
 import np.com.naxa.iset.profile.municipalityprofile.MunicipalityProfileActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
 import np.com.naxa.iset.settings.SettingsActivity;
-import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 import np.com.naxa.iset.utils.recycleviewutils.LinearLayoutManagerWithSmoothScroller;
 import np.com.naxa.iset.utils.recycleviewutils.RecyclerViewType;
@@ -67,6 +66,8 @@ public class SectionGridHomeActivity extends AppCompatActivity {
     Button btnAskForBlood;
     @BindView(R.id.btnNotifyOthers)
     Button btnNotifyOthers;
+    @BindView(R.id.collapsing_toolbar_layout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     private RecyclerViewType recyclerViewType;
     private RecyclerView recyclerView;
@@ -91,6 +92,9 @@ public class SectionGridHomeActivity extends AppCompatActivity {
 
 //        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -124,7 +128,7 @@ public class SectionGridHomeActivity extends AppCompatActivity {
     private void populateRecyclerView() {
         String[] sectionHeader = {"REACT QUICKLY", "DISASTER INFORMATION"};
 //        String[] sectionChildTitle = {"FIND OPEN SPACE", "ASK FOR HELP", "Report", "NOTIFY OTHERS", "HAZARD INFO", "DRR QUIZ", "DRR Dictionary", "MAP"};
-        String[] sectionChildTitle = {"FIND OPEN SPACE", "Report an incident", "My CIRCLE", "EMERGENCY NUMBERS", "HAZARD INFO", "Terminologies", "QUIZ", "Multimedia",  "Library", "Who Does What"};
+        String[] sectionChildTitle = {"FIND OPEN SPACE", "Report an incident", "My CIRCLE", "EMERGENCY NUMBERS", "HAZARD INFO", "Terminologies", "QUIZ", "Multimedia", "Library", "Who Does What"};
 
         ArrayList<Drawable> gridIcon = new ArrayList<Drawable>();
         gridIcon.add(getResources().getDrawable(R.drawable.ic_open_space_grid));
@@ -139,7 +143,6 @@ public class SectionGridHomeActivity extends AppCompatActivity {
         gridIcon.add(null);
 
 
-
         ArrayList<SectionModel> sectionModelArrayList = new ArrayList<>();
         //for loop for sections
         int sectionChildTitlePos = 0;
@@ -147,20 +150,20 @@ public class SectionGridHomeActivity extends AppCompatActivity {
             ArrayList<String> itemArrayList = new ArrayList<>();
             ArrayList<Drawable> itemIconArrayList = new ArrayList<>();
             //for loop for items
-            if(i ==1){
+            if (i == 1) {
                 for (int j = 1; j <= 4; j++) {
                     itemArrayList.add(sectionChildTitle[sectionChildTitlePos]);
                     itemIconArrayList.add(gridIcon.get(sectionChildTitlePos));
                     sectionChildTitlePos++;
                 }
             }
-             if(i==2){
-            for (int j = 1; j <= 6; j++) {
-                itemArrayList.add(sectionChildTitle[sectionChildTitlePos]);
-                itemIconArrayList.add(gridIcon.get(sectionChildTitlePos));
-                sectionChildTitlePos++;
+            if (i == 2) {
+                for (int j = 1; j <= 6; j++) {
+                    itemArrayList.add(sectionChildTitle[sectionChildTitlePos]);
+                    itemIconArrayList.add(gridIcon.get(sectionChildTitlePos));
+                    sectionChildTitlePos++;
+                }
             }
-             }
 
 
             //add the section and items to array list
@@ -285,7 +288,7 @@ public class SectionGridHomeActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.nav_map:
-                      startActivity(new Intent(SectionGridHomeActivity.this, OpenSpaceMapActivity.class));
+                        startActivity(new Intent(SectionGridHomeActivity.this, OpenSpaceMapActivity.class));
                         drawer.closeDrawers();
                         return true;
                     default:
