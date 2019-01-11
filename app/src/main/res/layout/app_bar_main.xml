@@ -9,9 +9,9 @@
     tools:context=".newhomepage.SectionGridHomeActivity"
     android:orientation="vertical">
 
- <!--<include layout="@layout/toolbar_purple"-->
-     <!--android:id="@+id/toolbar">-->
- <!--</include>-->
+    <!--<include layout="@layout/toolbar_purple"-->
+    <!--android:id="@+id/toolbar">-->
+    <!--</include>-->
 
 
     <android.support.design.widget.AppBarLayout
@@ -201,7 +201,6 @@
 
                 </LinearLayout>
 
-
             </android.support.constraint.ConstraintLayout>
 
             <android.support.v7.widget.Toolbar
@@ -217,19 +216,20 @@
     </android.support.design.widget.AppBarLayout>
 
 
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:scrollbars="none"
+        android:layout_marginBottom="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
         >
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/sectioned_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:nestedScrollingEnabled="true"
-        android:orientation="vertical"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sectioned_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            android:orientation="vertical" />
     </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
