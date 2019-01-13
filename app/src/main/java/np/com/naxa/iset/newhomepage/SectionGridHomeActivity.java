@@ -14,10 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -45,6 +47,7 @@ import np.com.naxa.iset.utils.recycleviewutils.RecyclerViewType;
 public class SectionGridHomeActivity extends AppCompatActivity {
 
     protected static final String RECYCLER_VIEW_TYPE = "recycler_view_type";
+    private static final String TAG = "SectionGridHomeActivity";
     @BindView(R.id.btn_disaster_info)
     Button btnDisasterInfo;
     @BindView(R.id.btn_react_quickly)
@@ -68,6 +71,14 @@ public class SectionGridHomeActivity extends AppCompatActivity {
     Button btnNotifyOthers;
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.btn_disaster_info_top)
+    Button btnDisasterInfoTop;
+    @BindView(R.id.btn_react_quickly_top)
+    Button btnReactQuicklyTop;
+    @BindView(R.id.btn_info_top)
+    Button btnInfoTop;
+    @BindView(R.id.quickActionButtonLayout)
+    LinearLayout quickActionButtonLayout;
 
     private RecyclerViewType recyclerViewType;
     private RecyclerView recyclerView;
@@ -92,9 +103,6 @@ public class SectionGridHomeActivity extends AppCompatActivity {
 
 //        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -103,6 +111,8 @@ public class SectionGridHomeActivity extends AppCompatActivity {
         imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
 
+
+        setupCollapsingToolbar();
         // load nav menu header data
         loadNavHeader();
 
@@ -113,6 +123,34 @@ public class SectionGridHomeActivity extends AppCompatActivity {
 //        setUpToolbarTitle();
         setUpRecyclerView();
         populateRecyclerView();
+
+    }
+
+    private void setupCollapsingToolbar(){
+        collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+
+
+
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
+                {
+                    //  Collapsed
+                    Log.d(TAG, "onOffsetChanged: Collapsed");
+                    quickActionButtonLayout.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    //Expanded
+                    Log.d(TAG, "onOffsetChanged: Expanded");
+                    quickActionButtonLayout.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
 
@@ -185,14 +223,19 @@ public class SectionGridHomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.btn_disaster_info, R.id.btn_react_quickly, R.id.btn_info, R.id.btnAskForBlood, R.id.btnNotifyOthers})
+    @OnClick({R.id.btn_disaster_info, R.id.btn_react_quickly, R.id.btn_info, R.id.btnAskForBlood, R.id.btnNotifyOthers,
+            R.id.btn_disaster_info_top, R.id.btn_react_quickly_top, R.id.btn_info_top})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_disaster_info:
                 recyclerView.smoothScrollToPosition(1);
+                recyclerView.smoothScrollToPosition(1);
+                appbar.setExpanded(false);
                 break;
             case R.id.btn_react_quickly:
                 recyclerView.smoothScrollToPosition(0);
+                appbar.setExpanded(true);
+
                 break;
             case R.id.btn_info:
                 startActivity(new Intent(SectionGridHomeActivity.this, MunicipalityProfileActivity.class));
@@ -204,6 +247,20 @@ public class SectionGridHomeActivity extends AppCompatActivity {
 
             case R.id.btnNotifyOthers:
                 startActivity(new Intent(SectionGridHomeActivity.this, NotifyOthersActivity.class));
+                break;
+
+            case R.id.btn_disaster_info_top:
+                recyclerView.smoothScrollToPosition(1);
+                appbar.setExpanded(false);
+                break;
+
+            case R.id.btn_react_quickly_top:
+                recyclerView.smoothScrollToPosition(0);
+                appbar.setExpanded(true);
+                break;
+
+            case R.id.btn_info_top:
+                startActivity(new Intent(SectionGridHomeActivity.this, MunicipalityProfileActivity.class));
                 break;
         }
     }
@@ -329,5 +386,4 @@ public class SectionGridHomeActivity extends AppCompatActivity {
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
     }
-
 }

@@ -13,7 +13,6 @@
     <!--android:id="@+id/toolbar">-->
     <!--</include>-->
 
-
     <android.support.design.widget.AppBarLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/appbar_general"
@@ -216,20 +215,120 @@
     </android.support.design.widget.AppBarLayout>
 
 
+
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="115dp"
         android:scrollbars="none"
-        android:layout_marginBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
         >
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/sectioned_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="true"
             android:orientation="vertical" />
+        </android.support.design.widget.CoordinatorLayout>
+
     </android.support.v4.widget.NestedScrollView>
+
+
+    <!--quick button layout-->
+    <LinearLayout
+        android:id="@+id/quickActionButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        >
+
+        <!--disaster info-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="95dp">
+
+            <Button
+                android:id="@+id/btn_disaster_info_top"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/disaster_info_button_bg"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Disaster\nInformation"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+        <!--react quickly-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="115dp">
+
+            <Button
+                android:id="@+id/btn_react_quickly_top"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/react_quickly_button_bg"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:gravity="center"
+                android:text="React\nQuickly"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+        <!--disaster news-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="95dp">
+
+            <Button
+                android:id="@+id/btn_info_top"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/info_button_bg"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="INFO"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
