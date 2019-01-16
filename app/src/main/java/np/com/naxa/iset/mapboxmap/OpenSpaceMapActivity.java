@@ -390,19 +390,14 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         this.mapboxMap = mapboxMap;
         setMapCameraPosition();
         mapboxMap.addOnMapClickListener(this);
+        mapboxMap.getUiSettings().setCompassFadeFacingNorth(false);
+        mapboxMap.getUiSettings().setCompassImage(getResources().getDrawable(R.drawable.direction_compas_icon));
 
 
         drawGeoJsonOnMap = new DrawGeoJsonOnMap(OpenSpaceMapActivity.this, mapboxMap, mapView);
         drawRouteOnMap = new DrawRouteOnMap(OpenSpaceMapActivity.this, mapboxMap, mapView);
         mapboxBaseStyleUtils = new MapboxBaseStyleUtils(OpenSpaceMapActivity.this, mapboxMap, mapView);
         mapboxBaseStyleUtils.changeBaseColor();
-
-//        if (sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == -1 ||
-//                sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == KEY_MUNICIPAL_BOARDER) {
-//            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_boundary.json", true, "");
-//        } else {
-//            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_wards.json", true, "");
-//        }
 
         setupMapOptionsDialog();
 
@@ -445,6 +440,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
+            Toast.makeText(this, "Location Permission Required", Toast.LENGTH_SHORT).show();
             return;
         }
 
