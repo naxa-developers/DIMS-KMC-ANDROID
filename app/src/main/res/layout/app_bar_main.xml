@@ -237,6 +237,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="true"
+            android:layout_marginBottom="@dimen/spacing_xlarge"
             android:orientation="vertical" />
         </android.support.design.widget.CoordinatorLayout>
 
@@ -249,6 +250,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:visibility="gone"

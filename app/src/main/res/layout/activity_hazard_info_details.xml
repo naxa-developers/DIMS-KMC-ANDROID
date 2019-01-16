@@ -21,7 +21,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintHeight_percent="0.78"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
@@ -101,7 +101,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent=".20"
+        app:layout_constraintHeight_percent=".15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2">
 
