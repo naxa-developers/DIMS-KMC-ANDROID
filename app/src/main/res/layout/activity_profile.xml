@@ -148,7 +148,19 @@
                 android:text="@string/add_people"
                 android:textAllCaps="false"
                 android:textColor="@color/light_gray"
-                android:layout_marginBottom="@dimen/spacing_xxxlarge"/>
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
+
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/gmail_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_below="@id/btn_add_people">
+
+            </com.google.android.gms.common.SignInButton>
 
         </RelativeLayout>
 

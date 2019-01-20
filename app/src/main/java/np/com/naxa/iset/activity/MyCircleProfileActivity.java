@@ -2,69 +2,53 @@ package np.com.naxa.iset.activity;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.Task;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.disasterinfo.HazardListAdapter;
-import np.com.naxa.iset.event.EmergenctContactCallEvent;
-import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
-import np.com.naxa.iset.newhomepage.SectionGridHomeActivity;
 import np.com.naxa.iset.utils.DialogFactory;
-import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -101,7 +85,12 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
     private static final String[] READ_STORAGE_AND_CONTACTS =
             {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS};
+    @BindView(R.id.gmail_sign_in_button)
+    SignInButton gmailSignInButton;
 
+
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +101,8 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         setupToolBar();
         initUI();
         setupListRecycler();
+
+        setupGmailLogin();
     }
 
     private void setupToolBar() {
@@ -147,19 +138,91 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
 
+
+
     Dialog progressDialog;
-    @OnClick({R.id.ib_setting, R.id.btn_add_people})
+
+    @OnClick({R.id.ib_setting, R.id.btn_add_people, R.id.gmail_sign_in_button})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_setting:
                 break;
+
             case R.id.btn_add_people:
 
                 handleContactPermission();
 
                 break;
+
+            case R.id.gmail_sign_in_button:
+                signIn();
+                break;
         }
     }
+
+
+// gmail Login Start
+    private void setupGmailLogin() {
+
+        gmailSignInButton.setSize(SignInButton.SIZE_STANDARD);
+        // Configure sign-in to request the user's ID, email address, and basic
+// profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account){
+        if(account == null){
+            return;
+        }
+        Toast.makeText(this, "Google Sign-in complete", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "updateUI: getDisplayName "+account.getDisplayName());
+        Log.d(TAG, "updateUI: getEmail "+account.getEmail());
+        Log.d(TAG, "updateUI: getIdToken "+account.getIdToken());
+        Log.d(TAG, "updateUI: getIdToken "+account.getIdToken());
+        Log.d(TAG, "updateUI: getPhotoUrl "+account.getPhotoUrl());
+        Log.d(TAG, "updateUI: getId :"+account.getId());
+        Log.d(TAG, "updateUI: getGivenName "+account.getGivenName());
+        Log.d(TAG, "updateUI: getFamilyName "+account.getFamilyName());
+    }
+
+//    gmail login end
 
 
     @AfterPermissionGranted(RESULT_CONTACT_PERMISSION)
@@ -168,7 +231,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
             GetContactFromDevice getContactFromDevice = new GetContactFromDevice();
 
-            progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Please Wait!!!" );
+            progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Please Wait!!!");
             progressDialog.show();
             getContactFromDevice.getContacts(MyCircleProfileActivity.this, progressDialog);
 
@@ -195,6 +258,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        // Check for existing Google Sign In account, if the user is already signed in
+// the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
     }
 
     @Override
@@ -205,14 +272,14 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
 
     List<ContactModel> contactModelList = new ArrayList<ContactModel>();
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MyCircleContactAddEvent.MyCircleContactAddClick itemClick) {
         String name = itemClick.getContactModel().getName();
 
         if (contactModelList.size() == 0) {
             contactModelList.add(itemClick.getContactModel());
-        }
-        else if (contactModelList.size() > 0) {
+        } else if (contactModelList.size() > 0) {
             boolean alreadyExist = false;
             int itemPosition = 0;
             for (int i = 0; i < contactModelList.size(); i++) {
@@ -249,14 +316,12 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDialogCloseClick(MyCircleContactAddEvent.MyCircleContactDialogCloseClick itemClick) {
 
-        if(contactModelList != null) {
+        if (contactModelList != null) {
             ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModelList);
         }
 
         Toast.makeText(this, "add to your circle dialog close clicked ", Toast.LENGTH_SHORT).show();
 
     }
-
-
 
 }
