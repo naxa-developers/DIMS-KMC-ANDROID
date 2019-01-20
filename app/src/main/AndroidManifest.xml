@@ -34,6 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".UserRegistrationActivity"></activity>
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true">
@@ -190,7 +191,7 @@
         <activity
             android:name=".mapboxmap.OpenSpaceMapActivity"
             android:exported="true" />
-        <activity android:name=".TerminologiesActivity"></activity>
+        <activity android:name=".TerminologiesActivity" />
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -16,9 +17,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +34,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,10 +90,30 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS};
     @BindView(R.id.gmail_sign_in_button)
     SignInButton gmailSignInButton;
+    @BindView(R.id.iv_MyCircle)
+    ImageView ivMyCircle;
+    @BindView(R.id.profileLayout)
+    RelativeLayout profileLayout;
+    @BindView(R.id.et_reg_full_name)
+    EditText etRegFullName;
+    @BindView(R.id.et_reg_email)
+    EditText etRegEmail;
+    @BindView(R.id.et_reg_mobile_no)
+    EditText etRegMobileNo;
+    @BindView(R.id.spn_blood_group)
+    Spinner spnBloodGroup;
+    @BindView(R.id.et_reg_address)
+    EditText etRegAddress;
+    @BindView(R.id.btn_register)
+    Button btnRegister;
+    @BindView(R.id.regestrationLayout)
+    LinearLayout regestrationLayout;
 
 
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
+
+    String userPhotoUri = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +122,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolBar();
-        initUI();
         setupListRecycler();
 
         setupGmailLogin();
@@ -114,19 +136,23 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        Glide.with(this)
-                .load("https://thumbs.dreamstime.com/b/profile-icon-male-avatar-portrait-casual-person-silhouette-face-flat-design-vector-46846328.jpg")
-                .asBitmap()
-                .centerCrop()
-                .into(new BitmapImageViewTarget(ivPicture) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        ivPicture.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+
+        if(userPhotoUri != null) {
+            Glide.with(this)
+                    .load(userPhotoUri)
+                    .asBitmap()
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(ivPicture) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ivPicture.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
+
     }
 
 
@@ -138,30 +164,33 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
 
-
-
     Dialog progressDialog;
 
-    @OnClick({R.id.ib_setting, R.id.btn_add_people, R.id.gmail_sign_in_button})
+    @OnClick({R.id.ib_setting, R.id.btn_add_people, R.id.gmail_sign_in_button, R.id.btn_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_setting:
                 break;
 
             case R.id.btn_add_people:
-
                 handleContactPermission();
-
                 break;
 
             case R.id.gmail_sign_in_button:
                 signIn();
                 break;
+
+                case R.id.btn_register:
+                    regestrationLayout.setVisibility(View.GONE);
+                    profileLayout.setVisibility(View.VISIBLE);
+
+                    initUI();
+                break;
         }
     }
 
 
-// gmail Login Start
+    // gmail Login Start
     private void setupGmailLogin() {
 
         gmailSignInButton.setSize(SignInButton.SIZE_STANDARD);
@@ -193,7 +222,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
@@ -207,19 +236,38 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUI(GoogleSignInAccount account){
-        if(account == null){
+    private void updateUI(GoogleSignInAccount account) {
+        if (account == null) {
             return;
         }
+        gmailSignInButton.setVisibility(View.GONE);
         Toast.makeText(this, "Google Sign-in complete", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "updateUI: getDisplayName "+account.getDisplayName());
-        Log.d(TAG, "updateUI: getEmail "+account.getEmail());
-        Log.d(TAG, "updateUI: getIdToken "+account.getIdToken());
-        Log.d(TAG, "updateUI: getIdToken "+account.getIdToken());
-        Log.d(TAG, "updateUI: getPhotoUrl "+account.getPhotoUrl());
-        Log.d(TAG, "updateUI: getId :"+account.getId());
-        Log.d(TAG, "updateUI: getGivenName "+account.getGivenName());
-        Log.d(TAG, "updateUI: getFamilyName "+account.getFamilyName());
+        Log.d(TAG, "updateUI: getDisplayName " + account.getDisplayName());
+        Log.d(TAG, "updateUI: getEmail " + account.getEmail());
+        Log.d(TAG, "updateUI: getIdToken " + account.getIdToken());
+        Log.d(TAG, "updateUI: getIdToken " + account.getIdToken());
+        Log.d(TAG, "updateUI: getPhotoUrl " + account.getPhotoUrl());
+        Log.d(TAG, "updateUI: getId :" + account.getId());
+        Log.d(TAG, "updateUI: getGivenName " + account.getGivenName());
+        Log.d(TAG, "updateUI: getFamilyName " + account.getFamilyName());
+
+        userPhotoUri = account.getPhotoUrl().toString();
+
+        Glide.with(this)
+                .load(account.getPhotoUrl())
+                .asBitmap()
+                .centerCrop()
+                .into(new BitmapImageViewTarget(ivPicture) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        ivPicture.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
+
+        tvName.setText(account.getDisplayName());
     }
 
 //    gmail login end
