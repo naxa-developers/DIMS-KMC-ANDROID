@@ -21,6 +21,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -54,10 +55,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.disasterinfo.HazardListAdapter;
 import np.com.naxa.iset.event.EmergenctContactCallEvent;
+import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
+import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.newhomepage.SectionGridHomeActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
@@ -107,6 +111,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
         setupToolBar();
         initUI();
+        setupListRecycler();
     }
 
     private void setupToolBar() {
@@ -132,6 +137,16 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    private void setupListRecycler() {
+        MyCircleContactListAdapter myCircleContactListAdapter = new MyCircleContactListAdapter(R.layout.people_in_my_circle_item_row_layout, null);
+        recyclerViewMyCircle.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMyCircle.setAdapter(myCircleContactListAdapter);
+
+    }
+
+
     Dialog progressDialog;
     @OnClick({R.id.ib_setting, R.id.btn_add_people})
     public void onViewClicked(View view) {
@@ -189,11 +204,59 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
 
+    List<ContactModel> contactModelList = new ArrayList<ContactModel>();
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MyCircleContactAddEvent.MyCircleContactAddClick itemClick) {
         String name = itemClick.getContactModel().getName();
-        Toast.makeText(this, "add to your circle button clicked "+name, Toast.LENGTH_SHORT).show();
+
+        if (contactModelList.size() == 0) {
+            contactModelList.add(itemClick.getContactModel());
+        }
+        else if (contactModelList.size() > 0) {
+            boolean alreadyExist = false;
+            int itemPosition = 0;
+            for (int i = 0; i < contactModelList.size(); i++) {
+                itemPosition = i;
+                if (contactModelList.get(i).getMobileNumber().equals(itemClick.getContactModel().getMobileNumber())) {
+                    alreadyExist = true;
+                    break;
+
+                } else {
+                    alreadyExist = false;
+                }
+            }
+
+            if (alreadyExist) {
+                if (!itemClick.isAddToCircle()) {
+                    contactModelList.remove(itemPosition);
+                    Log.d(TAG, "onRVItemClick: Contact Removed");
+
+                }
+            }
+            if (!alreadyExist) {
+                if (itemClick.isAddToCircle()) {
+                    contactModelList.add(itemClick.getContactModel());
+                    Log.d(TAG, "onRVItemClick: Contact Added");
+                }
+            }
+
+        }
+
+//        Toast.makeText(this, "add to your circle button clicked "+name+ " --> "+itemClick.isAddToCircle(), Toast.LENGTH_SHORT).show();
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDialogCloseClick(MyCircleContactAddEvent.MyCircleContactDialogCloseClick itemClick) {
+
+        if(contactModelList != null) {
+            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModelList);
+        }
+
+        Toast.makeText(this, "add to your circle dialog close clicked ", Toast.LENGTH_SHORT).show();
+
+    }
+
+
 
 }

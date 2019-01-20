@@ -246,7 +246,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                 DrawMarkerOnMap drawMarkerOnMap = new DrawMarkerOnMap(context, mapboxMap, mapView);
 
                 if(isChecked) {
-//                    plotMarkerOnMap(geoJsonString, context);
+//                    plotMarkerOnMap(geoJsonString, context, imageName, isChecked);
 
                     if(geoJsonString != null) {
                         final Handler handler = new Handler();
@@ -339,9 +339,8 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                             featureCollection[0] = FeatureCollection.fromJson(stringBuilder.toString());
 
 
-//                            addClusteredGeoJsonSource(stringBuilder.toString());
-//                            mapboxMap.addImage("cross-icon-id", BitmapUtils.getBitmapFromDrawable(
-//                                    context.getResources().getDrawable(R.drawable.ic_marker_hospital)));
+                            addClusteredGeoJsonSource(stringBuilder.toString());
+                            mapboxMap.addImage("cross-icon-id", LoadImageUtils.getImageBitmapFromDrawable(context, imageName));
                         } catch (Exception exception) {
                             Log.e("MAPBOX", "Exception Loading GeoJSON: " + exception.toString());
                         }
@@ -358,21 +357,21 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
 
 
 
-                        OpenSpaceMapActivity activity = activityRef.get();
-                        if (featureCollection == null || activity == null) {
-                            return;
-                        }
+//                        OpenSpaceMapActivity activity = activityRef.get();
+//                        if (featureCollection == null || activity == null) {
+//                            return;
+//                        }
 
 // This example runs on the premise that each GeoJSON Feature has a "selected" property,
 // with a boolean value. If your data's Features don't have this boolean property,
 // add it to the FeatureCollection 's features with the following code:
-                        for (Feature singleFeature : featureCollection[0].features()) {
-                            singleFeature.addBooleanProperty(PROPERTY_SELECTED, false);
-                        }
-
-                        setUpData(featureCollection[0] , imageName, isChecked );
-
-                        new GenerateViewIconTask(activity).execute(featureCollection);
+//                        for (Feature singleFeature : featureCollection[0].features()) {
+//                            singleFeature.addBooleanProperty(PROPERTY_SELECTED, false);
+//                        }
+//
+//                        setUpData(featureCollection[0] , imageName, isChecked );
+//
+//                        new GenerateViewIconTask(activity).execute(featureCollection);
 
 
                     }

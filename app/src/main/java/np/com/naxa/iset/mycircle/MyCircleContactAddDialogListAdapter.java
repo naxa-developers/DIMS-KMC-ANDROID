@@ -1,11 +1,11 @@
 package np.com.naxa.iset.mycircle;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
@@ -18,24 +18,24 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.event.EmergenctContactCallEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
-public class MyCircleContactListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
+public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
 
-    public MyCircleContactListAdapter(int layoutResId, @Nullable List<ContactModel> data) {
+    public MyCircleContactAddDialogListAdapter(int layoutResId, @Nullable List<ContactModel> data) {
         super(layoutResId, data);
     }
 
 
     @Override
     protected void convert(BaseViewHolder helper, ContactModel item) {
-        Button btnDelete = helper.getView(R.id.btnDeletePeopleInMyCircle);
-        Button btnStatus = helper.getView(R.id.btnMyCirclePeopleStatus);
-        ImageView imageView = helper.getView(R.id.ivPeopleInMyCircle);
+        ToggleButton addButton = helper.getView(R.id.btnAddContactToCircle);
+        ImageView imageView = helper.getView(R.id.ivContactPerson);
 
         if(item.getName() != null) {
-            helper.setText(R.id.tvPeopleInMyCircleName, item.getName());
+            helper.setText(R.id.tvContactPerson, item.getName());
         }
 
         if(item.getPhotoURI() != null && !item.getPhotoURI().equals("")) {
@@ -57,19 +57,32 @@ public class MyCircleContactListAdapter extends BaseQuickAdapter<ContactModel, B
         }
 
 
-        if(((helper.getLayoutPosition()+1) %2) == 0){
-            Log.d(TAG, "convert: "+helper.getLayoutPosition());
-            helper.setBackgroundColor(R.id.btnMyCirclePeopleStatus, btnStatus.getContext().getResources().getColor(R.color.isetGreen));
-            helper.setText(R.id.btnMyCirclePeopleStatus, "Safe");
-        }
 
-        btnDelete.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
+        addButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    addButton.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.ic_remove_circle_outline_black_24dp));
+                    EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactAddClick(item, true));
+
+                }
+                else
+                {
+                    addButton.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.ic_add_black_24dp));
+                    EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactAddClick(item, false));
+
+                }
+
+            }
+        });
 
     }
 }

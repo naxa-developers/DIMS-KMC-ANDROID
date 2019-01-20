@@ -18,6 +18,8 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.plugins.cluster.clustering.ClusterItem;
+import com.mapbox.mapboxsdk.plugins.cluster.clustering.ClusterManagerPlugin;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
@@ -35,6 +38,7 @@ import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.EmergenctContactCallEvent;
 import np.com.naxa.iset.event.MarkerClickEvent;
+import np.com.naxa.iset.home.ISET;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 
@@ -45,6 +49,8 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
     OpenSpaceMapActivity context;
     MapboxMap mapboxMap;
     MapView mapView;
+
+    private ClusterManagerPlugin<MyItem> clusterManagerPlugin;
 
     String imageName;
     ArrayList<LatLng> points = null;
@@ -57,9 +63,11 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
         this.mapView = mapView;
     }
 
-
+        List<MyItem> items = new ArrayList<MyItem>();
     public void AddMarkerOnMap(String geoJsonFileName ,StringBuilder stringBuilder, String imageName){
 
+        // Initializing the cluster plugin
+        clusterManagerPlugin = new ClusterManagerPlugin<>(context, mapboxMap);
 
         Log.d(TAG, "AddMarkerOnMap: "+stringBuilder.toString());
         Icon icon ;
@@ -69,8 +77,6 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
         }else {
             icon = IconFactory.getInstance(context).fromBitmap(LoadImageUtils.getImageBitmapFromDrawable(context, imageName));
         }
-
-//      BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.map_marker_blue);
 
       if(stringBuilder == null){
           return;
@@ -83,7 +89,7 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
         List<Feature> featureList  = featureCollection.features();
 
         Observable.just(featureList)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapIterable(new Function<List<Feature>, Iterable<Feature>>() {
                     @Override
@@ -125,6 +131,8 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
                                 .title(title)
                                 .snippet(snippest)
                                 .icon(icon));
+////
+                        items.add(new MyItem(location,title,snippest, icon));
 
                         mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                             @Override
@@ -139,16 +147,42 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Toast.makeText(context, "Problem reading list of markers.", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onComplete() {
+                        Log.d(TAG, "onComplete: "+items.size());
 
-
+//                        runThread(items);
                     }
                 });
 
+    }
+
+    private void runThread(List<MyItem> myItems) {
+
+        new Thread() {
+            public void run() {
+                    try {
+                        context.runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                mapboxMap.addOnCameraIdleListener(clusterManagerPlugin);
+                                try {
+                                    clusterManagerPlugin.addItems(myItems);
+                                } catch (Exception exception) {
+                                    Toast.makeText(context, "Problem reading list of markers.", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+            }
+        }.run();
     }
 
 
@@ -269,5 +303,74 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
 
         mapboxMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(position), 1000);
+    }
+
+
+    /**
+     * Custom class for use by the marker cluster plugin
+     */
+    public static class MyItem implements ClusterItem {
+        private final LatLng position;
+        private String title;
+        private String snippet;
+        private Icon icon;
+
+        public MyItem(double lat, double lng) {
+            position = new LatLng(lat, lng);
+            title = null;
+            snippet = null;
+        }
+
+
+        public MyItem(double lat, double lng, String title, String snippet, Icon icon) {
+            position = new LatLng(lat, lng);
+            this.title = title;
+            this.snippet = snippet;
+            this.icon = icon;
+        }
+
+        public MyItem(LatLng latLng, String title, String snippet, Icon icon) {
+            position = latLng;
+            this.title = title;
+            this.snippet = snippet;
+            this.icon = icon;
+        }
+
+        public MyItem(LatLng latLng, String title, String snippet) {
+            position = latLng;
+            this.title = title;
+            this.snippet = snippet;
+        }
+
+        @Override
+        public LatLng getPosition() {
+            return position;
+        }
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public String getSnippet() {
+            return snippet;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setSnippet(String snippet) {
+            this.snippet = snippet;
+        }
+
+        public Icon getIcon() {
+            return icon;
+        }
+
+        public void setIcon(Icon icon) {
+            this.icon = icon;
+        }
     }
 }

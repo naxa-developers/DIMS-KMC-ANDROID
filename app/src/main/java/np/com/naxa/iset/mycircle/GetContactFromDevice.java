@@ -21,6 +21,7 @@ import np.com.naxa.iset.utils.DialogFactory;
 public class GetContactFromDevice {
 
     public List<ContactModel> getContacts(Context context, Dialog progressDialog) {
+        progressDialog.show();
         ArrayList<ContactModel> list = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
