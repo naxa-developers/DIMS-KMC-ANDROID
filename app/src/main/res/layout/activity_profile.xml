@@ -15,295 +15,306 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--profile Layout-->
-            <RelativeLayout
-                android:id="@+id/profileLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
+            <ViewSwitcher
+                android:id="@+id/viewSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:inAnimation="@android:anim/slide_out_right">
 
-                <ImageView
-                    android:id="@+id/iv_picture"
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/spacing_xxlarge"
-                    android:layout_marginRight="@dimen/spacing_medium"
-                    android:layout_marginBottom="@dimen/spacing_large" />
-
-                <ImageButton
-                    android:id="@+id/ib_setting"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="@dimen/spacing_xxlarge"
-                    android:layout_toRightOf="@id/iv_picture"
-                    android:background="@drawable/ic_profile_setting" />
-
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/iv_picture"
-                    android:layout_marginBottom="@dimen/spacing_medium"
-                    android:gravity="center_horizontal"
-                    android:text="Samir Dangal"
-                    android:textSize="@dimen/material_text_headline"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name"
-                    android:layout_marginBottom="@dimen/spacing_medium"
-                    android:gravity="center_horizontal"
-                    android:text="New Baneshwor, Kathmandu" />
-
-                <TextView
-                    android:id="@+id/tv_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_address"
-                    android:gravity="center_horizontal"
-                    android:text="9809876543" />
-
-
-                <!--circle content layout-->
+                <!--Regestration Layout-->
                 <LinearLayout
-                    android:id="@+id/circleContentLayout"
+                    android:id="@+id/regestrationLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_number"
-                    android:layout_marginBottom="@dimen/spacing_xlarge"
-                    android:orientation="vertical">
-                    <!--layout before circle add-->
-                    <RelativeLayout
-                        android:id="@+id/relativeLayoutBeforeCircleAdd"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_xlarge">
+
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:text="Register to get more services"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/material_text_body1"
+                        android:textStyle="bold" />
 
-                        <ImageView
 
-                            android:id="@+id/iv_MyCircle"
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/spacing_xlarge"
-                            android:layout_marginRight="@dimen/spacing_medium"
-                            android:layout_marginBottom="@dimen/spacing_xlarge"
-                            android:src="@drawable/ic_my_circle_round" />
+                    <!--full name-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_detail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/iv_MyCircle"
-                            android:layout_marginLeft="@dimen/spacing_large"
-                            android:layout_marginRight="@dimen/spacing_large"
-                            android:gravity="center"
-                            android:text="@string/your_circle_is_empty_LBL"
-                            android:textSize="@dimen/material_text_subhead" />
+                            android:layout_marginBottom="@dimen/spacing_medium"
+                            android:text="Full Name" />
 
-                    </RelativeLayout>
+                        <EditText
+                            android:id="@+id/et_reg_full_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_large"
+                            android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                            android:padding="@dimen/spacing_medium" />
+                    </LinearLayout>
 
-                    <!--layout after circle added-->
-                    <RelativeLayout
-                        android:id="@+id/relativeLayoutAfterCircleAdded"
+                    <!--full name-->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_horizontal_margin"
-                        android:visibility="visible">
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvPeopleInYourCircleLBL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                            android:text="@string/people_in_your_circle"
-                            android:textColor="@color/slate_black"
-                            android:textSize="@dimen/material_text_subhead"
-                            android:textStyle="bold" />
+                            android:layout_marginBottom="@dimen/spacing_medium"
+                            android:text="Email" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recyclerViewMyCircle"
+                        <EditText
+                            android:id="@+id/et_reg_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/tvPeopleInYourCircleLBL"></android.support.v7.widget.RecyclerView>
+                            android:layout_marginBottom="@dimen/spacing_large"
+                            android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                            android:padding="@dimen/spacing_medium" />
+                    </LinearLayout>
 
-                    </RelativeLayout>
+                    <!--contact number -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_medium"
+                            android:text="Mobile Number" />
 
+                        <EditText
+                            android:id="@+id/et_reg_mobile_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_large"
+                            android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                            android:inputType="phone"
+                            android:padding="@dimen/spacing_medium" />
+                    </LinearLayout>
 
-                <Button
-                    android:id="@+id/btn_add_people"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/circleContentLayout"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="@dimen/spacing_xxxlarge"
-                    android:layout_marginRight="@dimen/spacing_xxxlarge"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/button_rounded_purple"
-                    android:drawablePadding="@dimen/spacing_large"
-                    android:paddingLeft="@dimen/spacing_xlarge"
-                    android:paddingRight="@dimen/spacing_xlarge"
-                    android:text="@string/add_people"
-                    android:textAllCaps="false"
-                    android:textColor="@color/light_gray" />
-
-            </RelativeLayout>
-
-            <!--Regestration Layout-->
-            <LinearLayout
-                android:id="@+id/regestrationLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="@dimen/spacing_xlarge">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_large"
-                    android:text="Register to get more services"
-                    android:textColor="@color/dark_gray"
-                    android:textSize="@dimen/material_text_body1"
-                    android:textStyle="bold" />
-
-
-                <!--full name-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    <!--blood group-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_medium"
-                        android:text="Full Name" />
+                        android:text="Blood Group" />
 
-                    <EditText
-                        android:id="@+id/et_reg_full_name"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_large"
-                        android:background="@drawable/rectangle_rounded_bordered_light_pink"
-                        android:padding="@dimen/spacing_medium" />
+                        android:background="@drawable/rectangle_rounded_light_purple"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_medium">
+
+                        <Spinner
+                            android:id="@+id/spn_blood_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white" />
+                    </LinearLayout>
+
+
+                    <!--Address-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_medium"
+                            android:text="Address" />
+
+                        <EditText
+                            android:id="@+id/et_reg_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_large"
+                            android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                            android:padding="@dimen/spacing_medium" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xxxlarge"
+                        android:background="@drawable/button_rounded_purple"
+                        android:text="Register"
+                        android:textColor="@color/light_gray"
+                        android:textStyle="bold" />
+
+                    <com.google.android.gms.common.SignInButton
+                        android:id="@+id/gmail_sign_in_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+                    </com.google.android.gms.common.SignInButton>
+
                 </LinearLayout>
 
-                <!--full name-->
-                <LinearLayout
+                <!--profile Layout-->
+                <RelativeLayout
+                    android:id="@+id/profileLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_picture"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/spacing_xxlarge"
+                        android:layout_marginRight="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_large" />
+
+                    <ImageButton
+                        android:id="@+id/ib_setting"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="@dimen/spacing_xxlarge"
+                        android:layout_toRightOf="@id/iv_picture"
+                        android:background="@drawable/ic_profile_setting" />
+
 
                     <TextView
+                        android:id="@+id/tv_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/iv_picture"
                         android:layout_marginBottom="@dimen/spacing_medium"
-                        android:text="Email" />
-
-                    <EditText
-                        android:id="@+id/et_reg_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        android:background="@drawable/rectangle_rounded_bordered_light_pink"
-                        android:padding="@dimen/spacing_medium" />
-                </LinearLayout>
-
-                <!--contact number -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                        android:gravity="center_horizontal"
+                        android:text="Samir Dangal"
+                        android:textSize="@dimen/material_text_headline"
+                        android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_name"
                         android:layout_marginBottom="@dimen/spacing_medium"
-                        android:text="Mobile Number" />
-
-                    <EditText
-                        android:id="@+id/et_reg_mobile_no"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        android:background="@drawable/rectangle_rounded_bordered_light_pink"
-                        android:padding="@dimen/spacing_medium"
-                        android:inputType="phone"/>
-                </LinearLayout>
-
-                <!--blood group-->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_medium"
-                    android:text="Blood Group" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_large"
-                    android:background="@drawable/rectangle_rounded_light_purple"
-                    android:padding="@dimen/spacing_medium"
-                    android:orientation="vertical">
-                    <Spinner
-                        android:id="@+id/spn_blood_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white" />
-                </LinearLayout>
-
-
-                <!--Address-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                        android:gravity="center_horizontal"
+                        android:text="New Baneshwor, Kathmandu" />
 
                     <TextView
+                        android:id="@+id/tv_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_medium"
-                        android:text="Address" />
+                        android:layout_below="@id/tv_address"
+                        android:gravity="center_horizontal"
+                        android:text="9809876543" />
 
-                    <EditText
-                        android:id="@+id/et_reg_address"
+
+                    <!--circle content layout-->
+                    <LinearLayout
+                        android:id="@+id/circleContentLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        android:background="@drawable/rectangle_rounded_bordered_light_pink"
-                        android:padding="@dimen/spacing_medium" />
-                </LinearLayout>
+                        android:layout_below="@id/tv_number"
+                        android:layout_marginBottom="@dimen/spacing_xlarge"
+                        android:orientation="vertical">
+                        <!--layout before circle add-->
+                        <RelativeLayout
+                            android:id="@+id/relativeLayoutBeforeCircleAdd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/btn_register"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_rounded_purple"
-                    android:text="Register"
-                    android:textColor="@color/light_gray"
-                    android:textStyle="bold" />
+                            <ImageView
 
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/gmail_sign_in_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin">
+                                android:id="@+id/iv_MyCircle"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/spacing_xlarge"
+                                android:layout_marginRight="@dimen/spacing_medium"
+                                android:layout_marginBottom="@dimen/spacing_xlarge"
+                                android:src="@drawable/ic_my_circle_round" />
 
-                </com.google.android.gms.common.SignInButton>
+                            <TextView
+                                android:id="@+id/tv_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/iv_MyCircle"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:gravity="center"
+                                android:text="@string/your_circle_is_empty_LBL"
+                                android:textSize="@dimen/material_text_subhead" />
 
-            </LinearLayout>
+                        </RelativeLayout>
 
+                        <!--layout after circle added-->
+                        <RelativeLayout
+                            android:id="@+id/relativeLayoutAfterCircleAdded"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/tvPeopleInYourCircleLBL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                                android:text="@string/people_in_your_circle"
+                                android:textColor="@color/slate_black"
+                                android:textSize="@dimen/material_text_subhead"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerViewMyCircle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/tvPeopleInYourCircleLBL"></android.support.v7.widget.RecyclerView>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                    <Button
+                        android:id="@+id/btn_add_people"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/circleContentLayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/spacing_xxxlarge"
+                        android:layout_marginRight="@dimen/spacing_xxxlarge"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:background="@drawable/button_rounded_purple"
+                        android:drawablePadding="@dimen/spacing_large"
+                        android:paddingLeft="@dimen/spacing_xlarge"
+                        android:paddingRight="@dimen/spacing_xlarge"
+                        android:text="@string/add_people"
+                        android:textAllCaps="false"
+                        android:textColor="@color/light_gray" />
+
+                </RelativeLayout>
+
+            </ViewSwitcher>
         </LinearLayout>
     </ScrollView>
 

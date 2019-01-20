@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -52,6 +54,7 @@ import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.HidekeyboardUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -108,6 +111,8 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     Button btnRegister;
     @BindView(R.id.regestrationLayout)
     LinearLayout regestrationLayout;
+    @BindView(R.id.viewSwitcher)
+    ViewSwitcher viewSwitcher;
 
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -124,6 +129,8 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         setupToolBar();
         setupListRecycler();
 
+        setUpSpinner();
+
         setupGmailLogin();
     }
 
@@ -137,7 +144,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
     private void initUI() {
 
-        if(userPhotoUri != null) {
+        if (userPhotoUri != null) {
             Glide.with(this)
                     .load(userPhotoUri)
                     .asBitmap()
@@ -153,6 +160,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                     });
         }
 
+        tvAddress.setText(etRegAddress.getText());
+        tvNumber.setText(etRegMobileNo.getText());
+
     }
 
 
@@ -161,6 +171,13 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         recyclerViewMyCircle.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewMyCircle.setAdapter(myCircleContactListAdapter);
 
+    }
+
+    private void setUpSpinner() {
+        ArrayAdapter<String> bloodAdapter = new ArrayAdapter<String>(MyCircleProfileActivity.this,
+                R.layout.item_spinner, getResources().getStringArray(R.array.array_blood_group));
+        bloodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnBloodGroup.setAdapter(bloodAdapter);
     }
 
 
@@ -180,11 +197,17 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 signIn();
                 break;
 
-                case R.id.btn_register:
-                    regestrationLayout.setVisibility(View.GONE);
-                    profileLayout.setVisibility(View.VISIBLE);
+            case R.id.btn_register:
+                HidekeyboardUtils.hideKeyboard(MyCircleProfileActivity.this);
 
-                    initUI();
+                if (viewSwitcher.getCurrentView() != regestrationLayout){
+
+                    viewSwitcher.showPrevious();
+                } else if (viewSwitcher.getCurrentView() != profileLayout){
+
+                    viewSwitcher.showNext();
+                }
+                initUI();
                 break;
         }
     }
@@ -268,6 +291,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 });
 
         tvName.setText(account.getDisplayName());
+
+        etRegEmail.setText(account.getEmail());
+        etRegFullName.setText(account.getDisplayName());
     }
 
 //    gmail login end
