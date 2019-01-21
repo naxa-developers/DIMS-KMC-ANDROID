@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +59,7 @@ public class BloodRequestActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolBar();
+        setBloodButtonList();
     }
 
 
@@ -72,25 +76,64 @@ public class BloodRequestActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.blood_A_positive:
+                setButtonChecked(R.id.blood_A_positive);
                 break;
+
             case R.id.blood_B_positive:
+                setButtonChecked(R.id.blood_B_positive);
                 break;
+
             case R.id.blood_O_positive:
+                setButtonChecked(R.id.blood_O_positive);
                 break;
+
             case R.id.blood_AB_positive:
+                setButtonChecked(R.id.blood_AB_positive);
                 break;
+
             case R.id.blood_A_negative:
+                setButtonChecked(R.id.blood_A_negative);
                 break;
+
             case R.id.blood_B_negative:
+                setButtonChecked(R.id.blood_B_negative);
                 break;
+
             case R.id.blood_O_negative:
+                setButtonChecked(R.id.blood_O_negative);
                 break;
+
             case R.id.blood_AB_negative:
+                setButtonChecked(R.id.blood_AB_negative);
                 break;
+
             case R.id.bloodGroupLayout:
                 break;
+
             case R.id.btnMakeBloodRequest:
                 break;
         }
+    }
+
+    List<Integer> bloodButtonList = new ArrayList<Integer>();
+    private void setBloodButtonList(){
+        bloodButtonList.add(R.id.blood_A_positive);
+        bloodButtonList.add(R.id.blood_B_positive);
+        bloodButtonList.add(R.id.blood_O_positive);
+        bloodButtonList.add(R.id.blood_AB_positive);
+        bloodButtonList.add(R.id.blood_A_negative);
+        bloodButtonList.add(R.id.blood_B_negative);
+        bloodButtonList.add(R.id.blood_O_negative);
+        bloodButtonList.add(R.id.blood_AB_negative);
+    }
+
+    private void setButtonChecked(int buttonId){
+        for (int i = 0; i< bloodButtonList.size(); i++){
+            ToggleButton toggleButton = (ToggleButton) findViewById(bloodButtonList.get(i));
+            toggleButton.setChecked(false);
+        }
+        ToggleButton toggleButton = (ToggleButton) findViewById(buttonId);
+        toggleButton.setChecked(true);
+
     }
 }

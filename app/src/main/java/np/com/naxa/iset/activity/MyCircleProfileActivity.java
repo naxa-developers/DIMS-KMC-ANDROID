@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,6 +56,7 @@ import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
+import np.com.naxa.iset.mycircle.contactlistdialog.TabbedDialog;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
@@ -118,6 +122,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
+    private static final int RC_SIGN_OUT = 2;
 
     String userPhotoUri = null;
 
@@ -191,7 +196,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_add_people:
-                handleContactPermission();
+//                handleContactPermission();
+
+                showTabbedDialog();
                 break;
 
             case R.id.gmail_sign_in_button:
@@ -201,16 +208,16 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             case R.id.btn_register:
                 HidekeyboardUtils.hideKeyboard(MyCircleProfileActivity.this);
 
-                if(FieldValidatorUtils.validateEditText(etRegFullName) &&
-                FieldValidatorUtils.validateEditText(etRegAddress) &&
-                FieldValidatorUtils.validateMobileNoEditText(etRegMobileNo) &&
-                FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
-                FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup , "Please select your blood group.")){
+                if (FieldValidatorUtils.validateEditText(etRegFullName) &&
+                        FieldValidatorUtils.validateEditText(etRegAddress) &&
+                        FieldValidatorUtils.validateMobileNoEditText(etRegMobileNo) &&
+                        FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
+                        FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup, "Please select your blood group.")) {
 
-                    if (viewSwitcher.getCurrentView() != regestrationLayout){
+                    if (viewSwitcher.getCurrentView() != regestrationLayout) {
 
                         viewSwitcher.showPrevious();
-                    } else if (viewSwitcher.getCurrentView() != profileLayout){
+                    } else if (viewSwitcher.getCurrentView() != profileLayout) {
 
                         viewSwitcher.showNext();
                     }
@@ -220,6 +227,20 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+
+    private void showTabbedDialog(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        TabbedDialog dialogFragment = new TabbedDialog();
+        dialogFragment.show(ft,"dialog");
     }
 
 
@@ -253,6 +274,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+
     }
 
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
@@ -306,7 +328,30 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         etRegFullName.setText(account.getDisplayName());
     }
 
+
 //    gmail login end
+
+    //    gmail log out
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+    }
+
+    private void revokeAccess() {
+        mGoogleSignInClient.revokeAccess()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+    }
+//    end of gmail log out
 
 
     @AfterPermissionGranted(RESULT_CONTACT_PERMISSION)
