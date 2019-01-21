@@ -54,6 +54,7 @@ import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -200,14 +201,23 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             case R.id.btn_register:
                 HidekeyboardUtils.hideKeyboard(MyCircleProfileActivity.this);
 
-                if (viewSwitcher.getCurrentView() != regestrationLayout){
+                if(FieldValidatorUtils.validateEditText(etRegFullName) &&
+                FieldValidatorUtils.validateEditText(etRegAddress) &&
+                FieldValidatorUtils.validateMobileNoEditText(etRegMobileNo) &&
+                FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
+                FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup , "Please select your blood group.")){
 
-                    viewSwitcher.showPrevious();
-                } else if (viewSwitcher.getCurrentView() != profileLayout){
+                    if (viewSwitcher.getCurrentView() != regestrationLayout){
 
-                    viewSwitcher.showNext();
+                        viewSwitcher.showPrevious();
+                    } else if (viewSwitcher.getCurrentView() != profileLayout){
+
+                        viewSwitcher.showNext();
+                    }
+                    initUI();
                 }
-                initUI();
+
+
                 break;
         }
     }

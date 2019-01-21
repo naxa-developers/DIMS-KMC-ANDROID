@@ -34,7 +34,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".UserRegistrationActivity"></activity>
+        <activity android:name=".mycircle.LoginActivity"></activity>
+        <activity android:name=".UserRegistrationActivity" />
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true">
