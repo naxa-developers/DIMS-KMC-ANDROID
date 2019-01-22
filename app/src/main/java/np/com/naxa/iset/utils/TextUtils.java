@@ -7,8 +7,7 @@ public class TextUtils {
 
     public static String validatePhoneNumber (String rawPhoneNumber){
         String new_phoneNo = "";
-
-
+        
         //            trunk '-' from contact number
         String trunk = rawPhoneNumber;
         String temp = trunk.replaceAll("-", "");
