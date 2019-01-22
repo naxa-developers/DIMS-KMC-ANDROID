@@ -15,6 +15,7 @@ import np.com.naxa.iset.database.dao.GeoJsonCategoryDao;
 import np.com.naxa.iset.database.dao.GeoJsonListDao;
 import np.com.naxa.iset.database.dao.HospitalFacilitiesDao;
 import np.com.naxa.iset.database.dao.MessageHelperDao;
+import np.com.naxa.iset.database.dao.MyCircleContactDao;
 import np.com.naxa.iset.database.dao.OpenSpaceDao;
 import np.com.naxa.iset.database.entity.CommonPlacesAttrb;
 import np.com.naxa.iset.database.entity.Contact;
@@ -24,18 +25,20 @@ import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.firebase.MessageHelper;
+import np.com.naxa.iset.mycircle.ContactModel;
 
 /**
  * Created by samir on 4/22/2018.
  */
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
-        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class,
+        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class,
 }, version = 17, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
 
     public abstract ContactDao contactDao();
+    public abstract MyCircleContactDao myCircleContactDao();
     public abstract MessageHelperDao messageHelperDao();
     public abstract OpenSpaceDao openSpaceDao();
     public abstract CommonPlacesAttrbDao commonPlacesAttrbDao();
@@ -84,6 +87,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final ContactDao mContactDao;
+        private final MyCircleContactDao mMyCircleContactDao;
         private final MessageHelperDao mMessageHelperDao;
         private final OpenSpaceDao mOpenSpaceDao;
         private final CommonPlacesAttrbDao mCommonPlacesAttrbDao;
@@ -94,6 +98,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
 
         PopulateDbAsync(ISETRoomDatabase db) {
             mContactDao = db.contactDao();
+            mMyCircleContactDao = db.myCircleContactDao();
             mMessageHelperDao = db.messageHelperDao();
             mOpenSpaceDao = db.openSpaceDao();
             mCommonPlacesAttrbDao = db.commonPlacesAttrbDao();

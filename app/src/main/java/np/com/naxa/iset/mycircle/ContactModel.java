@@ -1,16 +1,63 @@
 package np.com.naxa.iset.mycircle;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "ContactModel")
 public class ContactModel implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    private int cid;
+
+    @ColumnInfo(name = "id")
+    @SerializedName("id")
+    @Expose
     public String id;
+
+    @ColumnInfo(name = "name")
+    @SerializedName("name")
+    @Expose
     public String name;
+
+    @ColumnInfo(name = "mobile_no")
+    @SerializedName("mobile_no")
+    @Expose
     public String mobileNumber;
+
+    @ColumnInfo(name = "photo")
+    @SerializedName("photo")
+    @Expose
     public Bitmap photo;
+
+    @ColumnInfo(name = "photo_url")
+    @SerializedName("photo_url")
+    @Expose
     public Uri photoURI;
+
+
+    @ColumnInfo(name = "add_to_circle")
+    @SerializedName("add_to_circle")
+    @Expose
+    public int addToCircle;
+
+
+
+    public ContactModel(String id, String name, String mobileNumber, Bitmap photo, Uri photoURI, int addToCircle) {
+        this.id = id;
+        this.name = name;
+        this.mobileNumber = mobileNumber;
+        this.photo = photo;
+        this.photoURI = photoURI;
+        this.addToCircle = addToCircle;
+    }
 
     public String getId() {
         return id;
@@ -88,4 +135,12 @@ public class ContactModel implements Parcelable {
             return new ContactModel[size];
         }
     };
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
 }

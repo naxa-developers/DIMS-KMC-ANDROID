@@ -1,11 +1,12 @@
 package np.com.naxa.iset.utils;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 public class TextUtils {
     private static final String TAG = "TextUtils";
 
-    public static String validatePhoneNumber (String rawPhoneNumber){
+    public static String validatePhoneNumber (@NonNull String rawPhoneNumber){
         String new_phoneNo = "";
         
         //            trunk '-' from contact number
