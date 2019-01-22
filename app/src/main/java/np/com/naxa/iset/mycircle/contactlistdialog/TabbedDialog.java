@@ -1,6 +1,7 @@
 package np.com.naxa.iset.mycircle.contactlistdialog;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -15,7 +16,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.event.MyCircleContactAddEvent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,8 +40,8 @@ public class TabbedDialog  extends DialogFragment {
         btnClose = (Button) rootview.findViewById(R.id.btnClose);
 
         CustomAdapter adapter = new CustomAdapter(getChildFragmentManager());
-        adapter.addFragment("All",CustomFragment.createInstance("All"));
         adapter.addFragment("Registered",CustomFragment.createInstance("Registered"));
+        adapter.addFragment("All",CustomFragment.createInstance("All"));
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -46,6 +50,8 @@ public class TabbedDialog  extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // Create and show the dialog.
+                EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactDialogCloseClick());
+
             }
         });
 
@@ -56,4 +62,6 @@ public class TabbedDialog  extends DialogFragment {
 
         return rootview;
     }
+
+
 }

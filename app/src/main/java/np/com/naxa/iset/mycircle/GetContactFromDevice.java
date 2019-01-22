@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.TextUtils;
 
 public class GetContactFromDevice {
 
@@ -45,12 +46,14 @@ public class GetContactFromDevice {
                         ContactModel info = new ContactModel();
                         info.id = id;
                         info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        info.mobileNumber = cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+
                         info.photo = photo;
                         info.photoURI= pURI;
                         list.add(info);
 
                         Log.d("GetContactFromDevice", "getContacts: " + info.name);
+                        Log.d("GetContactFromDevice", "getContacts: " + info.mobileNumber);
                     }
 
                     cursorInfo.close();

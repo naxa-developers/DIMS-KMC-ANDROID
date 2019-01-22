@@ -30,7 +30,7 @@ public class FieldValidatorUtils {
             etContact.setError("Contact field is empty");
             return false;
         }
-        if (mobileNumber.length() < 10) {
+        if (mobileNumber.length() != 10) {
             Toast.makeText(ISET.getInstance(), "Invalid mobile number", Toast.LENGTH_SHORT).show();
             etContact.requestFocus();
             etContact.setError("Invalid mobile number");

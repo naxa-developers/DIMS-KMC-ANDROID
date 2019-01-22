@@ -28,6 +28,7 @@ public class CustomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.contact_list_tab_dialog_fragment_all_layout,container,false);
+
         ((TextView) v.findViewById(R.id.textView)).setText(mText);
         return v;
     }

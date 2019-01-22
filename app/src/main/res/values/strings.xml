@@ -275,6 +275,7 @@
     <string name="icon_explanation">Icon Explanation</string>
     <string name="go_there">Go There</string>
     <string name="no_response">No response</string>
+    <string name="login_with_your_gmail_account">Login with your Gmail Account</string>
 
 
     <string-array name="array_blood_group">

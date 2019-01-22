@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.android.gms.common.SignInButton;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.event.GmailLoginEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
@@ -413,6 +415,30 @@ public final class DialogFactory {
 //        dialog.getWindow().setAttributes(lp);
         return dialog;
     }
+
+
+    public static Dialog createGmailLoginDialog(@NonNull Context context) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.gmail_login_custom_dialog);
+
+
+        SignInButton dialogButton = (SignInButton) dialog.findViewById(R.id.gmail_sign_in_button);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                EventBus.getDefault().post(new GmailLoginEvent.loginButtonClick());
+
+            }
+        });
+        return dialog;
+    }
+
+
+
+
 
 
 

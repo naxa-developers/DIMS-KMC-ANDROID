@@ -12,6 +12,8 @@ public class UrlClass {
 
     public static final String BASE_URL = "http://app.naxa.com.np/";
 
+    public static final String API_ACCESS_TOKEN = "!@10293848576qwertyuiopasdfghjklmnbvcxzkhadkapoiuytrewq!0_p_123456r_@a_@k_@a_@s_@h_aquickbrownfoxjumpoverthelazydog";
+
     public static  String VSO_BASE_URL ;
 
 

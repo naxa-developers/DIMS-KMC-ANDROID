@@ -40,6 +40,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +58,8 @@ import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.mycircle.contactlistdialog.TabbedDialog;
+import np.com.naxa.iset.mycircle.registeruser.UserModel;
+import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
@@ -125,6 +128,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     private static final int RC_SIGN_OUT = 2;
 
     String userPhotoUri = null;
+
+    TabbedDialog dialogFragment;
+    FragmentTransaction ft;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -196,9 +202,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_add_people:
-//                handleContactPermission();
+                handleContactPermission();
 
-                showTabbedDialog();
+//                showTabbedDialog();
                 break;
 
             case R.id.gmail_sign_in_button:
@@ -221,6 +227,20 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                         viewSwitcher.showNext();
                     }
+
+                    UserModel userModel = new UserModel(UrlClass.API_ACCESS_TOKEN,
+                            etRegFullName.getText().toString(),
+                            etRegEmail.getText().toString(),
+                            etRegMobileNo.getText().toString(),
+                            spnBloodGroup.getSelectedItem().toString(),
+                            etRegAddress.getText().toString(),
+                            userPhotoUri);
+
+                    Gson gson = new Gson();
+                    String jsonInString = gson.toJson(userModel);
+                    Log.d(TAG, "onViewClicked: "+jsonInString);
+
+
                     initUI();
                 }
 
@@ -231,7 +251,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
 
     private void showTabbedDialog(){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             ft.remove(prev);
@@ -239,7 +259,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        TabbedDialog dialogFragment = new TabbedDialog();
+        dialogFragment = new TabbedDialog();
         dialogFragment.show(ft,"dialog");
     }
 
@@ -327,8 +347,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         etRegEmail.setText(account.getEmail());
         etRegFullName.setText(account.getDisplayName());
     }
-
-
 //    gmail login end
 
     //    gmail log out
@@ -444,6 +462,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDialogCloseClick(MyCircleContactAddEvent.MyCircleContactDialogCloseClick itemClick) {
+
+        dialogFragment.dismiss();
+
 
         if (contactModelList != null) {
             ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModelList);
