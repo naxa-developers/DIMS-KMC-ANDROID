@@ -16,6 +16,8 @@ public class SharedPreferenceUtils {
 
     public static final String IS_STORAGE_PERMISSION_GRANTED = "is_permission_granted";
     public static final String TOKEN_ID = "token_id";
+    public static final String USER_ALREADY_REGISTERED = "user_already_registered";
+    public static final String USER_ALREADY_LOGGED_IN = "user_already_logged_in";
     public static final String IS_NOTIFY_ME = "notify_me";
     public static final String APP_LANGUAGE = "app_language";
     public static final String MAP_BASE_LAYER = "base_layer";

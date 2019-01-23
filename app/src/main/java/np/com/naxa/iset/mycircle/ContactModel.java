@@ -32,15 +32,15 @@ public class ContactModel implements Parcelable {
     @Expose
     public String mobileNumber;
 
-    @ColumnInfo(name = "photo")
-    @SerializedName("photo")
-    @Expose
-    public Bitmap photo;
+//    @ColumnInfo(name = "photo")
+//    @SerializedName("photo")
+//    @Expose
+//    public Bitmap photo;
 
     @ColumnInfo(name = "photo_url")
     @SerializedName("photo_url")
     @Expose
-    public Uri photoURI;
+    public String photoURI;
 
 
     @ColumnInfo(name = "add_to_circle")
@@ -50,11 +50,11 @@ public class ContactModel implements Parcelable {
 
 
 
-    public ContactModel(String id, String name, String mobileNumber, Bitmap photo, Uri photoURI, int addToCircle) {
+    public ContactModel(String id, String name, String mobileNumber, String photoURI, int addToCircle) {
         this.id = id;
         this.name = name;
         this.mobileNumber = mobileNumber;
-        this.photo = photo;
+//        this.photo = photo;
         this.photoURI = photoURI;
         this.addToCircle = addToCircle;
     }
@@ -83,19 +83,19 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = mobileNumber;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
-    }
+//    public Bitmap getPhoto() {
+//        return photo;
+//    }
+//
+//    public void setPhoto(Bitmap photo) {
+//        this.photo = photo;
+//    }
 
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
-    }
-
-    public Uri getPhotoURI() {
+    public String getPhotoURI() {
         return photoURI;
     }
 
-    public void setPhotoURI(Uri photoURI) {
+    public void setPhotoURI(String photoURI) {
         this.photoURI = photoURI;
     }
 
@@ -109,8 +109,8 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.mobileNumber);
-        dest.writeParcelable(this.photo, flags);
-        dest.writeParcelable(this.photoURI, flags);
+//        dest.writeParcelable(this.photo, flags);
+        dest.writeString(this.photoURI);
     }
 
     public ContactModel() {
@@ -120,8 +120,8 @@ public class ContactModel implements Parcelable {
         this.id = in.readString();
         this.name = in.readString();
         this.mobileNumber = in.readString();
-        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
-        this.photoURI = in.readParcelable(Uri.class.getClassLoader());
+//        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
+        this.photoURI = in.readString();
     }
 
     public static final Parcelable.Creator<ContactModel> CREATOR = new Parcelable.Creator<ContactModel>() {

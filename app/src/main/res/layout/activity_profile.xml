@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <include layout="@layout/toolbar_purple" />
 
@@ -149,26 +150,42 @@
                             android:padding="@dimen/spacing_medium" />
                     </LinearLayout>
 
+                    <CheckBox
+                        android:id="@+id/chkGetNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_horizontal_margin"
+                        android:text="Agree to provide blood in case of emergency and get notification if there is pending blood request "
+                        android:checked="true"
+                        android:gravity="left"
+                        android:backgroundTint="@color/isetPurple"
+                        />
+
+                    <Button
+                        android:id="@+id/gmail_sign_in_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:drawableLeft="@drawable/ic_google_icon"
+                        android:drawablePadding="@dimen/spacing_small"
+                        android:background="@color/colorWindowBackground"
+                        android:text="Get details from Google Account"
+                        android:textAllCaps="false">
+
+                    </Button>
                     <Button
                         android:id="@+id/btn_register"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xxxlarge"
                         android:background="@drawable/button_rounded_purple"
                         android:text="Register"
                         android:textColor="@color/light_gray"
                         android:textStyle="bold" />
 
-                    <com.google.android.gms.common.SignInButton
-                        android:id="@+id/gmail_sign_in_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:layout_marginRight="40dp"
-                        android:layout_marginBottom="@dimen/activity_horizontal_margin">
 
-                    </com.google.android.gms.common.SignInButton>
 
                 </LinearLayout>
 

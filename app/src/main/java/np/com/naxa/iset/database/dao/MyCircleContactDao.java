@@ -1,6 +1,7 @@
 package np.com.naxa.iset.database.dao;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -10,7 +11,7 @@ import java.util.List;
 import io.reactivex.Flowable;
 import np.com.naxa.iset.mycircle.ContactModel;
 
-
+@Dao
 public interface MyCircleContactDao {
     // LiveData is a data holder class that can be observed within a given lifecycle.
     // Always holds/caches latest version of data. Notifies its active observers when the

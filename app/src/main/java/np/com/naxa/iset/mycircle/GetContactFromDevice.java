@@ -48,8 +48,8 @@ public class GetContactFromDevice {
                         info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
 
-                        info.photo = photo;
-                        info.photoURI= pURI;
+//                        info.photo = photo;
+                        info.photoURI= pURI.toString();
                         list.add(info);
 
                         Log.d("GetContactFromDevice", "getContacts: " + info.name);

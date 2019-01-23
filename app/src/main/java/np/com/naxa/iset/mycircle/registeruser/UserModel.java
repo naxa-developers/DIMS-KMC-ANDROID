@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserModel {
 
-    @SerializedName("api_token")
-    @Expose
-    private String api_token;
-
     @SerializedName("full_name")
     @Expose
     private String name;
@@ -33,14 +29,18 @@ public class UserModel {
     @Expose
     private String image_url;
 
-    public UserModel(String api_token, String name, String email, String mobile_no, String blood_group, String address, String image_url) {
-        this.api_token = api_token;
+    @SerializedName("get_notification")
+    @Expose
+    private String get_notification;
+
+    public UserModel( String name, String email, String mobile_no, String blood_group, String address, String image_url, String get_notification) {
         this.name = name;
         this.email = email;
         this.mobile_no = mobile_no;
         this.blood_group = blood_group;
         this.address = address;
         this.image_url = image_url;
+        this.get_notification = get_notification;
     }
 
     public String getName() {

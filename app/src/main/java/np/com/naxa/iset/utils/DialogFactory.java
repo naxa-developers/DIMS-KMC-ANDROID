@@ -156,7 +156,7 @@ public final class DialogFactory {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setContentView(R.layout.custom_dialog_success);
 
         TextView text = (TextView) dialog.findViewById(R.id.tv_message);
         text.setText(message);
@@ -174,6 +174,26 @@ public final class DialogFactory {
 
     public interface CustomDialogListener {
         void onClick();
+    }
+
+    public static Dialog createCustomErrorDialog(@NonNull Context context, @NonNull String message, @NonNull CustomDialogListener listener) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_dialog_error);
+
+        TextView text = (TextView) dialog.findViewById(R.id.tv_message);
+        text.setText(message);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.btn_ok);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                listener.onClick();
+            }
+        });
+        return dialog;
     }
 
 

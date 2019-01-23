@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,7 +37,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,17 +52,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.mycircle.contactlistdialog.TabbedDialog;
+import np.com.naxa.iset.mycircle.registeruser.RegisterResponse;
 import np.com.naxa.iset.mycircle.registeruser.UserModel;
 import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.network.retrofit.NetworkApiClient;
+import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
+import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -99,8 +106,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
     private static final String[] READ_STORAGE_AND_CONTACTS =
             {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS};
-    @BindView(R.id.gmail_sign_in_button)
-    SignInButton gmailSignInButton;
     @BindView(R.id.iv_MyCircle)
     ImageView ivMyCircle;
     @BindView(R.id.profileLayout)
@@ -121,6 +126,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     LinearLayout regestrationLayout;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher viewSwitcher;
+    @BindView(R.id.gmail_sign_in_button)
+    Button gmailSignInButton;
+    @BindView(R.id.chkGetNotification)
+    CheckBox chkGetNotification;
 
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -132,11 +141,19 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     TabbedDialog dialogFragment;
     FragmentTransaction ft;
 
+    private NetworkApiInterface apiInterface;
+    SharedPreferenceUtils sharedPreferenceUtils;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+
+        sharedPreferenceUtils = new SharedPreferenceUtils(MyCircleProfileActivity.this);
+        apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
+
 
         setupToolBar();
         setupListRecycler();
@@ -213,44 +230,97 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
             case R.id.btn_register:
                 HidekeyboardUtils.hideKeyboard(MyCircleProfileActivity.this);
-
-                if (FieldValidatorUtils.validateEditText(etRegFullName) &&
-                        FieldValidatorUtils.validateEditText(etRegAddress) &&
-                        FieldValidatorUtils.validateMobileNoEditText(etRegMobileNo) &&
-                        FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
-                        FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup, "Please select your blood group.")) {
-
-                    if (viewSwitcher.getCurrentView() != regestrationLayout) {
-
-                        viewSwitcher.showPrevious();
-                    } else if (viewSwitcher.getCurrentView() != profileLayout) {
-
-                        viewSwitcher.showNext();
-                    }
-
-                    UserModel userModel = new UserModel(UrlClass.API_ACCESS_TOKEN,
-                            etRegFullName.getText().toString(),
-                            etRegEmail.getText().toString(),
-                            etRegMobileNo.getText().toString(),
-                            spnBloodGroup.getSelectedItem().toString(),
-                            etRegAddress.getText().toString(),
-                            userPhotoUri);
-
-                    Gson gson = new Gson();
-                    String jsonInString = gson.toJson(userModel);
-                    Log.d(TAG, "onViewClicked: "+jsonInString);
-
-
-                    initUI();
-                }
-
-
+                convertdataToJson();
                 break;
         }
     }
 
+    private void convertdataToJson() {
+        String getNotification = "yes";
 
-    private void showTabbedDialog(){
+        getNotification = chkGetNotification.isChecked() ? "yes" : "no";
+
+        if (FieldValidatorUtils.validateEditText(etRegFullName) &&
+                FieldValidatorUtils.validateEditText(etRegAddress) &&
+                FieldValidatorUtils.validateMobileNoEditText(etRegMobileNo) &&
+                FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
+                FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup, "Please select your blood group.")) {
+
+            UserModel userModel = new UserModel(etRegFullName.getText().toString(),
+                    etRegEmail.getText().toString(),
+                    etRegMobileNo.getText().toString(),
+                    spnBloodGroup.getSelectedItem().toString(),
+                    etRegAddress.getText().toString(),
+                    userPhotoUri,
+                    getNotification);
+
+            Gson gson = new Gson();
+            String jsonInString = gson.toJson(userModel);
+            Log.d(TAG, "onViewClicked: " + jsonInString);
+
+
+            final Integer[] error = {null};
+            final String[] message = {null};
+            apiInterface
+                    .getRegisterResponse(UrlClass.API_ACCESS_TOKEN, jsonInString)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<RegisterResponse>() {
+                        @Override
+                        public void onNext(RegisterResponse registerResponse) {
+
+                            error[0] = registerResponse.getError();
+                            message[0] = registerResponse.getMessage();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                            if (error[0] == 0) {
+                                DialogFactory.createCustomDialog(MyCircleProfileActivity.this,
+                                        "Registered Successfully",
+                                        new DialogFactory.CustomDialogListener() {
+                                            @Override
+                                            public void onClick() {
+                                                switchViewregisterToProfile();
+                                            }
+                                        }).show();
+                            }
+
+                            if (error[0] == 1) {
+                              DialogFactory.createCustomErrorDialog(MyCircleProfileActivity.this,
+                                        "Registration Failed",
+                                        new DialogFactory.CustomDialogListener() {
+                                            @Override
+                                            public void onClick() {
+
+                                            }
+                                        }).show();
+                            }
+
+                        }
+                    });
+        }
+    }
+
+    private void switchViewregisterToProfile() {
+        if (viewSwitcher.getCurrentView() != regestrationLayout) {
+
+            viewSwitcher.showPrevious();
+        } else if (viewSwitcher.getCurrentView() != profileLayout) {
+
+            viewSwitcher.showNext();
+        }
+        initUI();
+    }
+
+
+    private void showTabbedDialog() {
         ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -260,14 +330,14 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
         // Create and show the dialog.
         dialogFragment = new TabbedDialog();
-        dialogFragment.show(ft,"dialog");
+        dialogFragment.show(ft, "dialog");
     }
 
 
     // gmail Login Start
     private void setupGmailLogin() {
 
-        gmailSignInButton.setSize(SignInButton.SIZE_STANDARD);
+//        gmailSignInButton.setSize(SignInButton.SIZE_STANDARD);
         // Configure sign-in to request the user's ID, email address, and basic
 // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -463,10 +533,11 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDialogCloseClick(MyCircleContactAddEvent.MyCircleContactDialogCloseClick itemClick) {
 
-        dialogFragment.dismiss();
+//        dialogFragment.dismiss();
 
-
+        tvDetail.setVisibility(View.VISIBLE);
         if (contactModelList != null) {
+            tvDetail.setVisibility(View.GONE);
             ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModelList);
         }
 

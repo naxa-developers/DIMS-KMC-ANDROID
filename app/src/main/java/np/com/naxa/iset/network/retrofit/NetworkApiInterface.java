@@ -3,6 +3,8 @@ package np.com.naxa.iset.network.retrofit;
 
 
 import io.reactivex.Observable;
+import np.com.naxa.iset.mycircle.registeruser.RegisterResponse;
+import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.model.AskForHelpResponse;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
 import okhttp3.MultipartBody;
@@ -22,6 +24,7 @@ import retrofit2.http.Part;
 
 public interface NetworkApiInterface {
 
+
     @Multipart
     @POST("ReportController/report_insert_api")
     Call<AskForHelpResponse> getAskForHelpResponse(@Part MultipartBody.Part file,
@@ -33,6 +36,14 @@ public interface NetworkApiInterface {
     @POST("MapApi/geojson")
     @FormUrlEncoded
     Observable<ResponseBody> getGeoJsonDetails(@Field("table") String table_name);
+
+
+    @POST("register")
+    @FormUrlEncoded
+    Observable<RegisterResponse> getRegisterResponse(@Field("api_key") String api_key,
+                                                     @Field("data") String jsonData);
+
+
 
 }
 
