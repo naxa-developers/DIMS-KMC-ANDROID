@@ -22,15 +22,15 @@ import np.com.naxa.iset.event.EmergenctContactCallEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
-public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
+public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<MyCircleContactListData, BaseViewHolder> {
 
-    public MyCircleContactAddDialogListAdapter(int layoutResId, @Nullable List<ContactModel> data) {
+    public MyCircleContactAddDialogListAdapter(int layoutResId, @Nullable List<MyCircleContactListData> data) {
         super(layoutResId, data);
     }
 
 
     @Override
-    protected void convert(BaseViewHolder helper, ContactModel item) {
+    protected void convert(BaseViewHolder helper, MyCircleContactListData item) {
         ToggleButton addButton = helper.getView(R.id.btnAddContactToCircle);
         ImageView imageView = helper.getView(R.id.ivContactPerson);
 
@@ -38,8 +38,8 @@ public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<Contac
             helper.setText(R.id.tvContactPerson, item.getName());
         }
 
-        if(item.getPhotoURI() != null && !item.getPhotoURI().equals("")) {
-            Glide.with(mContext).load(item.photoURI)
+        if(item.getImgUrl() != null && !item.getImgUrl().equals("")) {
+            Glide.with(mContext).load(item.getImgUrl())
                     .placeholder(mContext.getResources().getDrawable(R.drawable.ic_nav_profile))
                     .crossFade()
                     .thumbnail(0.5f)
@@ -58,11 +58,11 @@ public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<Contac
 
 
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+//        addButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//        });
 
         addButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 

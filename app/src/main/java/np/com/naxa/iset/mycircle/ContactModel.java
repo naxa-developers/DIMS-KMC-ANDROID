@@ -17,10 +17,10 @@ public class ContactModel implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int cid;
 
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    @Expose
-    public String id;
+//    @ColumnInfo(name = "id")
+//    @SerializedName("id")
+//    @Expose
+//    public String id;
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
@@ -48,24 +48,68 @@ public class ContactModel implements Parcelable {
     @Expose
     public int addToCircle;
 
+    @ColumnInfo(name = "registered")
+    @SerializedName("registered")
+    @Expose
+    private Boolean registered;
 
 
-    public ContactModel(String id, String name, String mobileNumber, String photoURI, int addToCircle) {
-        this.id = id;
+
+    public ContactModel( String name, String mobileNumber, String photoURI, int addToCircle, boolean registered) {
+//        this.id = id;
         this.name = name;
         this.mobileNumber = mobileNumber;
 //        this.photo = photo;
         this.photoURI = photoURI;
         this.addToCircle = addToCircle;
+        this.registered = registered;
     }
 
-    public String getId() {
-        return id;
+//    public String getId() {
+//        return id;
+//    }
+
+//    public void setId(String id) {
+//        this.id = id;
+//    }
+
+    protected ContactModel(Parcel in) {
+        cid = in.readInt();
+        name = in.readString();
+        mobileNumber = in.readString();
+        photoURI = in.readString();
+        addToCircle = in.readInt();
+        byte tmpRegistered = in.readByte();
+        registered = tmpRegistered == 0 ? null : tmpRegistered == 1;
     }
 
-    public void setId(String id) {
-        this.id = id;
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(cid);
+        dest.writeString(name);
+        dest.writeString(mobileNumber);
+        dest.writeString(photoURI);
+        dest.writeInt(addToCircle);
+        dest.writeByte((byte) (registered == null ? 0 : registered ? 1 : 2));
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {
+        @Override
+        public ContactModel createFromParcel(Parcel in) {
+            return new ContactModel(in);
+        }
+
+        @Override
+        public ContactModel[] newArray(int size) {
+            return new ContactModel[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -99,50 +143,19 @@ public class ContactModel implements Parcelable {
         this.photoURI = photoURI;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.name);
-        dest.writeString(this.mobileNumber);
-//        dest.writeParcelable(this.photo, flags);
-        dest.writeString(this.photoURI);
-        dest.writeInt(this.addToCircle);
-    }
-
-    public ContactModel() {
-    }
-
-    protected ContactModel(Parcel in) {
-        this.id = in.readString();
-        this.name = in.readString();
-        this.mobileNumber = in.readString();
-//        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
-        this.photoURI = in.readString();
-        this.addToCircle = in.readInt();
-    }
-
-    public static final Parcelable.Creator<ContactModel> CREATOR = new Parcelable.Creator<ContactModel>() {
-        @Override
-        public ContactModel createFromParcel(Parcel source) {
-            return new ContactModel(source);
-        }
-
-        @Override
-        public ContactModel[] newArray(int size) {
-            return new ContactModel[size];
-        }
-    };
-
     public int getCid() {
         return cid;
     }
 
     public void setCid(int cid) {
         this.cid = cid;
+    }
+
+    public Boolean getRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(Boolean registered) {
+        this.registered = registered;
     }
 }

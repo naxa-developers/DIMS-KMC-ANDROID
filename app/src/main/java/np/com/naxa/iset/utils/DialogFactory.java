@@ -42,6 +42,7 @@ import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.MyCircleContactAddDialogListAdapter;
+import np.com.naxa.iset.mycircle.MyCircleContactListData;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItemAdapter;
 
@@ -336,7 +337,7 @@ public final class DialogFactory {
     }
 
 
-    public static Dialog createContactListDialog(@NonNull Context context, ArrayList<ContactModel> contactModelArrayList) {
+    public static Dialog createContactListDialog(@NonNull Context context, ArrayList<MyCircleContactListData> contactModelArrayList) {
 
 
         final Dialog dialog = new Dialog(context);

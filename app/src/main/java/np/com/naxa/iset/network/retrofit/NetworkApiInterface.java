@@ -3,6 +3,7 @@ package np.com.naxa.iset.network.retrofit;
 
 
 import io.reactivex.Observable;
+import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
 import np.com.naxa.iset.mycircle.registeruser.RegisterResponse;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.model.AskForHelpResponse;
@@ -47,6 +48,11 @@ public interface NetworkApiInterface {
     @FormUrlEncoded
     Observable<RegisterResponse> getLoginResponse(@Field("api_key") String api_key,
                                                      @Field("data") String jsonData);
+
+    @POST("check_contact")
+    @FormUrlEncoded
+    Observable<MyCircleContactListResponse> getContactListResponse(@Field("api_key") String api_key,
+                                                             @Field("data") String jsonData);
 
 
 

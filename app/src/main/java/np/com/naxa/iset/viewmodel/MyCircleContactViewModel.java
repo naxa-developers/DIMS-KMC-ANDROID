@@ -31,6 +31,6 @@ public class MyCircleContactViewModel extends AndroidViewModel {
     public Flowable<List<ContactModel>> getAllContacts() { return mAllContacts; }
 
     public void insert(ContactModel contact) {
-        Log.d("VIewholder", "insert: "+contact.getId());
+        Log.d("VIewholder", "insert: "+contact.getRegistered());
         mRepository.insert(contact); }
 }

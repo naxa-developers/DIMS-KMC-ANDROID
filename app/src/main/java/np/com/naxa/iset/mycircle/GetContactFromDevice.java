@@ -24,9 +24,9 @@ import np.com.naxa.iset.utils.TextUtils;
 public class GetContactFromDevice {
     private static final String TAG  = "GetContactFromDevice";
 
-    public List<ContactModel> getContacts(Context context, Dialog progressDialog) {
+    public List<MyCircleContactListData> getContacts(Context context, Dialog progressDialog) {
         progressDialog.show();
-        ArrayList<ContactModel> list = new ArrayList<>();
+        ArrayList<MyCircleContactListData> list = new ArrayList<>();
         ArrayList<String> contactNoList = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -47,14 +47,15 @@ public class GetContactFromDevice {
                         photo = BitmapFactory.decodeStream(inputStream);
                     }
                     while (cursorInfo.moveToNext()) {
-                        ContactModel info = new ContactModel();
-                        info.id = id;
-                        info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//                        info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+//                        ContactModel info = new ContactModel("", "", "", 0,false);
 
-                        info.mobileNumber = "9841195929";
+                        MyCircleContactListData info = new MyCircleContactListData("", "", "", false);
+//                        info.id = id;
+                        info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+
 //                        info.photo = photo;
-                        info.photoURI= pURI.toString();
+                        info.imgUrl= pURI.toString();
                         list.add(info);
                         contactNoList.add(info.mobileNumber);
 

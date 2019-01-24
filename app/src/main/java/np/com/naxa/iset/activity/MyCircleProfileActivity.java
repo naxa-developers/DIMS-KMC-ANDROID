@@ -57,9 +57,9 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
-import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
+import np.com.naxa.iset.mycircle.MyCircleContactListData;
 import np.com.naxa.iset.mycircle.contactlistdialog.TabbedDialog;
 import np.com.naxa.iset.mycircle.registeruser.RegisterResponse;
 import np.com.naxa.iset.mycircle.registeruser.UserModel;
@@ -510,20 +510,21 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
 
-    List<ContactModel> contactModelList = new ArrayList<ContactModel>();
+    List<MyCircleContactListData> myCircleContactListData = new ArrayList<MyCircleContactListData>();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MyCircleContactAddEvent.MyCircleContactAddClick itemClick) {
         String name = itemClick.getContactModel().getName();
+        Log.d(TAG, "onRVItemClick: Contact clicked "+ name);
 
-        if (contactModelList.size() == 0) {
-            contactModelList.add(itemClick.getContactModel());
-        } else if (contactModelList.size() > 0) {
+        if (myCircleContactListData.size() == 0) {
+            myCircleContactListData.add(itemClick.getContactModel());
+        } else if (myCircleContactListData.size() > 0) {
             boolean alreadyExist = false;
             int itemPosition = 0;
-            for (int i = 0; i < contactModelList.size(); i++) {
+            for (int i = 0; i < myCircleContactListData.size(); i++) {
                 itemPosition = i;
-                if (contactModelList.get(i).getMobileNumber().equals(itemClick.getContactModel().getMobileNumber())) {
+                if (myCircleContactListData.get(i).getMobileNumber().equals(itemClick.getContactModel().getMobileNumber())) {
                     alreadyExist = true;
                     break;
 
@@ -534,14 +535,14 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
             if (alreadyExist) {
                 if (!itemClick.isAddToCircle()) {
-                    contactModelList.remove(itemPosition);
+                    myCircleContactListData.remove(itemPosition);
                     Log.d(TAG, "onRVItemClick: Contact Removed");
 
                 }
             }
             if (!alreadyExist) {
                 if (itemClick.isAddToCircle()) {
-                    contactModelList.add(itemClick.getContactModel());
+                    myCircleContactListData.add(itemClick.getContactModel());
                     Log.d(TAG, "onRVItemClick: Contact Added");
                 }
             }
@@ -558,9 +559,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 //        dialogFragment.dismiss();
 
         tvDetail.setVisibility(View.VISIBLE);
-        if (contactModelList != null) {
+        if (myCircleContactListData != null) {
+            Log.d(TAG, "onRVItemClick: " +myCircleContactListData.size());
             tvDetail.setVisibility(View.GONE);
-            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModelList);
+            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(myCircleContactListData);
         }
 
         Toast.makeText(this, "add to your circle dialog close clicked ", Toast.LENGTH_SHORT).show();
