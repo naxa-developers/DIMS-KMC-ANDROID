@@ -3,16 +3,12 @@ package np.com.naxa.iset.mycircle;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "ContactModel")
-public class ContactModel implements Parcelable {
+public class ContactModel {
 
     @PrimaryKey(autoGenerate = true)
     private int cid;
@@ -73,43 +69,6 @@ public class ContactModel implements Parcelable {
 //        this.id = id;
 //    }
 
-    protected ContactModel(Parcel in) {
-        cid = in.readInt();
-        name = in.readString();
-        mobileNumber = in.readString();
-        photoURI = in.readString();
-        addToCircle = in.readInt();
-        byte tmpRegistered = in.readByte();
-        registered = tmpRegistered == 0 ? null : tmpRegistered == 1;
-    }
-
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(cid);
-        dest.writeString(name);
-        dest.writeString(mobileNumber);
-        dest.writeString(photoURI);
-        dest.writeInt(addToCircle);
-        dest.writeByte((byte) (registered == null ? 0 : registered ? 1 : 2));
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {
-        @Override
-        public ContactModel createFromParcel(Parcel in) {
-            return new ContactModel(in);
-        }
-
-        @Override
-        public ContactModel[] newArray(int size) {
-            return new ContactModel[size];
-        }
-    };
 
     public String getName() {
         return name;

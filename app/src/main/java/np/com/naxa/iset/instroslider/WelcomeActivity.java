@@ -64,7 +64,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 R.layout.welcome_slide2_disaster_report_layout,
                 R.layout.welcome_slide3_react_quickly_layout,
                 R.layout.welcome_slide4_get_connected_layout,
-                R.layout.welcome_slide4_get_connected_layout
+                R.layout.welcome_slide5_registration_layout
         };
 
         // adding bottom dots

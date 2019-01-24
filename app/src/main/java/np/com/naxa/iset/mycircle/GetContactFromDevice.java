@@ -49,7 +49,7 @@ public class GetContactFromDevice {
                     while (cursorInfo.moveToNext()) {
 //                        ContactModel info = new ContactModel("", "", "", 0,false);
 
-                        MyCircleContactListData info = new MyCircleContactListData("", "", "", false);
+                        MyCircleContactListData info = new MyCircleContactListData("", "", "", "", false);
 //                        info.id = id;
                         info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));

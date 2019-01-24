@@ -26,11 +26,16 @@ public class MyCircleContactListData implements Parcelable {
     @Expose
     public Boolean registered;
 
+    @SerializedName("token")
+    @Expose
+    public String token;
+
 
     protected MyCircleContactListData(Parcel in) {
         name = in.readString();
         imgUrl = in.readString();
         mobileNumber = in.readString();
+        token = in.readString();
         byte tmpRegistered = in.readByte();
         registered = tmpRegistered == 0 ? null : tmpRegistered == 1;
     }
@@ -47,10 +52,11 @@ public class MyCircleContactListData implements Parcelable {
         }
     };
 
-    public MyCircleContactListData(String name, String imgUrl, String mobileNumber, Boolean registered) {
+    public MyCircleContactListData(String name, String imgUrl, String mobileNumber, String token,  Boolean registered) {
         this.name = name;
         this.imgUrl = imgUrl;
         this.mobileNumber = mobileNumber;
+        this.token = token;
         this.registered = registered;
     }
 
@@ -96,6 +102,15 @@ public class MyCircleContactListData implements Parcelable {
         dest.writeString(name);
         dest.writeString(imgUrl);
         dest.writeString(mobileNumber);
+        dest.writeString(token);
         dest.writeByte((byte) (registered == null ? 0 : registered ? 1 : 2));
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

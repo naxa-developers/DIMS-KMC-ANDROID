@@ -2,6 +2,7 @@ package np.com.naxa.iset.activity;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
+import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.mycircle.MyCircleContactListData;
@@ -70,6 +72,7 @@ import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
+import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -145,6 +148,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     SharedPreferenceUtils sharedPreferenceUtils;
 
 
+    MyCircleContactViewModel myCircleContactViewModel;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +159,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
         sharedPreferenceUtils = new SharedPreferenceUtils(MyCircleProfileActivity.this);
         apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
+
+        myCircleContactViewModel = ViewModelProviders.of(this).get(MyCircleContactViewModel.class);
+
 
 
         setupToolBar();
@@ -254,7 +263,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
                 FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup, "Please select your blood group.")) {
 
-            UserModel userModel = new UserModel(etRegFullName.getText().toString(),
+            UserModel userModel = new UserModel(
+                    sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null),
+                    etRegFullName.getText().toString(),
                     etRegEmail.getText().toString(),
                     etRegMobileNo.getText().toString(),
                     spnBloodGroup.getSelectedItem().toString(),
@@ -270,7 +281,8 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             final Integer[] error = {null};
             final String[] message = {null};
             apiInterface
-                    .getRegisterResponse(UrlClass.API_ACCESS_TOKEN, jsonInString)
+                    .getRegisterResponse(sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null),
+                            jsonInString)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DisposableObserver<RegisterResponse>() {
@@ -472,6 +484,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
             progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Please Wait!!!");
             progressDialog.show();
+
             getContactFromDevice.getContacts(MyCircleProfileActivity.this, progressDialog);
 
         } else {
@@ -563,6 +576,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             Log.d(TAG, "onRVItemClick: " +myCircleContactListData.size());
             tvDetail.setVisibility(View.GONE);
             ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(myCircleContactListData);
+
+            Gson gson = new Gson();
+            String circleJson = gson.toJson(myCircleContactListData);
+            Log.d(TAG, "onDialogCloseClick circleJson : "+ circleJson);
         }
 
         Toast.makeText(this, "add to your circle dialog close clicked ", Toast.LENGTH_SHORT).show();
