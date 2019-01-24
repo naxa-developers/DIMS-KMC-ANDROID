@@ -41,6 +41,7 @@ import np.com.naxa.iset.database.entity.GeoJsonCategoryEntity;
 import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.home.HomeActivity;
 import np.com.naxa.iset.home.MapDataRepository;
+import np.com.naxa.iset.instroslider.WelcomeActivity;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
@@ -137,21 +138,31 @@ public class SplashActivity extends AppCompatActivity {
 //            String formattedDate = df.format(date);
             String formattedDate = date.toString();
 
+//            if(sharedPreference.getBoolanValue(SharedPreferenceUtils.IS_APP_FIRST_TIME_LAUNCH , true)){
+//                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+//                finish();
+//            }
+
 
             if (formattedDate.equals(sharedPreference.getStringValue("time", ""))) {
-                SectionGridHomeActivity.start(SplashActivity.this);
+//                SectionGridHomeActivity.start(SplashActivity.this);
+                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+
             } else {
                 SharedPreferenceUtils.getInstance(this).setValue("time", formattedDate);
                 if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
                     //we are connected to a network
 //                    fetchGeoJsonCategoryList();
-                    SectionGridHomeActivity.start(SplashActivity.this);
+//                    SectionGridHomeActivity.start(SplashActivity.this);
+                    startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
 
                 } else {
                     // redirect to homepage27.1.1
 //                    SectionGridHomeActivity.start(SplashActivity.this);
-                    startActivity(new Intent(SplashActivity.this, SectionGridHomeActivity.class));
+//                    startActivity(new Intent(SplashActivity.this, SectionGridHomeActivity.class));
+                    startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+
                 }
             }
 

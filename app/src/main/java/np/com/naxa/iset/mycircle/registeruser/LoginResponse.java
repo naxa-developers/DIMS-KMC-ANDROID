@@ -3,18 +3,22 @@ package np.com.naxa.iset.mycircle.registeruser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterResponse {
-
+public class LoginResponse {
     @SerializedName("error")
     @Expose
-     Integer error;
+    Integer error;
+
+    @SerializedName("data")
+    @Expose
+    UserModel data;
 
     @SerializedName("message")
     @Expose
     String message ;
 
-    public RegisterResponse(Integer error, String message) {
+    public LoginResponse(Integer error, UserModel data, String message) {
         this.error = error;
+        this.data = data;
         this.message = message;
     }
 
@@ -22,8 +26,16 @@ public class RegisterResponse {
         return error;
     }
 
-    public void setError(Integer data) {
-        this.error = data;
+    public void setError(Integer error) {
+        this.error = error;
+    }
+
+    public UserModel getData() {
+        return data;
+    }
+
+    public void setData(UserModel data) {
+        this.data = data;
     }
 
     public String getMessage() {

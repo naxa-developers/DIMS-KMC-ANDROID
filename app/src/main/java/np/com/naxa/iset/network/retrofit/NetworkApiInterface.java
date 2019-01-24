@@ -43,6 +43,11 @@ public interface NetworkApiInterface {
     Observable<RegisterResponse> getRegisterResponse(@Field("api_key") String api_key,
                                                      @Field("data") String jsonData);
 
+    @POST("register")
+    @FormUrlEncoded
+    Observable<RegisterResponse> getLoginResponse(@Field("api_key") String api_key,
+                                                     @Field("data") String jsonData);
+
 
 
 }

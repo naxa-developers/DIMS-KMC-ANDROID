@@ -111,6 +111,7 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.mobileNumber);
 //        dest.writeParcelable(this.photo, flags);
         dest.writeString(this.photoURI);
+        dest.writeInt(this.addToCircle);
     }
 
     public ContactModel() {
@@ -122,6 +123,7 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = in.readString();
 //        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
         this.photoURI = in.readString();
+        this.addToCircle = in.readInt();
     }
 
     public static final Parcelable.Creator<ContactModel> CREATOR = new Parcelable.Creator<ContactModel>() {

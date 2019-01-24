@@ -34,7 +34,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".mycircle.LoginActivity"></activity>
+        <activity android:name=".instroslider.WelcomeActivity"
+            >
+        </activity>
+        <!--android:theme="@style/AppThemeIntro"-->
+
+        <activity android:name=".mycircle.LoginActivity" />
         <activity android:name=".UserRegistrationActivity" />
         <activity
             android:name=".activity.SplashActivity"

@@ -14,8 +14,10 @@ public class SharedPreferenceUtils {
     private SharedPreferences.Editor mSharedPreferencesEditor;
 
 
+    public static final String IS_APP_FIRST_TIME_LAUNCH = "is_app_first_time_launch";
     public static final String IS_STORAGE_PERMISSION_GRANTED = "is_permission_granted";
     public static final String TOKEN_ID = "token_id";
+    public static final String USER_DETAILS = "user_details";
     public static final String USER_ALREADY_REGISTERED = "user_already_registered";
     public static final String USER_ALREADY_LOGGED_IN = "user_already_logged_in";
     public static final String IS_NOTIFY_ME = "notify_me";

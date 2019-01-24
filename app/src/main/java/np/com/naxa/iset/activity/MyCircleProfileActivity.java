@@ -161,6 +161,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         setUpSpinner();
 
         setupGmailLogin();
+
+        if(sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, false)){
+            switchViewregisterToProfile();
+        }
     }
 
     private void setupToolBar() {
@@ -236,6 +240,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
     private void convertdataToJson() {
+
+        Dialog progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Registering!!!\nPlease wait...");
+        progressDialog.show();
+
         String getNotification = "yes";
 
         getNotification = chkGetNotification.isChecked() ? "yes" : "no";
@@ -275,11 +283,25 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(Throwable e) {
+                            progressDialog.dismiss();
+                            DialogFactory.createCustomErrorDialog(MyCircleProfileActivity.this,
+                                    "Registration Failed \n"+ e.getMessage(),
+                                    new DialogFactory.CustomDialogListener() {
+                                        @Override
+                                        public void onClick() {
+                                            switchViewregisterToProfile();
+                                        }
+                                    }).show();
 
                         }
 
                         @Override
                         public void onComplete() {
+
+                            progressDialog.dismiss();
+
+                            sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_DETAILS, jsonInString);
+                            sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, true);
 
                             if (error[0] == 0) {
                                 DialogFactory.createCustomDialog(MyCircleProfileActivity.this,
@@ -298,7 +320,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                                         new DialogFactory.CustomDialogListener() {
                                             @Override
                                             public void onClick() {
-
+                                                switchViewregisterToProfile();
                                             }
                                         }).show();
                             }

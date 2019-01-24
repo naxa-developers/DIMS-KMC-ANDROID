@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +22,12 @@ import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.TextUtils;
 
 public class GetContactFromDevice {
+    private static final String TAG  = "GetContactFromDevice";
 
     public List<ContactModel> getContacts(Context context, Dialog progressDialog) {
         progressDialog.show();
         ArrayList<ContactModel> list = new ArrayList<>();
+        ArrayList<String> contactNoList = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         if (cursor.getCount() > 0) {
@@ -46,11 +50,13 @@ public class GetContactFromDevice {
                         ContactModel info = new ContactModel();
                         info.id = id;
                         info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+//                        info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
 
+                        info.mobileNumber = "9841195929";
 //                        info.photo = photo;
                         info.photoURI= pURI.toString();
                         list.add(info);
+                        contactNoList.add(info.mobileNumber);
 
                         Log.d("GetContactFromDevice", "getContacts: " + info.name);
                         Log.d("GetContactFromDevice", "getContacts: " + info.mobileNumber);
@@ -66,6 +72,12 @@ public class GetContactFromDevice {
             progressDialog.dismiss();
         }
         DialogFactory.createContactListDialog(context, list).show();
+
+        Gson gson = new Gson();
+//        String contactJson = gson.toJson(list);
+        String contactJson = gson.toJson(contactNoList);
+
+        Log.d(TAG, "getContacts: "+ contactJson);
         return list;
     }
 
