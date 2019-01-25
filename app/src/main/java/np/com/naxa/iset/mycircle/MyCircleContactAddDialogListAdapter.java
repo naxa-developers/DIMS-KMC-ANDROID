@@ -34,8 +34,12 @@ public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<Contac
         ToggleButton addButton = helper.getView(R.id.btnAddContactToCircle);
         ImageView imageView = helper.getView(R.id.ivContactPerson);
 
-        if(item.getName() != null) {
+//        if(item.getName() != null) {
             helper.setText(R.id.tvContactPerson, item.getName());
+//        }
+
+        if(!item.getRegistered()){
+            addButton.setVisibility(View.INVISIBLE);
         }
 
         if(item.getImg_url() != null && !item.getImg_url().equals("")) {

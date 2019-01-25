@@ -237,6 +237,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_add_people:
+                progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Please Wait!!!");
+                progressDialog.show();
+
                 handleContactPermission();
 
 //                showTabbedDialog();
@@ -286,8 +289,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             final Integer[] error = {null};
             final String[] message = {null};
             apiInterface
-                    .getRegisterResponse(sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null),
-                            jsonInString)
+                    .getRegisterResponse(UrlClass.API_ACCESS_TOKEN, jsonInString)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DisposableObserver<RegisterResponse>() {
@@ -306,7 +308,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                                     new DialogFactory.CustomDialogListener() {
                                         @Override
                                         public void onClick() {
-                                            switchViewregisterToProfile();
                                         }
                                     }).show();
 
@@ -317,10 +318,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                             progressDialog.dismiss();
 
-                            sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_DETAILS, jsonInString);
-                            sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, true);
-
                             if (error[0] == 0) {
+                                sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_DETAILS, jsonInString);
+                                sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, true);
+
                                 DialogFactory.createCustomDialog(MyCircleProfileActivity.this,
                                         "Registered Successfully",
                                         new DialogFactory.CustomDialogListener() {
@@ -333,11 +334,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                             if (error[0] == 1) {
                               DialogFactory.createCustomErrorDialog(MyCircleProfileActivity.this,
-                                        "Registration Failed",
+                                        "Registration Failed\n\n"+message[0],
                                         new DialogFactory.CustomDialogListener() {
                                             @Override
                                             public void onClick() {
-                                                switchViewregisterToProfile();
                                             }
                                         }).show();
                             }
@@ -488,9 +488,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     private void handleContactPermission() {
         if (hasStorageAndContactsPermissions()) {
 
-
-            progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Please Wait!!!");
-            progressDialog.show();
             getCircleListFromServerAndSave();
 
         } else {
@@ -543,15 +540,15 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                                     getContactListResponse(UrlClass.API_ACCESS_TOKEN, contactJson[0])
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .flatMap(new Function<MyCircleContactListResponse, ObservableSource<MyCircleContactListData>>() {
+                            .flatMap(new Function<MyCircleContactListResponse, ObservableSource<List<MyCircleContactListData>>>() {
                                 @Override
-                                public ObservableSource<MyCircleContactListData> apply(MyCircleContactListResponse myCircleContactListResponse) throws Exception {
-                                    return (ObservableSource<MyCircleContactListData>) myCircleContactListResponse.getData();
+                                public ObservableSource<List<MyCircleContactListData>> apply(MyCircleContactListResponse myCircleContactListResponse) throws Exception {
+                                    return  Observable.just(myCircleContactListResponse.getData());
                                 }
                             })
-                            .flatMapIterable(new Function<MyCircleContactListData, Iterable<MyCircleContactListData>>() {
+                            .flatMapIterable(new Function<List<MyCircleContactListData>, Iterable<MyCircleContactListData>>() {
                                 @Override
-                                public Iterable<MyCircleContactListData> apply(MyCircleContactListData myCircleContactListData) throws Exception {
+                                public Iterable<MyCircleContactListData> apply(List<MyCircleContactListData> myCircleContactListData) throws Exception {
                                     return (Iterable<MyCircleContactListData>) myCircleContactListData;
                                 }
                             })
@@ -571,6 +568,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onError(Throwable e) {
+                                    Toast.makeText(MyCircleProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
                                 }
 

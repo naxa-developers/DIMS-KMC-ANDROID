@@ -39,17 +39,17 @@ public interface NetworkApiInterface {
     Observable<ResponseBody> getGeoJsonDetails(@Field("table") String table_name);
 
 
-    @POST("register")
+    @POST("check_registration")
     @FormUrlEncoded
     Observable<RegisterResponse> getRegisterResponse(@Field("api_key") String api_key,
                                                      @Field("data") String jsonData);
 
-    @POST("register")
+    @POST("loginCheck")
     @FormUrlEncoded
     Observable<RegisterResponse> getLoginResponse(@Field("api_key") String api_key,
                                                      @Field("data") String jsonData);
 
-    @POST("check_contact")
+    @POST("check_registered_num")
     @FormUrlEncoded
     Observable<MyCircleContactListResponse> getContactListResponse(@Field("api_key") String api_key,
                                                              @Field("data") String jsonData);
