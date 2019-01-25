@@ -27,10 +27,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,7 @@ import np.com.naxa.iset.event.GmailLoginEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.SharedPreferenceUtils;
 
 public class BloodRequestActivity extends AppCompatActivity {
 
@@ -250,6 +254,17 @@ public class BloodRequestActivity extends AppCompatActivity {
         Log.d(TAG, "updateUI: getFamilyName " + account.getFamilyName());
 
         userPhotoUri = account.getPhotoUrl().toString();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            SharedPreferenceUtils sharedPreferenceUtils = new SharedPreferenceUtils(this);
+            jsonObject.put("email", account.getEmail());
+            jsonObject.put("token", sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "convertDataToJson: "+jsonObject.toString());
 
     }
 //    gmail login end

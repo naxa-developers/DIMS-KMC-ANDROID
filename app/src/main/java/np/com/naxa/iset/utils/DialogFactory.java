@@ -337,7 +337,7 @@ public final class DialogFactory {
     }
 
 
-    public static Dialog createContactListDialog(@NonNull Context context, ArrayList<MyCircleContactListData> contactModelArrayList) {
+    public static Dialog createContactListDialog(@NonNull Context context, List<ContactModel> contactModelArrayList) {
 
 
         final Dialog dialog = new Dialog(context);

@@ -18,7 +18,7 @@ public class MyCircleContactListData implements Parcelable {
     @Expose
     public String imgUrl;
 
-    @SerializedName("mobile_number")
+    @SerializedName("mobile_no")
     @Expose
     public String mobileNumber;
 

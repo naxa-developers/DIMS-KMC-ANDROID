@@ -24,8 +24,7 @@ import np.com.naxa.iset.utils.TextUtils;
 public class GetContactFromDevice {
     private static final String TAG  = "GetContactFromDevice";
 
-    public List<MyCircleContactListData> getContacts(Context context, Dialog progressDialog) {
-        progressDialog.show();
+    public ArrayList<MyCircleContactListData> getContacts(Context context) {
         ArrayList<MyCircleContactListData> list = new ArrayList<>();
         ArrayList<String> contactNoList = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
@@ -68,17 +67,6 @@ public class GetContactFromDevice {
             }
             cursor.close();
         }
-
-        if(progressDialog.isShowing() && progressDialog != null){
-            progressDialog.dismiss();
-        }
-        DialogFactory.createContactListDialog(context, list).show();
-
-        Gson gson = new Gson();
-//        String contactJson = gson.toJson(list);
-        String contactJson = gson.toJson(contactNoList);
-
-        Log.d(TAG, "getContacts: "+ contactJson);
         return list;
     }
 

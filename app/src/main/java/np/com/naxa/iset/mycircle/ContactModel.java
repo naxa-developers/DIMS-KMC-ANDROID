@@ -13,11 +13,6 @@ public class ContactModel {
     @PrimaryKey(autoGenerate = true)
     private int cid;
 
-//    @ColumnInfo(name = "id")
-//    @SerializedName("id")
-//    @Expose
-//    public String id;
-
     @ColumnInfo(name = "name")
     @SerializedName("name")
     @Expose
@@ -28,46 +23,34 @@ public class ContactModel {
     @Expose
     public String mobileNumber;
 
-//    @ColumnInfo(name = "photo")
-//    @SerializedName("photo")
-//    @Expose
-//    public Bitmap photo;
-
-    @ColumnInfo(name = "photo_url")
-    @SerializedName("photo_url")
+    @ColumnInfo(name = "img_url")
+    @SerializedName("img_url")
     @Expose
-    public String photoURI;
-
-
-    @ColumnInfo(name = "add_to_circle")
-    @SerializedName("add_to_circle")
-    @Expose
-    public int addToCircle;
+    public String img_url;
 
     @ColumnInfo(name = "registered")
     @SerializedName("registered")
     @Expose
     private Boolean registered;
 
+    @ColumnInfo(name = "add_to_circle")
+    @SerializedName("add_to_circle")
+    @Expose
+    public int addToCircle;
+
+    @SerializedName("token")
+    @Expose
+    public String token;
 
 
-    public ContactModel( String name, String mobileNumber, String photoURI, int addToCircle, boolean registered) {
-//        this.id = id;
+    public ContactModel(String name, String mobileNumber, String img_url, Boolean registered, int addToCircle, String token) {
         this.name = name;
         this.mobileNumber = mobileNumber;
-//        this.photo = photo;
-        this.photoURI = photoURI;
-        this.addToCircle = addToCircle;
+        this.img_url = img_url;
         this.registered = registered;
+        this.addToCircle = addToCircle;
+        this.token = token;
     }
-
-//    public String getId() {
-//        return id;
-//    }
-
-//    public void setId(String id) {
-//        this.id = id;
-//    }
 
 
     public String getName() {
@@ -94,12 +77,12 @@ public class ContactModel {
 //        this.photo = photo;
 //    }
 
-    public String getPhotoURI() {
-        return photoURI;
+    public String getImg_url() {
+        return img_url;
     }
 
-    public void setPhotoURI(String photoURI) {
-        this.photoURI = photoURI;
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 
     public int getCid() {
@@ -116,5 +99,13 @@ public class ContactModel {
 
     public void setRegistered(Boolean registered) {
         this.registered = registered;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

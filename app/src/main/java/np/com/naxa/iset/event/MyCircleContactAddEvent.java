@@ -6,20 +6,20 @@ import np.com.naxa.iset.mycircle.MyCircleContactListData;
 public class MyCircleContactAddEvent {
 
     public static class MyCircleContactAddClick{
-        private MyCircleContactListData myCircleContactListData;
+        private ContactModel myCircleContactListData;
         private boolean addToCircle;
 
-        public MyCircleContactAddClick(MyCircleContactListData myCircleContactListData, boolean addToCircle) {
+        public MyCircleContactAddClick(ContactModel myCircleContactListData, boolean addToCircle) {
             this.myCircleContactListData = myCircleContactListData;
             this.addToCircle = addToCircle;
         }
 
 
-        public MyCircleContactListData getContactModel() {
+        public ContactModel getContactModel() {
             return myCircleContactListData;
         }
 
-        public void setContactModel(MyCircleContactListData myCircleContactListData) {
+        public void setContactModel(ContactModel myCircleContactListData) {
             this.myCircleContactListData = myCircleContactListData;
         }
 

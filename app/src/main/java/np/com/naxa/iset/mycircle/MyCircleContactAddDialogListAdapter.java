@@ -22,15 +22,15 @@ import np.com.naxa.iset.event.EmergenctContactCallEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
-public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<MyCircleContactListData, BaseViewHolder> {
+public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
 
-    public MyCircleContactAddDialogListAdapter(int layoutResId, @Nullable List<MyCircleContactListData> data) {
+    public MyCircleContactAddDialogListAdapter(int layoutResId, @Nullable List<ContactModel> data) {
         super(layoutResId, data);
     }
 
 
     @Override
-    protected void convert(BaseViewHolder helper, MyCircleContactListData item) {
+    protected void convert(BaseViewHolder helper, ContactModel item) {
         ToggleButton addButton = helper.getView(R.id.btnAddContactToCircle);
         ImageView imageView = helper.getView(R.id.ivContactPerson);
 
@@ -38,8 +38,8 @@ public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<MyCirc
             helper.setText(R.id.tvContactPerson, item.getName());
         }
 
-        if(item.getImgUrl() != null && !item.getImgUrl().equals("")) {
-            Glide.with(mContext).load(item.getImgUrl())
+        if(item.getImg_url() != null && !item.getImg_url().equals("")) {
+            Glide.with(mContext).load(item.getImg_url())
                     .placeholder(mContext.getResources().getDrawable(R.drawable.ic_nav_profile))
                     .crossFade()
                     .thumbnail(0.5f)
