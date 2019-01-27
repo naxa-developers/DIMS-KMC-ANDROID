@@ -42,6 +42,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,6 +78,7 @@ import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
+import np.com.naxa.iset.utils.sectionmultiitemUtils.JsonGsonConverterUtils;
 import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -168,7 +170,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         myCircleContactViewModel = ViewModelProviders.of(this).get(MyCircleContactViewModel.class);
 
 
-
         setupToolBar();
         setupListRecycler();
 
@@ -176,7 +177,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
         setupGmailLogin();
 
-        if(sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, false)){
+        if (sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, false)) {
             switchViewregisterToProfile();
         }
     }
@@ -218,6 +219,27 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         recyclerViewMyCircle.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewMyCircle.setAdapter(myCircleContactListAdapter);
 
+        myCircleContactViewModel.getAllMyCircleContacts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<List<ContactModel>>() {
+                    @Override
+                    public void onNext(List<ContactModel> contactModels) {
+                        ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModels);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     private void setUpSpinner() {
@@ -240,9 +262,14 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 progressDialog = DialogFactory.createProgressDialog(MyCircleProfileActivity.this, "Please Wait!!!");
                 progressDialog.show();
 
-                handleContactPermission();
+                if (sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.HAS_CONTACT_LIST_LOCALLY, false)) {
+//                    showContactDialog();
+                    showTabbedDialog();
 
-//                showTabbedDialog();
+                } else {
+                    handleContactPermission();
+                }
+
                 break;
 
             case R.id.gmail_sign_in_button:
@@ -304,7 +331,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                         public void onError(Throwable e) {
                             progressDialog.dismiss();
                             DialogFactory.createCustomErrorDialog(MyCircleProfileActivity.this,
-                                    "Registration Failed \n"+ e.getMessage(),
+                                    "Registration Failed \n" + e.getMessage(),
                                     new DialogFactory.CustomDialogListener() {
                                         @Override
                                         public void onClick() {
@@ -333,8 +360,8 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                             }
 
                             if (error[0] == 1) {
-                              DialogFactory.createCustomErrorDialog(MyCircleProfileActivity.this,
-                                        "Registration Failed\n\n"+message[0],
+                                DialogFactory.createCustomErrorDialog(MyCircleProfileActivity.this,
+                                        "Registration Failed\n\n" + message[0],
                                         new DialogFactory.CustomDialogListener() {
                                             @Override
                                             public void onClick() {
@@ -370,6 +397,10 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         // Create and show the dialog.
         dialogFragment = new TabbedDialog();
         dialogFragment.show(ft, "dialog");
+
+        if(progressDialog!= null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
     }
 
 
@@ -488,7 +519,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     private void handleContactPermission() {
         if (hasStorageAndContactsPermissions()) {
 
-            getCircleListFromServerAndSave();
+            getMyContactFromDevice();
 
         } else {
             EasyPermissions.requestPermissions(this, "Provide contact access permission to add contacts.",
@@ -508,16 +539,41 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         return EasyPermissions.hasPermissions(this, READ_STORAGE_AND_CONTACTS);
     }
 
-    private void getCircleListFromServerAndSave(){
+    ArrayList<MyCircleContactListData> list = new ArrayList<>();
+
+    private void getMyContactFromDevice() {
         GetContactFromDevice getContactFromDevice = new GetContactFromDevice();
+        Observable.just("getContact")
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        list = getContactFromDevice.getContacts(MyCircleProfileActivity.this);
+                        Log.d(TAG, "onNext: " + list.size());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        getCircleListFromServerAndSave(list);
+                    }
+                });
+    }
+
+
+    private void getCircleListFromServerAndSave(ArrayList<MyCircleContactListData> myCircleContactListData) {
 
         Gson gson = new Gson();
 //        String contactJson = gson.toJson(list);
         final String[] contactJson = {""};
-        Log.d(TAG, "getContacts: "+ contactJson[0]);
+        Log.d(TAG, "getContacts: " + contactJson[0]);
 
-
-        Observable.just(getContactFromDevice.getContacts(MyCircleProfileActivity.this))
+        Observable.just(myCircleContactListData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<ArrayList<MyCircleContactListData>>() {
@@ -535,78 +591,89 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-                        if(contactJson[0] != null) {
+                        if (contactJson[0] != null) {
                             apiInterface.
                                     getContactListResponse(UrlClass.API_ACCESS_TOKEN, contactJson[0])
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .flatMap(new Function<MyCircleContactListResponse, ObservableSource<List<MyCircleContactListData>>>() {
-                                @Override
-                                public ObservableSource<List<MyCircleContactListData>> apply(MyCircleContactListResponse myCircleContactListResponse) throws Exception {
-                                    return  Observable.just(myCircleContactListResponse.getData());
-                                }
-                            })
-                            .flatMapIterable(new Function<List<MyCircleContactListData>, Iterable<MyCircleContactListData>>() {
-                                @Override
-                                public Iterable<MyCircleContactListData> apply(List<MyCircleContactListData> myCircleContactListData) throws Exception {
-                                    return (Iterable<MyCircleContactListData>) myCircleContactListData;
-                                }
-                            })
-                            .map(new Function<MyCircleContactListData, MyCircleContactListData>() {
-                                @Override
-                                public MyCircleContactListData apply(MyCircleContactListData myCircleContactListData) throws Exception {
-                                    return myCircleContactListData;
-                                }
-                            })
-                            .subscribe(new DisposableObserver<MyCircleContactListData>() {
-                                @Override
-                                public void onNext(MyCircleContactListData myCircleContactListData) {
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .flatMap(new Function<MyCircleContactListResponse, ObservableSource<List<MyCircleContactListData>>>() {
+                                        @Override
+                                        public ObservableSource<List<MyCircleContactListData>> apply(MyCircleContactListResponse myCircleContactListResponse) throws Exception {
+                                            return Observable.just(myCircleContactListResponse.getData());
+                                        }
+                                    })
+                                    .flatMapIterable(new Function<List<MyCircleContactListData>, Iterable<MyCircleContactListData>>() {
+                                        @Override
+                                        public Iterable<MyCircleContactListData> apply(List<MyCircleContactListData> myCircleContactListData) throws Exception {
+                                            return (Iterable<MyCircleContactListData>) myCircleContactListData;
+                                        }
+                                    })
+                                    .map(new Function<MyCircleContactListData, MyCircleContactListData>() {
+                                        @Override
+                                        public MyCircleContactListData apply(MyCircleContactListData myCircleContactListData) throws Exception {
+                                            return myCircleContactListData;
+                                        }
+                                    })
+                                    .subscribe(new DisposableObserver<MyCircleContactListData>() {
+                                        @Override
+                                        public void onNext(MyCircleContactListData myCircleContactListData) {
 
-                                    myCircleContactViewModel.insert(new ContactModel(myCircleContactListData.getName(), myCircleContactListData.getMobileNumber(),
-                                            myCircleContactListData.getImgUrl(),myCircleContactListData.registered, 0, myCircleContactListData.getToken()));
-                                }
+                                            if (myCircleContactListData.registered) {
+                                                myCircleContactViewModel.insert(new ContactModel(myCircleContactListData.getName(), myCircleContactListData.getMobileNumber(),
+                                                        myCircleContactListData.getImgUrl(), 1, 0, myCircleContactListData.getToken()));
+                                            } else {
+                                                myCircleContactViewModel.insert(new ContactModel(myCircleContactListData.getName(), myCircleContactListData.getMobileNumber(),
+                                                        myCircleContactListData.getImgUrl(), 0, 0, myCircleContactListData.getToken()));
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    Toast.makeText(MyCircleProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
 
-                                }
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            Toast.makeText(MyCircleProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
-                                @Override
-                                public void onComplete() {
-                                    myCircleContactViewModel.getAllContacts()
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(new DisposableSubscriber<List<ContactModel>>() {
-                                                @Override
-                                                public void onNext(List<ContactModel> contactModels) {
-                                                    DialogFactory.createContactListDialog(MyCircleProfileActivity.this, contactModels).show();
+                                        }
 
-                                                }
+                                        @Override
+                                        public void onComplete() {
+                                            sharedPreferenceUtils.setValue(SharedPreferenceUtils.HAS_CONTACT_LIST_LOCALLY, true);
+//                                            showContactDialog();
+                                            showTabbedDialog();
 
-                                                @Override
-                                                public void onError(Throwable t) {
-
-                                                }
-
-                                                @Override
-                                                public void onComplete() {
-                                                    if(progressDialog != null && progressDialog.isShowing() ){
-                                                        progressDialog.dismiss();
-                                                    }
-                                                }
-                                            });
-
-
-                                }
-                            })
+                                        }
+                                    })
                             ;
 
                         }
                     }
                 });
+    }
 
+    private void showContactDialog() {
 
+        myCircleContactViewModel.getAllContacts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<List<ContactModel>>() {
+                    @Override
+                    public void onNext(List<ContactModel> contactModels) {
+                        DialogFactory.createContactListDialog(MyCircleProfileActivity.this, contactModels).show();
+
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
@@ -632,7 +699,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MyCircleContactAddEvent.MyCircleContactAddClick itemClick) {
         String name = itemClick.getContactModel().getName();
-        Log.d(TAG, "onRVItemClick: Contact clicked "+ name);
+        Log.d(TAG, "onRVItemClick: Contact clicked " + name);
 
         if (myCircleContactListData.size() == 0) {
             myCircleContactListData.add(itemClick.getContactModel());
@@ -652,6 +719,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
             if (alreadyExist) {
                 if (!itemClick.isAddToCircle()) {
+                    ContactModel contactModel = itemClick.getContactModel();
+                    contactModel.setAddToCircle(0);
+                    myCircleContactViewModel.insert(contactModel);
                     myCircleContactListData.remove(itemPosition);
                     Log.d(TAG, "onRVItemClick: Contact Removed");
 
@@ -659,6 +729,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             }
             if (!alreadyExist) {
                 if (itemClick.isAddToCircle()) {
+                    ContactModel contactModel = itemClick.getContactModel();
+                    contactModel.setAddToCircle(1);
+                    myCircleContactViewModel.insert(contactModel);
                     myCircleContactListData.add(itemClick.getContactModel());
                     Log.d(TAG, "onRVItemClick: Contact Added");
                 }
@@ -673,21 +746,31 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDialogCloseClick(MyCircleContactAddEvent.MyCircleContactDialogCloseClick itemClick) {
 
-//        dialogFragment.dismiss();
+        dialogFragment.dismiss();
 
         tvDetail.setVisibility(View.VISIBLE);
         if (myCircleContactListData != null) {
-            Log.d(TAG, "onRVItemClick: " +myCircleContactListData.size());
+            Log.d(TAG, "onRVItemClick: " + myCircleContactListData.size());
             tvDetail.setVisibility(View.GONE);
-            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(myCircleContactListData);
+//            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(myCircleContactListData);
 
             Gson gson = new Gson();
             String circleJson = gson.toJson(myCircleContactListData);
-            Log.d(TAG, "onDialogCloseClick circleJson : "+ circleJson);
+            Log.d(TAG, "onDialogCloseClick circleJson : " + circleJson);
         }
 
         Toast.makeText(this, "add to your circle dialog close clicked ", Toast.LENGTH_SHORT).show();
+//        onBackPressed();
+
+        setupListRecycler();
+        // Create and show the dialog.
+        dialogFragment.dismiss();
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

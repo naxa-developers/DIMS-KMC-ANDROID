@@ -15,6 +15,7 @@ public class SharedPreferenceUtils {
 
 
     public static final String IS_APP_FIRST_TIME_LAUNCH = "is_app_first_time_launch";
+    public static final String HAS_CONTACT_LIST_LOCALLY = "has_contact_list_locally";
     public static final String IS_STORAGE_PERMISSION_GRANTED = "is_permission_granted";
     public static final String TOKEN_ID = "token_id";
     public static final String USER_DETAILS = "user_details";

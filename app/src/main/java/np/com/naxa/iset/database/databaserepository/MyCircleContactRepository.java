@@ -19,6 +19,9 @@ import np.com.naxa.iset.mycircle.ContactModel;
 public class MyCircleContactRepository {
         private MyCircleContactDao mContactDao;
         private Flowable<List<ContactModel>> mAllContacts;
+        private Flowable<List<ContactModel>> mAllRegisteredContacts;
+        private Flowable<List<ContactModel>> mAllUnRegisteredContacts;
+        private Flowable<List<ContactModel>> mAllMyCircleContacts;
 
         // Note that in order to unit test the WordRepository, you have to remove the Application
         // dependency. This adds complexity and much more code, and this sample is not about testing.
@@ -28,6 +31,9 @@ public class MyCircleContactRepository {
             ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
             mContactDao = db.myCircleContactDao();
             mAllContacts = mContactDao.getAllContactList();
+            mAllRegisteredContacts = mContactDao.getRegisteredContactList();
+            mAllUnRegisteredContacts = mContactDao.getUnRegisteredContactList();
+            mAllMyCircleContacts = mContactDao.getMyCircleContactList();
         }
 
         // Room executes all queries on a separate thread.
@@ -35,6 +41,18 @@ public class MyCircleContactRepository {
         public Flowable<List<ContactModel>> getAllContacts() {
             return mAllContacts;
         }
+
+    public Flowable<List<ContactModel>> getAllRegisteredContacts() {
+        return mAllRegisteredContacts;
+    }
+
+    public Flowable<List<ContactModel>> getAllUnRegisteredContacts() {
+        return mAllUnRegisteredContacts;
+    }
+
+    public Flowable<List<ContactModel>> getAllMyCircleContacts() {
+        return mAllMyCircleContacts;
+    }
 
         // You must call this on a non-UI thread or your app will crash.
         // Like this, Room ensures that you're not doing any long running operations on the main

@@ -18,24 +18,24 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.event.EmergenctContactCallEvent;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
-public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
+public class MyCircleContactListInviteAdapter  extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
 
-    public MyCircleContactAddDialogListAdapter(int layoutResId, @Nullable List<ContactModel> data) {
+    public MyCircleContactListInviteAdapter(int layoutResId, @Nullable List<ContactModel> data) {
         super(layoutResId, data);
     }
 
 
     @Override
     protected void convert(BaseViewHolder helper, ContactModel item) {
-        ToggleButton addButton = helper.getView(R.id.btnAddContactToCircle);
+        Button btnInvite = helper.getView(R.id.btnInviteContact);
         ImageView imageView = helper.getView(R.id.ivContactPerson);
 
-            helper.setText(R.id.tvContactPerson, item.getName());
-//
+//        if(item.getName() != null) {
+        helper.setText(R.id.tvContactPerson, item.getName());
+//        }
 
         if(item.getImg_url() != null && !item.getImg_url().equals("")) {
             Glide.with(mContext).load(item.getImg_url())
@@ -55,31 +55,15 @@ public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<Contac
                     .into(imageView);
         }
 
-        addButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+
+        btnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
-                    addButton.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.ic_remove_circle_outline_black_24dp));
-                    EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactAddClick(item, true));
-
-                }
-                else
-                {
-                    addButton.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.ic_add_black_24dp));
-                    EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactAddClick(item, false));
-
-                }
-
+            public void onClick(View v) {
+                Toast.makeText(mContext, "Invite Button Clicked"+"\n"+item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
-
-        if(item.getAddToCircle() == 1){
-            addButton.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.ic_remove_circle_outline_black_24dp));
-            addButton.setChecked(false);
-        }
 
     }
 }

@@ -31,7 +31,7 @@ public class ContactModel {
     @ColumnInfo(name = "registered")
     @SerializedName("registered")
     @Expose
-    private Boolean registered;
+    public int registered;
 
     @ColumnInfo(name = "add_to_circle")
     @SerializedName("add_to_circle")
@@ -43,7 +43,7 @@ public class ContactModel {
     public String token;
 
 
-    public ContactModel(String name, String mobileNumber, String img_url, Boolean registered, int addToCircle, String token) {
+    public ContactModel(String name, String mobileNumber, String img_url, int registered, int addToCircle, String token) {
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.img_url = img_url;
@@ -93,11 +93,11 @@ public class ContactModel {
         this.cid = cid;
     }
 
-    public Boolean getRegistered() {
+    public int getRegistered() {
         return registered;
     }
 
-    public void setRegistered(Boolean registered) {
+    public void setRegistered(int registered) {
         this.registered = registered;
     }
 
@@ -107,5 +107,13 @@ public class ContactModel {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getAddToCircle() {
+        return addToCircle;
+    }
+
+    public void setAddToCircle(int addToCircle) {
+        this.addToCircle = addToCircle;
     }
 }
