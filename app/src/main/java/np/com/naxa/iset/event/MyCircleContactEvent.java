@@ -3,7 +3,7 @@ package np.com.naxa.iset.event;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.MyCircleContactListData;
 
-public class MyCircleContactAddEvent {
+public class MyCircleContactEvent {
 
     public static class MyCircleContactAddClick{
         private ContactModel myCircleContactListData;
@@ -37,5 +37,33 @@ public class MyCircleContactAddEvent {
         public MyCircleContactDialogCloseClick() {
         }
     }
+
+
+    public static class MyCircleContactRemoveFromListeClick{
+        public int position;
+        private ContactModel myCircleContactListData;
+
+        public MyCircleContactRemoveFromListeClick(ContactModel myCircleContactListData, int position) {
+            this.position = position;
+            this.myCircleContactListData = myCircleContactListData;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+        public ContactModel getMyCircleContactListData() {
+            return myCircleContactListData;
+        }
+
+        public void setMyCircleContactListData(ContactModel myCircleContactListData) {
+            this.myCircleContactListData = myCircleContactListData;
+        }
+    }
+
 
 }

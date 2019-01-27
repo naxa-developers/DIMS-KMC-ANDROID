@@ -32,17 +32,15 @@ import com.google.android.gms.common.SignInButton;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.GmailLoginEvent;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
+import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.MyCircleContactAddDialogListAdapter;
-import np.com.naxa.iset.mycircle.MyCircleContactListData;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItemAdapter;
 
@@ -358,7 +356,7 @@ public final class DialogFactory {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactDialogCloseClick());
+                EventBus.getDefault().post(new MyCircleContactEvent.MyCircleContactDialogCloseClick());
                 dialog.dismiss();
 
             }

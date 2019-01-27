@@ -4,9 +4,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -18,13 +16,16 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
+import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
+import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 
 public class MyCircleContactListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
 
+    MyCircleContactViewModel myCircleContactViewModel;
     public MyCircleContactListAdapter(int layoutResId, @Nullable List<ContactModel> data) {
         super(layoutResId, data);
+//        this.myCircleContactViewModel = myCircleContactViewModel;
     }
 
 
@@ -66,7 +67,9 @@ public class MyCircleContactListAdapter extends BaseQuickAdapter<ContactModel, B
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                item.setAddToCircle(0);
+//                myCircleContactViewModel.insert(item);
+                EventBus.getDefault().post(new MyCircleContactEvent.MyCircleContactRemoveFromListeClick(item, helper.getLayoutPosition()));
 
             }
         });

@@ -2,20 +2,16 @@ package np.com.naxa.iset.mycircle.contactlistdialog;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -25,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
+import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 
@@ -104,7 +100,7 @@ public class TabbedDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // Create and show the dialog.
-                EventBus.getDefault().post(new MyCircleContactAddEvent.MyCircleContactDialogCloseClick());
+                EventBus.getDefault().post(new MyCircleContactEvent.MyCircleContactDialogCloseClick());
 
             }
         });

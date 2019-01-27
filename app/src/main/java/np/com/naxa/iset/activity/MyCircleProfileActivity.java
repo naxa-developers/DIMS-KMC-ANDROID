@@ -42,7 +42,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,7 +61,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
+import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
@@ -78,7 +77,6 @@ import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
-import np.com.naxa.iset.utils.sectionmultiitemUtils.JsonGsonConverterUtils;
 import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -156,6 +154,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
 
     MyCircleContactViewModel myCircleContactViewModel;
+    MyCircleContactListAdapter myCircleContactListAdapter;
 
 
     @Override
@@ -215,7 +214,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
 
     private void setupListRecycler() {
-        MyCircleContactListAdapter myCircleContactListAdapter = new MyCircleContactListAdapter(R.layout.people_in_my_circle_item_row_layout, null);
+        myCircleContactListAdapter = new MyCircleContactListAdapter(R.layout.people_in_my_circle_item_row_layout, null);
         recyclerViewMyCircle.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewMyCircle.setAdapter(myCircleContactListAdapter);
 
@@ -697,7 +696,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     List<ContactModel> myCircleContactListData = new ArrayList<ContactModel>();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRVItemClick(MyCircleContactAddEvent.MyCircleContactAddClick itemClick) {
+    public void onRVItemClick(MyCircleContactEvent.MyCircleContactAddClick itemClick) {
         String name = itemClick.getContactModel().getName();
         Log.d(TAG, "onRVItemClick: Contact clicked " + name);
 
@@ -744,7 +743,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDialogCloseClick(MyCircleContactAddEvent.MyCircleContactDialogCloseClick itemClick) {
+    public void onDialogCloseClick(MyCircleContactEvent.MyCircleContactDialogCloseClick itemClick) {
 
         dialogFragment.dismiss();
 
@@ -765,6 +764,24 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         setupListRecycler();
         // Create and show the dialog.
         dialogFragment.dismiss();
+
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCircleItemRemoveClick(MyCircleContactEvent.MyCircleContactRemoveFromListeClick itemClick) {
+        Toast.makeText(this, "Removing "+itemClick.getMyCircleContactListData().getName(), Toast.LENGTH_SHORT).show();
+
+//         myCircleContactListAdapter.remove(itemClick.position);
+//        myCircleContactListAdapter.notifyItemRemoved(itemClick.position);
+//        myCircleContactListAdapter.notifyItemRangeChanged(itemClick.position, myCircleContactListAdapter.size());
+
+        ContactModel contactModel = itemClick.getMyCircleContactListData();
+        contactModel.setAddToCircle(0);
+        myCircleContactViewModel.insert(contactModel);
+
+        setupListRecycler();
+
 
     }
 
