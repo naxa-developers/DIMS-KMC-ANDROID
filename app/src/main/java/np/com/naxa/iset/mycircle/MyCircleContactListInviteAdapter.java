@@ -1,5 +1,6 @@
 package np.com.naxa.iset.mycircle;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import np.com.naxa.iset.BuildConfig;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
@@ -61,6 +63,17 @@ public class MyCircleContactListInviteAdapter  extends BaseQuickAdapter<ContactM
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "Invite Button Clicked"+"\n"+item.getName(), Toast.LENGTH_SHORT).show();
+                try {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Kathmandu Metropolitan City DIMS App");
+                    String shareMessage= "Kathmandu Metropolitan City DIMS App\n\nLet me recommend you this application\n";
+                    shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=kathmandu_metropolitan_city_dims" + BuildConfig.APPLICATION_ID +"\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    mContext.startActivity(Intent.createChooser(shareIntent, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
             }
         });
 

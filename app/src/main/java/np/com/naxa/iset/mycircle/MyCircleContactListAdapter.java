@@ -67,6 +67,7 @@ public class MyCircleContactListAdapter extends BaseQuickAdapter<ContactModel, B
             @Override
             public void onClick(View v) {
 
+
             }
         });
 
