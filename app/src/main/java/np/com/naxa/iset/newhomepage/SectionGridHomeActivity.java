@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -21,28 +22,53 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.activity.MyCircleProfileActivity;
 import np.com.naxa.iset.activity.NotifyOthersActivity;
 import np.com.naxa.iset.activity.ReportActivity;
 import np.com.naxa.iset.bloodrequest.BloodRequestActivity;
 import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
+import np.com.naxa.iset.event.GmailLoginEvent;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
+import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
+import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.network.retrofit.NetworkApiClient;
+import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.profile.municipalityprofile.MunicipalityProfileActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
 import np.com.naxa.iset.settings.SettingsActivity;
+import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.JsonGsonConverterUtils;
+import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 import np.com.naxa.iset.utils.recycleviewutils.LinearLayoutManagerWithSmoothScroller;
 import np.com.naxa.iset.utils.recycleviewutils.RecyclerViewType;
+import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 
 public class SectionGridHomeActivity extends AppCompatActivity {
 
@@ -95,6 +121,12 @@ public class SectionGridHomeActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 1;
+
+    String userPhotoUri = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +155,8 @@ public class SectionGridHomeActivity extends AppCompatActivity {
 //        setUpToolbarTitle();
         setUpRecyclerView();
         populateRecyclerView();
+
+        setupGmailLogin();
 
     }
 
@@ -348,6 +382,10 @@ public class SectionGridHomeActivity extends AppCompatActivity {
                         startActivity(new Intent(SectionGridHomeActivity.this, OpenSpaceMapActivity.class));
                         drawer.closeDrawers();
                         return true;
+
+                        case R.id.nav_login:
+                            DialogFactory.createGmailLoginDialog(SectionGridHomeActivity.this).show();
+                            return true;
                     default:
                         navItemIndex = 0;
                 }
@@ -386,4 +424,156 @@ public class SectionGridHomeActivity extends AppCompatActivity {
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
     }
+
+
+
+    // gmail Login Start
+    private void setupGmailLogin() {
+
+        // Configure sign-in to request the user's ID, email address, and basic
+// profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+
+    }
+
+    private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        if (account == null) {
+            return;
+        }
+
+        Toast.makeText(this, "Google Sign-in complete", Toast.LENGTH_SHORT).show();
+
+        userPhotoUri = account.getPhotoUrl().toString();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            SharedPreferenceUtils sharedPreferenceUtils = new SharedPreferenceUtils(this);
+            jsonObject.put("email", account.getEmail());
+            jsonObject.put("token", sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null));
+
+
+        Log.d(TAG, "convertDataToJson: "+jsonObject.toString());
+
+        if(sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.USER_ALREADY_LOGGED_IN, false)){
+            return;
+        }
+
+        NetworkApiInterface apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
+
+        apiInterface.getLoginResponse(UrlClass.API_ACCESS_TOKEN, jsonObject.toString())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<LoginResponse>() {
+                    @Override
+                    public void onNext(LoginResponse loginResponse) {
+                        if(loginResponse.getError() == 0){
+                          DialogFactory.createCustomDialog(SectionGridHomeActivity.this, loginResponse.getMessage(), new DialogFactory.CustomDialogListener() {
+                              @Override
+                              public void onClick() {
+                                  sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_DETAILS, JsonGsonConverterUtils.getJsonFromGson(loginResponse.getData()));
+                                  sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, true);
+                                  sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_LOGGED_IN, true);
+
+                              }
+                          }).show();
+                        }
+
+                        if(loginResponse.getError() == 1){
+                            DialogFactory.createCustomErrorDialog(SectionGridHomeActivity.this, loginResponse.getMessage(), new DialogFactory.CustomDialogListener() {
+                                @Override
+                                public void onClick() {
+
+                                    startActivity(new Intent(SectionGridHomeActivity.this, MyCircleContactViewModel.class));
+                                }
+                            }).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DialogFactory.createCustomErrorDialog(SectionGridHomeActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
+                            @Override
+                            public void onClick() {
+
+                            }
+                        }).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+//    gmail login end
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+        // Check for existing Google Sign In account, if the user is already signed in
+// the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGmailLoginEvent(GmailLoginEvent.loginButtonClick itemClick) {
+
+        signIn();
+
+        Toast.makeText(this, "Gmail account Logging in", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+
 }

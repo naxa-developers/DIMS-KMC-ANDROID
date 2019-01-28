@@ -3,57 +3,61 @@ package np.com.naxa.iset.mycircle.registeruser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import np.com.naxa.iset.mycircle.MyCircleContactListData;
+
 public class UserModel {
 
+    @SerializedName("id")
+    @Expose
+    private String id;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("mobile_no")
+    @Expose
+    private String mobileNo;
+    @SerializedName("full_name")
+    @Expose
+    private String fullName;
+    @SerializedName("image_url")
+    @Expose
+    private String imageUrl;
+    @SerializedName("get_notification")
+    @Expose
+    private String getNotification;
+    @SerializedName("blood_group")
+    @Expose
+    private String bloodGroup;
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("my_circle")
+    @Expose
+    private List<MyCircleContactListData> myCircle;
     @SerializedName("token")
     @Expose
     private String token;
 
-    @SerializedName("full_name")
-    @Expose
-    private String name;
-
-    @SerializedName("email")
-    @Expose
-    private String email;
-
-    @SerializedName("mobile_no")
-    @Expose
-    private String mobile_no;
-
-    @SerializedName("blood_group")
-    @Expose
-    private String blood_group;
-
-    @SerializedName("address")
-    @Expose
-    private String address;
-
-    @SerializedName("image_url")
-    @Expose
-    private String image_url;
-
-    @SerializedName("get_notification")
-    @Expose
-    private String get_notification;
-
-    public UserModel(String token ,String name, String email, String mobile_no, String blood_group, String address, String image_url, String get_notification) {
-        this.token = token;
-        this.name = name;
+    public UserModel(String email, String mobileNo, String fullName, String imageUrl, String getNotification, String bloodGroup, String address, List<MyCircleContactListData> myCircle, String token) {
         this.email = email;
-        this.mobile_no = mobile_no;
-        this.blood_group = blood_group;
+        this.mobileNo = mobileNo;
+        this.fullName = fullName;
+        this.imageUrl = imageUrl;
+        this.getNotification = getNotification;
+        this.bloodGroup = bloodGroup;
         this.address = address;
-        this.image_url = image_url;
-        this.get_notification = get_notification;
+        this.myCircle = myCircle;
+        this.token = token;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -64,20 +68,44 @@ public class UserModel {
         this.email = email;
     }
 
-    public String getMobile_no() {
-        return mobile_no;
+    public String getMobileNo() {
+        return mobileNo;
     }
 
-    public void setMobile_no(String mobile_no) {
-        this.mobile_no = mobile_no;
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
     }
 
-    public String getBlood_group() {
-        return blood_group;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setBlood_group(String blood_group) {
-        this.blood_group = blood_group;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getGetNotification() {
+        return getNotification;
+    }
+
+    public void setGetNotification(String getNotification) {
+        this.getNotification = getNotification;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
     }
 
     public String getAddress() {
@@ -88,12 +116,12 @@ public class UserModel {
         this.address = address;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public List<MyCircleContactListData> getMyCircle() {
+        return myCircle;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setMyCircle(List<MyCircleContactListData> myCircle) {
+        this.myCircle = myCircle;
     }
 
     public String getToken() {
@@ -104,11 +132,4 @@ public class UserModel {
         this.token = token;
     }
 
-    public String getGet_notification() {
-        return get_notification;
-    }
-
-    public void setGet_notification(String get_notification) {
-        this.get_notification = get_notification;
-    }
 }

@@ -3,6 +3,7 @@ package np.com.naxa.iset.network.retrofit;
 
 import io.reactivex.Observable;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
+import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.network.model.AskForHelpResponse;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
@@ -44,8 +45,8 @@ public interface NetworkApiInterface {
 
     @POST("loginCheck")
     @FormUrlEncoded
-    Observable<NormalResponse> getLoginResponse(@Field("api_key") String api_key,
-                                                @Field("data") String jsonData);
+    Observable<LoginResponse> getLoginResponse(@Field("api_key") String api_key,
+                                               @Field("data") String jsonData);
 
     @POST("check_registered_num")
     @FormUrlEncoded

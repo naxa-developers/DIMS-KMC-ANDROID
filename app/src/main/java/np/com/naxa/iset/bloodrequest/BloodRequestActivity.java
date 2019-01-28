@@ -138,7 +138,7 @@ public class BloodRequestActivity extends AppCompatActivity {
                 break;
 
             case R.id.btnMakeBloodRequest:
-                DialogFactory.createGmailLoginDialog(BloodRequestActivity.this).show();
+//                DialogFactory.createGmailLoginDialog(BloodRequestActivity.this).show();
                 break;
         }
     }

@@ -77,6 +77,7 @@ import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
+import np.com.naxa.iset.utils.JsonGsonConverterUtils;
 import np.com.naxa.iset.utils.NetworkUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
@@ -208,9 +209,13 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                         }
                     });
         }
+UserModel userModel = JsonGsonConverterUtils.getUserFromJson(sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.USER_DETAILS, null));
+        if(userModel!= null) {
+            tvAddress.setText(userModel.getAddress());
+            tvNumber.setText(userModel.getMobileNo());
+//            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(userModel.getMyCircle());
 
-        tvAddress.setText(etRegAddress.getText());
-        tvNumber.setText(etRegMobileNo.getText());
+        }
 
     }
 
@@ -314,15 +319,9 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                 FieldValidatorUtils.validateEmailPattern(etRegEmail) &&
                 FieldValidatorUtils.validateSpinnerItemIsselected(spnBloodGroup, "Please select your blood group.")) {
 
-            UserModel userModel = new UserModel(
-                    sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null),
-                    etRegFullName.getText().toString(),
-                    etRegEmail.getText().toString(),
-                    etRegMobileNo.getText().toString(),
-                    spnBloodGroup.getSelectedItem().toString(),
-                    etRegAddress.getText().toString(),
-                    userPhotoUri,
-                    getNotification);
+            UserModel userModel = new UserModel(etRegEmail.getText().toString(), etRegMobileNo.getText().toString(), etRegFullName.getText().toString(),
+                    userPhotoUri, getNotification,  spnBloodGroup.getSelectedItem().toString(),etRegAddress.getText().toString(), null,
+                    sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.TOKEN_ID, null));
 
             Gson gson = new Gson();
             String jsonInString = gson.toJson(userModel);
