@@ -64,11 +64,12 @@ import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.GetContactFromDevice;
+import np.com.naxa.iset.mycircle.MyCircleAddRemove;
 import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
 import np.com.naxa.iset.mycircle.MyCircleContactListData;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
 import np.com.naxa.iset.mycircle.contactlistdialog.TabbedDialog;
-import np.com.naxa.iset.mycircle.registeruser.RegisterResponse;
+import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.mycircle.registeruser.UserModel;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
@@ -76,6 +77,7 @@ import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.FieldValidatorUtils;
 import np.com.naxa.iset.utils.HidekeyboardUtils;
+import np.com.naxa.iset.utils.NetworkUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -218,13 +220,29 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         recyclerViewMyCircle.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewMyCircle.setAdapter(myCircleContactListAdapter);
 
+        updateMyCircleRecycleerList();
+    }
+
+    private void updateMyCircleRecycleerList() {
         myCircleContactViewModel.getAllMyCircleContacts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableSubscriber<List<ContactModel>>() {
                     @Override
                     public void onNext(List<ContactModel> contactModels) {
-                        ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModels);
+                        if (myCircleContactListData.size() > 0) {
+                            if (NetworkUtils.isNetworkAvailable()) {
+
+                                MyCircleAddRemove myCircleAddRemove = new MyCircleAddRemove();
+                                myCircleAddRemove.addMyCircleList(MyCircleProfileActivity.this, apiInterface, contactModels, recyclerViewMyCircle);
+
+                            } else {
+                                Toast.makeText(MyCircleProfileActivity.this, "No Internet Access", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            ((MyCircleContactListAdapter) recyclerViewMyCircle.getAdapter()).replaceData(contactModels);
+
+                        }
 
                     }
 
@@ -238,7 +256,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
                     }
                 });
-
     }
 
     private void setUpSpinner() {
@@ -318,12 +335,12 @@ public class MyCircleProfileActivity extends AppCompatActivity {
                     .getRegisterResponse(UrlClass.API_ACCESS_TOKEN, jsonInString)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DisposableObserver<RegisterResponse>() {
+                    .subscribe(new DisposableObserver<NormalResponse>() {
                         @Override
-                        public void onNext(RegisterResponse registerResponse) {
+                        public void onNext(NormalResponse normalResponse) {
 
-                            error[0] = registerResponse.getError();
-                            message[0] = registerResponse.getMessage();
+                            error[0] = normalResponse.getError();
+                            message[0] = normalResponse.getMessage();
                         }
 
                         @Override
@@ -397,7 +414,7 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         dialogFragment = new TabbedDialog();
         dialogFragment.show(ft, "dialog");
 
-        if(progressDialog!= null && progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }
@@ -459,14 +476,6 @@ public class MyCircleProfileActivity extends AppCompatActivity {
         btnRegister.setVisibility(View.VISIBLE);
 
         Toast.makeText(this, "Google Sign-in complete", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "updateUI: getDisplayName " + account.getDisplayName());
-        Log.d(TAG, "updateUI: getEmail " + account.getEmail());
-        Log.d(TAG, "updateUI: getIdToken " + account.getIdToken());
-        Log.d(TAG, "updateUI: getIdToken " + account.getIdToken());
-        Log.d(TAG, "updateUI: getPhotoUrl " + account.getPhotoUrl());
-        Log.d(TAG, "updateUI: getId :" + account.getId());
-        Log.d(TAG, "updateUI: getGivenName " + account.getGivenName());
-        Log.d(TAG, "updateUI: getFamilyName " + account.getFamilyName());
 
         userPhotoUri = account.getPhotoUrl().toString();
 
@@ -756,12 +765,14 @@ public class MyCircleProfileActivity extends AppCompatActivity {
             Gson gson = new Gson();
             String circleJson = gson.toJson(myCircleContactListData);
             Log.d(TAG, "onDialogCloseClick circleJson : " + circleJson);
+
+            updateMyCircleRecycleerList();
         }
 
         Toast.makeText(this, "add to your circle dialog close clicked ", Toast.LENGTH_SHORT).show();
 //        onBackPressed();
 
-        setupListRecycler();
+
         // Create and show the dialog.
         dialogFragment.dismiss();
 
@@ -770,17 +781,15 @@ public class MyCircleProfileActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCircleItemRemoveClick(MyCircleContactEvent.MyCircleContactRemoveFromListeClick itemClick) {
-        Toast.makeText(this, "Removing "+itemClick.getMyCircleContactListData().getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Removing " + itemClick.getMyCircleContactListData().getName(), Toast.LENGTH_SHORT).show();
 
-//         myCircleContactListAdapter.remove(itemClick.position);
-//        myCircleContactListAdapter.notifyItemRemoved(itemClick.position);
-//        myCircleContactListAdapter.notifyItemRangeChanged(itemClick.position, myCircleContactListAdapter.size());
-
-        ContactModel contactModel = itemClick.getMyCircleContactListData();
-        contactModel.setAddToCircle(0);
-        myCircleContactViewModel.insert(contactModel);
-
-        setupListRecycler();
+        if (NetworkUtils.isNetworkAvailable()) {
+            MyCircleAddRemove myCircleAddRemove = new MyCircleAddRemove();
+            myCircleAddRemove.removeFromMyCircleList(MyCircleProfileActivity.this, apiInterface,
+                    itemClick.getMyCircleContactListData(), recyclerViewMyCircle, myCircleContactViewModel);
+        }else {
+            Toast.makeText(this, "No Internet Access", Toast.LENGTH_SHORT).show();
+        }
 
 
     }

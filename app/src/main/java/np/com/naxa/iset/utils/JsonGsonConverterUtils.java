@@ -1,4 +1,4 @@
-package np.com.naxa.iset.utils.sectionmultiitemUtils;
+package np.com.naxa.iset.utils;
 
 import android.content.Context;
 import android.util.Log;

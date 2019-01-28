@@ -62,7 +62,7 @@ public class MyCircleContactListInviteAdapter  extends BaseQuickAdapter<ContactM
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Kathmandu Metropolitan City DIMS App");
-                    String shareMessage= "Kathmandu Metropolitan City DIMS App\n\nLet me recommend you this application\n";
+                    String shareMessage= "Kathmandu Metropolitan City DIMS App\n\nLet me recommend you this application\n\n";
                     shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=kathmandu_metropolitan_city_dims" + BuildConfig.APPLICATION_ID +"\n\n";
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                     mContext.startActivity(Intent.createChooser(shareIntent, "choose one"));

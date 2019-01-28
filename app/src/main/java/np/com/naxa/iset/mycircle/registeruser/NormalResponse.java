@@ -3,7 +3,7 @@ package np.com.naxa.iset.mycircle.registeruser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterResponse {
+public class NormalResponse {
 
     @SerializedName("error")
     @Expose
@@ -13,7 +13,7 @@ public class RegisterResponse {
     @Expose
     String message ;
 
-    public RegisterResponse(Integer error, String message) {
+    public NormalResponse(Integer error, String message) {
         this.error = error;
         this.message = message;
     }

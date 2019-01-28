@@ -1,11 +1,9 @@
 package np.com.naxa.iset.network.retrofit;
 
 
-
 import io.reactivex.Observable;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
-import np.com.naxa.iset.mycircle.registeruser.RegisterResponse;
-import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.network.model.AskForHelpResponse;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
 import okhttp3.MultipartBody;
@@ -29,7 +27,7 @@ public interface NetworkApiInterface {
     @Multipart
     @POST("ReportController/report_insert_api")
     Call<AskForHelpResponse> getAskForHelpResponse(@Part MultipartBody.Part file,
-                                                     @Part("data") RequestBody jsonToSend);
+                                                   @Part("data") RequestBody jsonToSend);
 
     @GET("MapApi/get_category")
     Observable<GeoJsonCategoryDetails> getGeoJsonCategoryDetails();
@@ -41,19 +39,30 @@ public interface NetworkApiInterface {
 
     @POST("check_registration")
     @FormUrlEncoded
-    Observable<RegisterResponse> getRegisterResponse(@Field("api_key") String api_key,
-                                                     @Field("data") String jsonData);
+    Observable<NormalResponse> getRegisterResponse(@Field("api_key") String api_key,
+                                                   @Field("data") String jsonData);
 
     @POST("loginCheck")
     @FormUrlEncoded
-    Observable<RegisterResponse> getLoginResponse(@Field("api_key") String api_key,
-                                                     @Field("data") String jsonData);
+    Observable<NormalResponse> getLoginResponse(@Field("api_key") String api_key,
+                                                @Field("data") String jsonData);
 
     @POST("check_registered_num")
     @FormUrlEncoded
     Observable<MyCircleContactListResponse> getContactListResponse(@Field("api_key") String api_key,
-                                                             @Field("data") String jsonData);
+                                                                   @Field("data") String jsonData);
 
+    @POST("add_my_circle")
+    @FormUrlEncoded
+    Observable<NormalResponse> getCircleListUpdateResponse(@Field("api_key") String api_key,
+                                                           @Field("email") String email,
+                                                           @Field("data") String jsonData);
+
+    @POST("delete_circle")
+    @FormUrlEncoded
+    Observable<NormalResponse> getCircleListDeleteResponse(@Field("api_key") String api_key,
+                                                           @Field("email") String email,
+                                                           @Field("mobile_no") String mobile_no);
 
 
 }
