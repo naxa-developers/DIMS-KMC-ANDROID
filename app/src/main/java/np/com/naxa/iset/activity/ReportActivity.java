@@ -38,7 +38,7 @@ public class ReportActivity extends AppCompatActivity {
     Spinner spnHazardType;
     @BindView(R.id.btn_photo)
     Button btnPhoto;
-    @BindView(R.id.btn_audio_video)
+    @BindView(R.id.btn_gps_location)
     Button btnAudioVideo;
     @BindView(R.id.et_message)
     EditText etMessage;
@@ -78,13 +78,13 @@ public class ReportActivity extends AppCompatActivity {
         spnHazardType.setAdapter(hazardAdapter);
     }
 
-    @OnClick({R.id.btn_photo, R.id.btn_audio_video, R.id.btn_submit})
+    @OnClick({R.id.btn_photo, R.id.btn_gps_location, R.id.btn_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_photo:
                 EasyImage.openChooserWithDocuments(ReportActivity.this, "Take Image", 0);
                 break;
-            case R.id.btn_audio_video:
+            case R.id.btn_gps_location:
 
                 break;
             case R.id.btn_submit:

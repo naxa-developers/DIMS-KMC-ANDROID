@@ -25,20 +25,12 @@
                 android:textSize="@dimen/material_text_body1"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <!--incident type-->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_large"
-                android:background="@drawable/rectangle_rounded_light_purple"
-                android:padding="@dimen/spacing_medium">
-
-                <Spinner
-                    android:id="@+id/spn_ward_no"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white" />
-            </LinearLayout>
-
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Type of Disaster Events" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,6 +45,114 @@
                     android:backgroundTint="@color/white" />
             </LinearLayout>
 
+            <!--Occurance Date-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Date" />
+
+            <EditText
+                android:id="@+id/et_occurance_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="date" />
+
+
+            <!--Occurance Date-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Time" />
+            <EditText
+                android:id="@+id/et_occurance_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="datetime" />
+
+
+            <!--VDC/Municipality Name-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Name of the VDC/Municipality" />
+            <EditText
+                android:id="@+id/et_vdc_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="text"
+                android:hint="VDC/Municipality Name"/>
+
+            <!--ward-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Ward no." />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:background="@drawable/rectangle_rounded_light_purple"
+                android:padding="@dimen/spacing_medium">
+
+                <Spinner
+                    android:id="@+id/spn_ward_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white" />
+            </LinearLayout>
+
+
+            <!--Name of the place-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Name of the VDC/Municipality" />
+
+            <EditText
+                android:id="@+id/et_name_of_the_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="text"
+                android:hint="Tole"/>
+
+            <!--Risk level-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Risk level" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:background="@drawable/rectangle_rounded_light_purple"
+                android:padding="@dimen/spacing_medium">
+
+                <Spinner
+                    android:id="@+id/spn_risk_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white" />
+            </LinearLayout>
+
+            <!--photo- location-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,23 +177,93 @@
                     android:layout_height="0dp" />
 
                 <Button
-                    android:id="@+id/btn_audio_video"
+                    android:id="@+id/btn_gps_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/rectangle_rounded_light_purple"
-                    android:text="Audio/ Video"
+                    android:text="GPS Location"
                     android:textAllCaps="false"
                     android:textColor="@color/light_gray" />
 
 
             </LinearLayout>
 
+            <!--Disaster Status-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
-                android:text="Message" />
+                android:text="Disaster Status" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:background="@drawable/rectangle_rounded_light_purple"
+                android:padding="@dimen/spacing_medium">
+
+                <Spinner
+                    android:id="@+id/spn_disaster_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white" />
+            </LinearLayout>
+
+            <!--Name of the Reporter-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Name of the reporter" />
+            <EditText
+                android:id="@+id/et_reporter_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="text"
+                android:hint="Your Name"/>
+
+            <!--Address of the Reporter-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Address of the reporter" />
+            <EditText
+                android:id="@+id/et_reporter_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="text"
+                android:hint="Your Name"/>
+
+            <!--Contact of the Reporter-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Contact of the reporter" />
+            <EditText
+                android:id="@+id/et_reporter_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:padding="@dimen/spacing_medium"
+                android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:inputType="phone"
+                android:hint="Your Contact Number"/>
+
+
+            <!--Remarks-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="Remarks" />
 
             <EditText
                 android:id="@+id/et_message"
@@ -102,16 +272,39 @@
                 android:layout_marginBottom="@dimen/spacing_large"
                 android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
-                android:minLines="5" />
+                android:minLines="5"
+                android:hint="Remarks"/>
 
-            <Button
-                android:id="@+id/btn_submit"
+          <!-- save- submit-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_rounded_purple"
-                android:text="Submit"
-                android:textColor="@color/light_gray"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <!--submit-->
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_rounded_purple"
+                    android:text="Save"
+                    android:textColor="@color/light_gray"
+                    android:textStyle="bold"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+                <!--submit-->
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/button_rounded_purple"
+                    android:text="Submit"
+                    android:textColor="@color/light_gray"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
