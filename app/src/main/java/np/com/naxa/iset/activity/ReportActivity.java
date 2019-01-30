@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,9 +27,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.utils.CalendarUtils;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 import np.com.naxa.iset.utils.ToastUtils;
-import np.com.naxa.iset.utils.imageutils.ImageSaveTask;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -71,6 +72,8 @@ public class ReportActivity extends AppCompatActivity {
     EditText etReporterContact;
     @BindView(R.id.btn_save)
     Button btnSave;
+    @BindView(R.id.ivImagePreview)
+    ImageView ivImagePreview;
 
     private String imageFilePath = null;
     private File imageFileToBeUploaded;
@@ -115,23 +118,32 @@ public class ReportActivity extends AppCompatActivity {
         spnDisasterStatus.setAdapter(disasterStatusAdapter);
 
 
-
     }
 
-    @OnClick({R.id.btn_photo, R.id.btn_gps_location, R.id.btn_save, R.id.btn_submit})
+    @OnClick({R.id.et_occurance_date, R.id.et_occurance_time, R.id.btn_photo, R.id.btn_gps_location, R.id.btn_save, R.id.btn_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.et_occurance_date:
+                CalendarUtils.datePickerDialog(ReportActivity.this, etOccuranceDate).show();
+                break;
+
+            case R.id.et_occurance_time:
+                CalendarUtils.timePickerDialog(ReportActivity.this, etOccuranceTime).show();
+                break;
+
             case R.id.btn_photo:
                 EasyImage.openChooserWithDocuments(ReportActivity.this, "Take Image", 0);
                 break;
-            case R.id.btn_gps_location:
 
+            case R.id.btn_gps_location:
                 break;
+
             case R.id.btn_save:
                 break;
 
             case R.id.btn_submit:
-
+                CalendarUtils.getCurrentDate();
+                CalendarUtils.getCurrentTime();
                 break;
         }
     }
@@ -150,9 +162,10 @@ public class ReportActivity extends AppCompatActivity {
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
 
                 imageFilePath = imageFile.getAbsolutePath();
+                CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(ReportActivity.this, CreateAppMainFolderUtils.appmainFolderName);
 
                 int file_size = Integer.parseInt(String.valueOf(imageFile.length() / 1024));
-                Log.d(TAG, "onImagePicked: file size "+file_size+ " KB");
+                Log.d(TAG, "onImagePicked: file size " + file_size + " KB");
 
 
                 new Compressor(ReportActivity.this)
@@ -164,18 +177,11 @@ public class ReportActivity extends AppCompatActivity {
                             public void accept(File file) {
                                 imageFileToBeUploaded = file;
                                 int file_size = Integer.parseInt(String.valueOf(imageFileToBeUploaded.length() / 1024));
-                                Log.d(TAG, "accept: compressed file size "+file_size+" KB");
-                                Log.d(TAG, "accept: "+imageFileToBeUploaded.getAbsolutePath());
+                                Log.d(TAG, "accept: compressed file size " + file_size + " KB");
+                                Log.d(TAG, "accept: " + imageFileToBeUploaded.getAbsolutePath());
 
-//                                ImageSaveTask imageSaveTask =new ImageSaveTask(ReportActivity.this);
-                                CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(ReportActivity.this, CreateAppMainFolderUtils.appmainFolderName);
-//                                imageSaveTask.execute(imageFilePath, createAppMainFolderUtils.getAppMediaFolderName());
-
-                                BitmapFactory.Options options = new BitmapFactory.Options();
-                                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                                Bitmap bitmap = BitmapFactory.decodeFile(imageFileToBeUploaded.getAbsoluteFile().getAbsolutePath(), options);
-
-                                LoadImageUtils.imageSaveFileToSpecificDirectory(bitmap, "Samir", createAppMainFolderUtils.getAppMediaFolderName());
+                                LoadImageUtils.imageSaveFileToSpecificDirectory(getBitmapOfImageFile(imageFileToBeUploaded.getAbsoluteFile().getAbsolutePath()),
+                                        "Samir", createAppMainFolderUtils.getAppMediaFolderName());
 
                             }
                         }, new Consumer<Throwable>() {
@@ -185,28 +191,28 @@ public class ReportActivity extends AppCompatActivity {
 //                                showError(throwable.getMessage());
                                 ToastUtils.showToast(throwable.getMessage().toString());
                                 imageFileToBeUploaded = imageFile;
-                                Log.d(TAG, "accept: "+imageFileToBeUploaded.getAbsolutePath());
-
-
-//                                ImageSaveTask imageSaveTask =new ImageSaveTask(ReportActivity.this);
-                                CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(ReportActivity.this, CreateAppMainFolderUtils.appmainFolderName);
-//                                imageSaveTask.execute(imageFilePath, createAppMainFolderUtils.getAppMediaFolderName());
-
-                                BitmapFactory.Options options = new BitmapFactory.Options();
-                                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                                Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath, options);
-                                LoadImageUtils.imageSaveFileToSpecificDirectory(bitmap, "Samir", createAppMainFolderUtils.getAppMediaFolderName());
+                                Log.d(TAG, "accept: failed to compress " + imageFileToBeUploaded.getAbsolutePath());
+                                LoadImageUtils.imageSaveFileToSpecificDirectory(getBitmapOfImageFile(imageFileToBeUploaded.getAbsolutePath()),
+                                        "Samir", createAppMainFolderUtils.getAppMediaFolderName());
                             }
                         });
 
-
-
-
-
                 hasNewImage = true;
-
             }
 
         });
+    }
+
+    private Bitmap getBitmapOfImageFile(String absoluteImageFilePath) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(absoluteImageFilePath, options);
+        ivImagePreview.setImageBitmap(bitmap);
+        return bitmap;
+    }
+
+
+    private void convertDataToJson() {
+
     }
 }
