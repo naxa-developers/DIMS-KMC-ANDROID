@@ -27,8 +27,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.mycircle.registeruser.UserModel;
 import np.com.naxa.iset.utils.CalendarUtils;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
+import np.com.naxa.iset.utils.JsonGsonConverterUtils;
+import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -79,14 +82,19 @@ public class ReportActivity extends AppCompatActivity {
     private File imageFileToBeUploaded;
     private Boolean hasNewImage = false;
 
+    SharedPreferenceUtils sharedPreferenceUtils;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         ButterKnife.bind(this);
 
+        sharedPreferenceUtils = new SharedPreferenceUtils(ReportActivity.this);
         setupToolBar();
         setUpSpinner();
+
+        initDefaultField();
     }
 
     private void setupToolBar() {
@@ -118,6 +126,18 @@ public class ReportActivity extends AppCompatActivity {
         spnDisasterStatus.setAdapter(disasterStatusAdapter);
 
 
+    }
+
+    private void initDefaultField(){
+        etVdcName.setText("Kathmandu Metropolitan City");
+        if (sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.USER_ALREADY_LOGGED_IN, false)) {
+
+            UserModel userModel = JsonGsonConverterUtils.getUserFromJson(sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.USER_DETAILS, null));
+
+            etReporterName.setText(userModel.getFullName());
+            etReporterAddress.setText(userModel.getAddress());
+            etReporterContact.setText(userModel.getMobileNo());
+        }
     }
 
     @OnClick({R.id.et_occurance_date, R.id.et_occurance_time, R.id.btn_photo, R.id.btn_gps_location, R.id.btn_save, R.id.btn_submit})
@@ -207,6 +227,7 @@ public class ReportActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeFile(absoluteImageFilePath, options);
+        ivImagePreview.setVisibility(View.VISIBLE);
         ivImagePreview.setImageBitmap(bitmap);
         return bitmap;
     }

@@ -52,6 +52,9 @@ public class UserModel {
         this.token = token;
     }
 
+    public UserModel() {
+    }
+
     public String getId() {
         return id;
     }
