@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 
 import butterknife.BindView;
@@ -27,6 +29,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.database.entity.ReportDetailsEntity;
+import np.com.naxa.iset.gps.GeoPointActivity;
 import np.com.naxa.iset.mycircle.registeruser.UserModel;
 import np.com.naxa.iset.utils.CalendarUtils;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
@@ -50,7 +54,7 @@ public class ReportActivity extends AppCompatActivity {
     @BindView(R.id.btn_photo)
     Button btnPhoto;
     @BindView(R.id.btn_gps_location)
-    Button btnAudioVideo;
+    Button btnGPSLocation;
     @BindView(R.id.et_message)
     EditText etMessage;
     @BindView(R.id.btn_submit)
@@ -78,11 +82,18 @@ public class ReportActivity extends AppCompatActivity {
     @BindView(R.id.ivImagePreview)
     ImageView ivImagePreview;
 
-    private String imageFilePath = null;
+    private String imageFilePath = null, imageNameToBeSaved = "";
     private File imageFileToBeUploaded;
     private Boolean hasNewImage = false;
 
     SharedPreferenceUtils sharedPreferenceUtils;
+
+    public static final int GEOPOINT_RESULT_CODE = 1994;
+    public static final String LOCATION_RESULT = "LOCATION_RESULT";
+    double myLat = 0.0;
+    double myLong = 0.0;
+    String latitude, longitude;
+    ReportDetailsEntity reportDetailsEntity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -156,14 +167,22 @@ public class ReportActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_gps_location:
+                Intent toGeoPointActivity = new Intent(this, GeoPointActivity.class);
+                startActivityForResult(toGeoPointActivity, GEOPOINT_RESULT_CODE);
                 break;
 
             case R.id.btn_save:
+                if (hasLocationAndImage()) {
+                    convertDataToJson();
+                }
+
                 break;
 
             case R.id.btn_submit:
-                CalendarUtils.getCurrentDate();
-                CalendarUtils.getCurrentTime();
+                if (hasLocationAndImage()) {
+                        convertDataToJson();
+
+                }
                 break;
         }
     }
@@ -171,6 +190,33 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GEOPOINT_RESULT_CODE) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    String location = data.getStringExtra(LOCATION_RESULT);
+
+                    Log.d(TAG, "onActivityResult: " + location.toString());
+
+                    String string = location;
+                    String[] parts = string.split(" ");
+                    String split_lat = parts[0]; // 004
+                    String split_lon = parts[1]; // 034556
+
+                    if (!split_lat.equals("") && !split_lon.equals("")) {
+                        myLat = Double.parseDouble(split_lat);
+                        myLong = Double.parseDouble(split_lon);
+                        btnGPSLocation.setText("Recorded");
+//                        showLoading("Please wait ... \nCalculating distance");
+                    } else {
+//                        showInfoToast("Cannot calculate distance");
+                        Toast.makeText(this, "Cannot get location", Toast.LENGTH_SHORT).show();
+                    }
+
+                    break;
+            }
+        }
+
         EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
@@ -200,8 +246,9 @@ public class ReportActivity extends AppCompatActivity {
                                 Log.d(TAG, "accept: compressed file size " + file_size + " KB");
                                 Log.d(TAG, "accept: " + imageFileToBeUploaded.getAbsolutePath());
 
+                                imageNameToBeSaved = CalendarUtils.getTimeInMilisecond();
                                 LoadImageUtils.imageSaveFileToSpecificDirectory(getBitmapOfImageFile(imageFileToBeUploaded.getAbsoluteFile().getAbsolutePath()),
-                                        "Samir", createAppMainFolderUtils.getAppMediaFolderName());
+                                        imageNameToBeSaved, createAppMainFolderUtils.getAppMediaFolderName());
 
                             }
                         }, new Consumer<Throwable>() {
@@ -211,9 +258,10 @@ public class ReportActivity extends AppCompatActivity {
 //                                showError(throwable.getMessage());
                                 ToastUtils.showToast(throwable.getMessage().toString());
                                 imageFileToBeUploaded = imageFile;
+                                imageNameToBeSaved = CalendarUtils.getTimeInMilisecond();
                                 Log.d(TAG, "accept: failed to compress " + imageFileToBeUploaded.getAbsolutePath());
                                 LoadImageUtils.imageSaveFileToSpecificDirectory(getBitmapOfImageFile(imageFileToBeUploaded.getAbsolutePath()),
-                                        "Samir", createAppMainFolderUtils.getAppMediaFolderName());
+                                        imageNameToBeSaved, createAppMainFolderUtils.getAppMediaFolderName());
                             }
                         });
 
@@ -232,8 +280,54 @@ public class ReportActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    private boolean hasLocationAndImage(){
+        boolean hasLocationAndImage;
+        if (myLat == 0 && myLong == 0) {
+            Toast.makeText(ReportActivity.this, "you need to take GPS Location first", Toast.LENGTH_SHORT).show();
+            hasLocationAndImage = false;
+        }
+        else if(!hasNewImage){
+            Toast.makeText(ReportActivity.this, "you need to take Photo first", Toast.LENGTH_SHORT).show();
+            hasLocationAndImage = false;
+        }else {
+            hasLocationAndImage = true;
+        }
+
+        return hasLocationAndImage;
+    }
+
+    private boolean validateSpinner(){
+        boolean status;
+        if(spnHazardType.getSelectedItemId() == 0){
+            Toast.makeText(this, "Please select incident type", Toast.LENGTH_SHORT).show();
+            status = false;
+        }else if(spnWardNo.getSelectedItemId() == 0){
+            Toast.makeText(this, "Please select ward", Toast.LENGTH_SHORT).show();
+            status = false;
+        }else {
+            status = true;
+        }
+    return status;
+    }
+
 
     private void convertDataToJson() {
 
+        if(!validateSpinner()) {
+            return;
+        }
+        latitude = myLat + "";
+        longitude = myLong + "";
+Gson gson = new Gson();
+        reportDetailsEntity = new ReportDetailsEntity(spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+                etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
+                spnWardNo.getSelectedItem().toString(), "", imageNameToBeSaved, "", etReporterName.getText().toString(),
+                etReporterAddress.getText().toString(), etReporterContact.getText().toString(), etMessage.getText().toString(),
+                "", latitude, longitude);
+
+        String jsonInString = gson.toJson(reportDetailsEntity);
+        Log.d(TAG, "convertDataToJson: "+jsonInString);
+
     }
+
 }

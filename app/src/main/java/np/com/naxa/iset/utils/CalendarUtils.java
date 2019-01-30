@@ -34,6 +34,17 @@ public class CalendarUtils {
         return formattedTime;
     }
 
+    public static String getTimeInMilisecond(){
+
+        Date date = Calendar.getInstance(new Locale("en", "US")).getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
+        String formattedDate = df.format(date);
+        Log.d(TAG, "getCurrentDate: "+formattedDate);
+        return formattedDate;
+
+
+    }
+
 
     public static DatePickerDialog datePickerDialog(Context context, EditText etDateDisplayView){
          int mYear, mMonth, mDay;
