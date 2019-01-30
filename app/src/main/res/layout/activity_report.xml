@@ -137,13 +137,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
-                android:text="Risk level" />
+                android:text="Risk level"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
                 android:background="@drawable/rectangle_rounded_light_purple"
-                android:padding="@dimen/spacing_medium">
+                android:padding="@dimen/spacing_medium"
+                android:visibility="gone">
 
                 <Spinner
                     android:id="@+id/spn_risk_level"
@@ -194,13 +196,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
-                android:text="Disaster Status" />
+                android:text="Disaster Status"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
                 android:background="@drawable/rectangle_rounded_light_purple"
-                android:padding="@dimen/spacing_medium">
+                android:padding="@dimen/spacing_medium"
+                android:visibility="gone">
 
                 <Spinner
                     android:id="@+id/spn_disaster_status"

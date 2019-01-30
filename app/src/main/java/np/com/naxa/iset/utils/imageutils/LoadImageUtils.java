@@ -3,12 +3,14 @@ package np.com.naxa.iset.utils.imageutils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
@@ -20,13 +22,13 @@ import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 public class LoadImageUtils {
 
-    public static int getImageFromDrawable(Context context, String imageName){
+    public static int getImageFromDrawable(@NonNull Context context, String imageName){
         int drawableResourceId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
 
         return drawableResourceId;
     }
 
-    public static Icon getImageIconFromDrawable(Context context, String imageName){
+    public static Icon getImageIconFromDrawable(@NonNull Context context, String imageName){
 
         Bitmap bitmap = BitmapFactory.decodeResource(
                 context.getResources(), getImageFromDrawable(context, imageName));
@@ -39,7 +41,7 @@ public class LoadImageUtils {
         return  icon;
     }
 
-    public static Bitmap getImageBitmapFromDrawable(Context context, String imageName){
+    public static Bitmap getImageBitmapFromDrawable(@NonNull Context context, String imageName){
 
         Bitmap bitmap = BitmapFactory.decodeResource(
                 context.getResources(), getImageFromDrawable(context, imageName));
@@ -54,7 +56,7 @@ public class LoadImageUtils {
      * @param imgIn - Source image. It will be released, and should not be used more
      * @return a copy of imgIn, but muttable.
      */
-    public static Bitmap convertToMutable(Context context, Bitmap imgIn, String imageName, int outHeight, int outWidth) {
+    public static Bitmap convertToMutable(Context context, @NonNull Bitmap imgIn, String imageName, int outHeight, int outWidth) {
         CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(context, CreateAppMainFolderUtils.appmainFolderName);
         try {
             //this is the file going to use temporally to save the bytes.
@@ -104,4 +106,20 @@ public class LoadImageUtils {
         return imgIn;
     }
 
+
+    public static void imageSaveFileToSpecificDirectory(Bitmap imageToSave, String fileName, String filePath) {
+
+        File file = new File(new File(filePath), fileName+".jpg");
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

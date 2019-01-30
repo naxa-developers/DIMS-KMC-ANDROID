@@ -2,6 +2,7 @@ package np.com.naxa.iset.utils.imageutils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
@@ -16,7 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 
-public class ImageSaveTask  extends AsyncTask<String, Void, Void> {
+public class ImageSaveTask  extends AsyncTask< String, Void, Void> {
     private Context context;
 
     public ImageSaveTask(Context context) {
@@ -33,10 +34,17 @@ public class ImageSaveTask  extends AsyncTask<String, Void, Void> {
         String dst = params[1];
 
         try {
+//            File file = Glide.with(context)
+//                    .load(src)
+//                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+//                    .get();
+
             File file = Glide.with(context)
-                    .load(src)
+                    .load(new File(src))
                     .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                     .get();
+
+
 
             File dstFile = new File(dst);
             if (!dstFile.exists()) {
@@ -76,9 +84,12 @@ public class ImageSaveTask  extends AsyncTask<String, Void, Void> {
                     }
                 }
             }
+
+            Log.d("ImageSaveTask", "doInBackground: ReportActivity Image file saved successfully ");
         } catch (InterruptedException | ExecutionException | IOException e) {
             e.printStackTrace();
         }
+
 
         return null;
     }
