@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -81,6 +82,24 @@ public class ReportActivity extends AppCompatActivity {
     Button btnSave;
     @BindView(R.id.ivImagePreview)
     ImageView ivImagePreview;
+    @BindView(R.id.et_name_of_the_ward_staff)
+    EditText etNameOfTheWardStaff;
+    @BindView(R.id.et_designation)
+    EditText etDesignation;
+    @BindView(R.id.et_total_no_of_death)
+    EditText etTotalNoOfDeath;
+    @BindView(R.id.et_total_no_of_injured)
+    EditText etTotalNoOfInjured;
+    @BindView(R.id.et_affected_people)
+    EditText etAffectedPeople;
+    @BindView(R.id.spn_damage_of_the_infrastructure)
+    Spinner spnDamageOfTheInfrastructure;
+    @BindView(R.id.et_animals_affected)
+    EditText etAnimalsAffected;
+    @BindView(R.id.et_estimated_loss)
+    EditText etEstimatedLoss;
+    @BindView(R.id.layout_staff_form_field)
+    LinearLayout layoutStaffFormField;
 
     private String imageFilePath = null, imageNameToBeSaved = "";
     private File imageFileToBeUploaded;
@@ -136,10 +155,15 @@ public class ReportActivity extends AppCompatActivity {
         disasterStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDisasterStatus.setAdapter(disasterStatusAdapter);
 
+        ArrayAdapter<String> infrastructureDamageAdapter = new ArrayAdapter<String>(ReportActivity.this,
+                R.layout.item_spinner, getResources().getStringArray(R.array.infrastructure_damage));
+        infrastructureDamageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnDamageOfTheInfrastructure.setAdapter(infrastructureDamageAdapter);
+
 
     }
 
-    private void initDefaultField(){
+    private void initDefaultField() {
         etVdcName.setText("Kathmandu Metropolitan City");
         if (sharedPreferenceUtils.getBoolanValue(SharedPreferenceUtils.USER_ALREADY_LOGGED_IN, false)) {
 
@@ -180,7 +204,7 @@ public class ReportActivity extends AppCompatActivity {
 
             case R.id.btn_submit:
                 if (hasLocationAndImage()) {
-                        convertDataToJson();
+                    convertDataToJson();
 
                 }
                 break;
@@ -280,45 +304,44 @@ public class ReportActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    private boolean hasLocationAndImage(){
+    private boolean hasLocationAndImage() {
         boolean hasLocationAndImage;
         if (myLat == 0 && myLong == 0) {
             Toast.makeText(ReportActivity.this, "you need to take GPS Location first", Toast.LENGTH_SHORT).show();
             hasLocationAndImage = false;
-        }
-        else if(!hasNewImage){
+        } else if (!hasNewImage) {
             Toast.makeText(ReportActivity.this, "you need to take Photo first", Toast.LENGTH_SHORT).show();
             hasLocationAndImage = false;
-        }else {
+        } else {
             hasLocationAndImage = true;
         }
 
         return hasLocationAndImage;
     }
 
-    private boolean validateSpinner(){
+    private boolean validateSpinner() {
         boolean status;
-        if(spnHazardType.getSelectedItemId() == 0){
+        if (spnHazardType.getSelectedItemId() == 0) {
             Toast.makeText(this, "Please select incident type", Toast.LENGTH_SHORT).show();
             status = false;
-        }else if(spnWardNo.getSelectedItemId() == 0){
+        } else if (spnWardNo.getSelectedItemId() == 0) {
             Toast.makeText(this, "Please select ward", Toast.LENGTH_SHORT).show();
             status = false;
-        }else {
+        } else {
             status = true;
         }
-    return status;
+        return status;
     }
 
 
     private void convertDataToJson() {
 
-        if(!validateSpinner()) {
+        if (!validateSpinner()) {
             return;
         }
         latitude = myLat + "";
         longitude = myLong + "";
-Gson gson = new Gson();
+        Gson gson = new Gson();
         reportDetailsEntity = new ReportDetailsEntity(spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
                 etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                 spnWardNo.getSelectedItem().toString(), "", imageNameToBeSaved, "", etReporterName.getText().toString(),
@@ -326,7 +349,7 @@ Gson gson = new Gson();
                 "", latitude, longitude);
 
         String jsonInString = gson.toJson(reportDetailsEntity);
-        Log.d(TAG, "convertDataToJson: "+jsonInString);
+        Log.d(TAG, "convertDataToJson: " + jsonInString);
 
     }
 

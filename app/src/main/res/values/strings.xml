@@ -261,6 +261,12 @@
         <item>Solved</item>
     </string-array>
 
+    <string-array name="infrastructure_damage">
+        <item>Select Infrastructure Damage</item>
+        <item>Full</item>
+        <item>Partial</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="choose_category_and_start_playing_quiz">Choose category and start playing quiz</string>

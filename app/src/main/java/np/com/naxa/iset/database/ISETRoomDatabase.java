@@ -33,7 +33,7 @@ import np.com.naxa.iset.mycircle.ContactModel;
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
         GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class,
-}, version = 17, exportSchema = false)
+}, version = 18, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
 

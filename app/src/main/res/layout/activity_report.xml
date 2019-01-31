@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Type of Disaster Events" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,10 +58,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:focusable="false"
                 android:inputType="date"
-                android:focusable="false"/>
+                android:padding="@dimen/spacing_medium" />
 
 
             <!--Occurance Date-->
@@ -69,15 +70,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Time" />
+
             <EditText
                 android:id="@+id/et_occurance_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:focusable="false"
                 android:inputType="datetime"
-                android:focusable="false"/>
+                android:padding="@dimen/spacing_medium" />
 
 
             <!--VDC/Municipality Name-->
@@ -86,15 +88,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Name of the VDC/Municipality" />
+
             <EditText
                 android:id="@+id/et_vdc_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:hint="VDC/Municipality Name"
                 android:inputType="text"
-                android:hint="VDC/Municipality Name"/>
+                android:padding="@dimen/spacing_medium" />
 
             <!--ward-->
             <TextView
@@ -102,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Ward no." />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,103 +133,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:hint="Tole"
                 android:inputType="text"
-                android:hint="Tole"/>
+                android:padding="@dimen/spacing_medium" />
 
-            <!--Risk level-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:text="Risk level"
-                android:visibility="gone"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_large"
-                android:background="@drawable/rectangle_rounded_light_purple"
-                android:padding="@dimen/spacing_medium"
-                android:visibility="gone">
-
-                <Spinner
-                    android:id="@+id/spn_risk_level"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white" />
-            </LinearLayout>
 
             <!--photo- location-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_large"
-                android:orientation="horizontal"
-                android:weightSum="2">
 
-                <Button
-                    android:id="@+id/btn_photo"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_light_purple"
-                    android:drawableRight="@drawable/ic_camera"
-                    android:paddingRight="@dimen/spacing_large"
-                    android:text="Take a picture"
-                    android:textAllCaps="false"
-                    android:textColor="@color/light_gray" />
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="0dp" />
+                    <Button
+                        android:id="@+id/btn_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_rounded_light_purple"
+                        android:drawableRight="@drawable/ic_camera"
+                        android:paddingRight="@dimen/spacing_large"
+                        android:text="Take a picture"
+                        android:textAllCaps="false"
+                        android:textColor="@color/light_gray" />
 
-                <Button
-                    android:id="@+id/btn_gps_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_light_purple"
-                    android:text="GPS Location"
-                    android:textAllCaps="false"
-                    android:textColor="@color/light_gray" />
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="0dp" />
+
+                    <Button
+                        android:id="@+id/btn_gps_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_rounded_light_purple"
+                        android:text="GPS Location"
+                        android:textAllCaps="false"
+                        android:textColor="@color/light_gray" />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/ivImagePreview"
                     android:layout_width="220dp"
                     android:layout_height="250dp"
                     android:layout_gravity="center_horizontal"
-                    android:visibility="gone"/>
-            </LinearLayout>
-
-
-            <!--Disaster Status-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:text="Disaster Status"
-                android:visibility="gone"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_large"
-                android:background="@drawable/rectangle_rounded_light_purple"
-                android:padding="@dimen/spacing_medium"
-                android:visibility="gone">
-
-                <Spinner
-                    android:id="@+id/spn_disaster_status"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white" />
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!--Name of the Reporter-->
@@ -234,15 +195,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Name of the reporter" />
+
             <EditText
                 android:id="@+id/et_reporter_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:hint="Your Name"
                 android:inputType="text"
-                android:hint="Your Name"/>
+                android:padding="@dimen/spacing_medium" />
 
             <!--Address of the Reporter-->
             <TextView
@@ -250,15 +212,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Address of the reporter" />
+
             <EditText
                 android:id="@+id/et_reporter_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:hint="Your Name"
                 android:inputType="text"
-                android:hint="Your Name"/>
+                android:padding="@dimen/spacing_medium" />
 
             <!--Contact of the Reporter-->
             <TextView
@@ -266,15 +229,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:text="Contact of the reporter" />
+
             <EditText
                 android:id="@+id/et_reporter_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:hint="Your Contact Number"
                 android:inputType="phone"
-                android:hint="Your Contact Number"/>
+                android:padding="@dimen/spacing_medium" />
 
 
             <!--Remarks-->
@@ -289,12 +253,205 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_large"
-                android:padding="@dimen/spacing_medium"
                 android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                android:hint="Remarks"
                 android:minLines="5"
-                android:hint="Remarks"/>
+                android:padding="@dimen/spacing_medium" />
 
-          <!-- save- submit-->
+
+            <!-- for ward officers-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layout_staff_form_field">
+                <!--Name of the ward staff-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Name of the ward staff" />
+
+                <EditText
+                    android:id="@+id/et_name_of_the_ward_staff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Name of the ward staff"
+                    android:inputType="text"
+                    android:padding="@dimen/spacing_medium" />
+
+                <!--Dersignation-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Designation" />
+
+                <EditText
+                    android:id="@+id/et_designation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Your Name"
+                    android:inputType="text"
+                    android:padding="@dimen/spacing_medium" />
+
+                <!--Risk level-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Risk level" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_light_purple"
+                    android:padding="@dimen/spacing_medium">
+
+                    <Spinner
+                        android:id="@+id/spn_risk_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white" />
+                </LinearLayout>
+
+                <!--Disaster Status-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Disaster Status" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_light_purple"
+                    android:padding="@dimen/spacing_medium">
+
+                    <Spinner
+                        android:id="@+id/spn_disaster_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white" />
+                </LinearLayout>
+
+                <!--Total number of deaths-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Total number of deaths" />
+
+                <EditText
+                    android:id="@+id/et_total_no_of_death"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Your Name"
+                    android:inputType="number"
+                    android:padding="@dimen/spacing_medium" />
+
+                <!--Total  no. of injured-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Total  number of injured" />
+
+                <EditText
+                    android:id="@+id/et_total_no_of_injured"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Your Name"
+                    android:inputType="number"
+                    android:padding="@dimen/spacing_medium" />
+
+                <!--Affected Family/Population-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Affected Family/Population" />
+
+                <EditText
+                    android:id="@+id/et_affected_people"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Affected Family/Population"
+                    android:inputType="number"
+                    android:padding="@dimen/spacing_medium" />
+
+
+                <!--Damage of the Infrastructure-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Damage of the Infrastructure" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_light_purple"
+                    android:padding="@dimen/spacing_medium">
+
+                    <Spinner
+                        android:id="@+id/spn_damage_of_the_infrastructure"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white" />
+                </LinearLayout>
+
+                <!--Animals affected -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Animals affected " />
+
+                <EditText
+                    android:id="@+id/et_animals_affected"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Animals affected "
+                    android:inputType="number"
+                    android:padding="@dimen/spacing_medium" />
+
+                <!--Estimated Loss-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:text="Estimated Loss" />
+
+                <EditText
+                    android:id="@+id/et_estimated_loss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@drawable/rectangle_rounded_bordered_light_pink"
+                    android:hint="Your Name"
+                    android:inputType="text"
+                    android:padding="@dimen/spacing_medium" />
+
+            </LinearLayout>
+            <!--end of ward staff-->
+
+            <!-- save- submit-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -304,21 +461,21 @@
                 <Button
                     android:id="@+id/btn_save"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_weight="1"
                     android:background="@drawable/button_rounded_purple"
                     android:text="Save"
                     android:textColor="@color/light_gray"
-                    android:textStyle="bold"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+                    android:textStyle="bold" />
 
                 <!--submit-->
                 <Button
                     android:id="@+id/btn_submit"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_weight="1"
                     android:background="@drawable/button_rounded_purple"
                     android:text="Submit"
                     android:textColor="@color/light_gray"
