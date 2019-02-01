@@ -269,7 +269,6 @@ public class ReportActivity extends AppCompatActivity {
 //                        showInfoToast("Cannot calculate distance");
                         Toast.makeText(this, "Cannot get location", Toast.LENGTH_SHORT).show();
                     }
-
                     break;
             }
         }
