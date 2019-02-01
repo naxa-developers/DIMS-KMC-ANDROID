@@ -1,6 +1,7 @@
 package np.com.naxa.iset.activity;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +36,7 @@ import id.zelory.compressor.Compressor;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
 import np.com.naxa.iset.gps.GeoPointActivity;
@@ -44,6 +47,7 @@ import np.com.naxa.iset.utils.JsonGsonConverterUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
+import np.com.naxa.iset.viewmodel.ReportDetailsViewModel;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -122,11 +126,15 @@ public class ReportActivity extends AppCompatActivity {
     String latitude, longitude;
     ReportDetailsEntity reportDetailsEntity;
 
+    ReportDetailsViewModel reportDetailsViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         ButterKnife.bind(this);
+
+        reportDetailsViewModel = ViewModelProviders.of(this).get(ReportDetailsViewModel.class);
 
         sharedPreferenceUtils = new SharedPreferenceUtils(ReportActivity.this);
         setupToolBar();
@@ -203,16 +211,22 @@ public class ReportActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_save:
-//                if (hasLocationAndImage()) {
-                    convertDataToJson();
-//                }
+                if (hasLocationAndImage()) {
+                    if(validateSpinner()) {
+                        convertDataToJson();
+                        saveDataToDatabase();
+                    }
+                }
 
                 break;
 
             case R.id.btn_submit:
                 if (hasLocationAndImage()) {
-                    convertDataToJson();
-
+                    if(validateSpinner()) {
+                        convertDataToJson();
+                        sentDataToServer();
+                        btnSave.setEnabled(true);
+                    }
                 }
                 break;
         }
@@ -365,31 +379,63 @@ public class ReportActivity extends AppCompatActivity {
         return status;
     }
 
-
+    String jsonInString = "";
     private void convertDataToJson() {
 
         if (!validateSpinner()) {
             return;
         }
-//        latitude = myLat + "";
-//        longitude = myLong + "";
+        latitude = myLat + "";
+        longitude = myLong + "";
 
-        latitude ="27.8565454";
-        longitude =  "85.6554545";
+//        latitude ="27.8565454";
+//        longitude =  "85.6554545";
 
         Gson gson = new Gson();
         reportDetailsEntity = new ReportDetailsEntity(spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
                 etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                 spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
                 spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
-                etReporterContact.getText().toString(), etMessage.getText().toString(), "", latitude, longitude,
+                etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
                 etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
                 etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
-                etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString());
+                etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "0");
 
-        String jsonInString = gson.toJson(reportDetailsEntity);
+        jsonInString = gson.toJson(reportDetailsEntity);
         Log.d(TAG, "convertDataToJson: " + jsonInString);
 
+    }
+
+    private void saveDataToDatabase(){
+       long id =  reportDetailsViewModel.insert(reportDetailsEntity);
+        Log.d(TAG, "saveDataToDatabase: insert "+id);
+        btnSave.setEnabled(false);
+
+    }
+
+    private void sentDataToServer(){
+
+        reportDetailsViewModel.getAllReportDetailsList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new DisposableSubscriber<List<ReportDetailsEntity>>() {
+                    @Override
+                    public void onNext(List<ReportDetailsEntity> reportDetailsEntities) {
+                        Gson gson = new Gson();
+                        String json = gson.toJson(reportDetailsEntities.get(0));
+                        Log.d(TAG, "onNext: insert"+json);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 }

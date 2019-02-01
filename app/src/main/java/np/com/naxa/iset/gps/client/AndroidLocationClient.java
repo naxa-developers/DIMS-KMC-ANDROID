@@ -1,4 +1,4 @@
-package np.com.naxa.iset.location.client;
+package np.com.naxa.iset.gps.client;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

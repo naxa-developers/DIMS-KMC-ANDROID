@@ -4,9 +4,12 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+
+import java.io.File;
 
 import np.com.naxa.iset.database.dao.CommonPlacesAttrbDao;
 import np.com.naxa.iset.database.dao.ContactDao;
@@ -17,6 +20,7 @@ import np.com.naxa.iset.database.dao.HospitalFacilitiesDao;
 import np.com.naxa.iset.database.dao.MessageHelperDao;
 import np.com.naxa.iset.database.dao.MyCircleContactDao;
 import np.com.naxa.iset.database.dao.OpenSpaceDao;
+import np.com.naxa.iset.database.dao.ReportDetailsDao;
 import np.com.naxa.iset.database.entity.CommonPlacesAttrb;
 import np.com.naxa.iset.database.entity.Contact;
 import np.com.naxa.iset.database.entity.EducationalInstitutes;
@@ -24,15 +28,17 @@ import np.com.naxa.iset.database.entity.GeoJsonCategoryEntity;
 import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
+import np.com.naxa.iset.database.entity.ReportDetailsEntity;
 import np.com.naxa.iset.firebase.MessageHelper;
 import np.com.naxa.iset.mycircle.ContactModel;
+import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 /**
  * Created by samir on 4/22/2018.
  */
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
-        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class,
+        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class
 }, version = 18, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
@@ -46,15 +52,17 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     public abstract EducationalInstitutesDao educationalInstitutesDao();
     public abstract GeoJsonCategoryDao geoJsonCategoryDao();
     public abstract GeoJsonListDao geoJsonListDao();
+    public abstract ReportDetailsDao reportDetailsDao();
 
     private static ISETRoomDatabase INSTANCE;
 
     public static ISETRoomDatabase getDatabase(final Context context) {
+        CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(context, CreateAppMainFolderUtils.appmainFolderName);
         if (INSTANCE == null) {
             synchronized (ISETRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            ISETRoomDatabase.class, "iset_database")
+                            ISETRoomDatabase.class, createAppMainFolderUtils.getAppDataFolderName()+File.separator+"iset_database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this codelab.
                             .fallbackToDestructiveMigration()
@@ -95,6 +103,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
         private final EducationalInstitutesDao mEducationalInstitutesDao;
         private final GeoJsonCategoryDao mGeoJsonCategoryDao;
         private final GeoJsonListDao mGeoJsonListDao;
+        private final ReportDetailsDao mReportDetailsDao;
 
         PopulateDbAsync(ISETRoomDatabase db) {
             mContactDao = db.contactDao();
@@ -106,6 +115,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mEducationalInstitutesDao = db.educationalInstitutesDao();
             mGeoJsonCategoryDao = db.geoJsonCategoryDao();
             mGeoJsonListDao = db.geoJsonListDao();
+            mReportDetailsDao = db.reportDetailsDao();
 
         }
 

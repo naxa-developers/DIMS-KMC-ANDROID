@@ -1,4 +1,4 @@
-package np.com.naxa.iset.location.client;
+package np.com.naxa.iset.gps.client;
 
 import android.location.Location;
 import android.support.annotation.NonNull;

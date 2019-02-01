@@ -135,28 +135,12 @@ public class ReportDetailsEntity implements Parcelable {
     @ColumnInfo(name = "estimated_loss")
     private String estimated_loss ;
 
+    @SerializedName("edited")
+    @Expose
+    @ColumnInfo(name = "edited")
+    private String edited ;
 
-
-//    public ReportDetailsEntity(String incident_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude) {
-//        this.incident_type = incident_type;
-//        this.date = date;
-//        this.time = time;
-//        this.vdc_mun = vdc_mun;
-//        this.place_name = place_name;
-//        this.ward = ward;
-//        this.risk_level = risk_level;
-//        this.photo_name = photo_name;
-//        this.status = status;
-//        this.name_reporter = name_reporter;
-//        this.address = address;
-//        this.contact_reporter = contact_reporter;
-//        this.remarks = remarks;
-//        this.verify = verify;
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//    }
-
-    public ReportDetailsEntity(String incident_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude, String ward_staff_name, String designation, String death_no, String injured_no, String affected_people_no, String infrastructure_damage, String affected_animal_no, String estimated_loss) {
+    public ReportDetailsEntity(String incident_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude, String ward_staff_name, String designation, String death_no, String injured_no, String affected_people_no, String infrastructure_damage, String affected_animal_no, String estimated_loss, String edited) {
         this.incident_type = incident_type;
         this.date = date;
         this.time = time;
@@ -181,6 +165,7 @@ public class ReportDetailsEntity implements Parcelable {
         this.infrastructure_damage = infrastructure_damage;
         this.affected_animal_no = affected_animal_no;
         this.estimated_loss = estimated_loss;
+        this.edited = edited;
     }
 
     public int getId() {
@@ -416,6 +401,7 @@ public class ReportDetailsEntity implements Parcelable {
         dest.writeString(this.infrastructure_damage);
         dest.writeString(this.affected_animal_no);
         dest.writeString(this.estimated_loss);
+        dest.writeString(this.edited);
     }
 
     protected ReportDetailsEntity(Parcel in) {
@@ -444,6 +430,7 @@ public class ReportDetailsEntity implements Parcelable {
         this.infrastructure_damage = in.readString();
         this.affected_animal_no = in.readString();
         this.estimated_loss = in.readString();
+        this.edited = in.readString();
     }
 
     public static final Parcelable.Creator<ReportDetailsEntity> CREATOR = new Parcelable.Creator<ReportDetailsEntity>() {
@@ -457,4 +444,12 @@ public class ReportDetailsEntity implements Parcelable {
             return new ReportDetailsEntity[size];
         }
     };
+
+    public String getEdited() {
+        return edited;
+    }
+
+    public void setEdited(String edited) {
+        this.edited = edited;
+    }
 }

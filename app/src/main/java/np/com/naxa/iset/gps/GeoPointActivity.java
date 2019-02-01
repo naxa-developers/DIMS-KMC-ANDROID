@@ -15,9 +15,7 @@
 package np.com.naxa.iset.gps;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,25 +24,21 @@ import android.location.GpsStatus;
 import android.location.Location;
 import com.google.android.gms.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Window;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.location.client.LocationClient;
-import np.com.naxa.iset.location.client.LocationClients;
+import np.com.naxa.iset.gps.client.LocationClient;
+import np.com.naxa.iset.gps.client.LocationClients;
 import np.com.naxa.iset.utils.ToastUtils;
 import timber.log.Timber;
 

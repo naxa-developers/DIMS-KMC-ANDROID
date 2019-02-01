@@ -122,6 +122,8 @@ public class SplashActivity extends AppCompatActivity {
             CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(SplashActivity.this,
                     appmainFolderName);
             createAppMainFolderUtils.createMainFolder();
+            createAppMainFolderUtils.createMediaFolder();
+            createAppMainFolderUtils.createDatabaseFolder();
 
 //            if(createAppMainFolderUtils.isFolderExist("media")) {
 //                String[] image = {"https://tinyurl.com/ybu9syvj", Environment.getExternalStorageDirectory() + "/"+appmainFolderName+"/"+"media/"+"downloadTestImage.jpg"};
