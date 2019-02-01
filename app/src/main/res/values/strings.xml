@@ -57,7 +57,7 @@
     <string name="nntds_executive_commitee">NNTDS\'s Executive Committee</string>
     <string name="full_name">Full Name</string>
     <string name="contact_number">Contact Number</string>
-    <string name="photo">Photo</string>
+    <string name="photo_name">Photo</string>
     <string name="location">Location</string>
     <string name="capture">Capture</string>
     <string name="record">Record</string>
@@ -359,6 +359,20 @@
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
     <string name="nav_login">Login</string>
+
+    <string name="get_location">Record Location</string>
+    <string name="getting_location">Loading Location</string>
+    <string name="please_wait_long">Please wait. This could take a few minutes.</string>
+    <string name="save_point">Save GeoPoint</string>
+    <string name="get_point">Start GeoPoint</string>
+    <string name="geopoint_view_read_only">View GeoPoint</string>
+    <string name="cancel_location">Cancel</string>
+    <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
+    <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
+    <string name="location_accuracy">Accuracy is %f$s m</string>
+    <string name="location_metadata">Satellites available: %1$d/24\n\nTime elapsed: %2$s</string>
+
+
     <!--intro slider end-->
 
 

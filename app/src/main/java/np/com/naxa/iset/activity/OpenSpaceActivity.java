@@ -33,6 +33,9 @@ import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.gps.GeoPointActivity;
 import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
 
+import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
+
+
 public class OpenSpaceActivity extends AppCompatActivity {
 
     private static final String TAG = "ContactActivity";
@@ -51,7 +54,6 @@ public class OpenSpaceActivity extends AppCompatActivity {
 
 
     public static final int GEOPOINT_RESULT_CODE = 1994;
-    public static final String LOCATION_RESULT = "LOCATION_RESULT";
     double myLat = 0.0;
     double myLong = 0.0;
     Map<OpenSpace, Float> hashMapWithDistance;

@@ -1,9 +1,14 @@
 package np.com.naxa.iset.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +46,8 @@ import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReportActivity extends AppCompatActivity {
     private static final String TAG = "ReportActivity";
@@ -109,6 +116,7 @@ public class ReportActivity extends AppCompatActivity {
 
     public static final int GEOPOINT_RESULT_CODE = 1994;
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
+    private final int RESULT_LOCATION_PERMISSION = 100;
     double myLat = 0.0;
     double myLong = 0.0;
     String latitude, longitude;
@@ -191,14 +199,13 @@ public class ReportActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_gps_location:
-                Intent toGeoPointActivity = new Intent(this, GeoPointActivity.class);
-                startActivityForResult(toGeoPointActivity, GEOPOINT_RESULT_CODE);
+                handleLocationPermission();
                 break;
 
             case R.id.btn_save:
-                if (hasLocationAndImage()) {
+//                if (hasLocationAndImage()) {
                     convertDataToJson();
-                }
+//                }
 
                 break;
 
@@ -210,6 +217,32 @@ public class ReportActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @AfterPermissionGranted(RESULT_LOCATION_PERMISSION)
+    private void handleLocationPermission() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!statusOfGPS) {
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            } else {
+
+                Intent toGeoPointActivity = new Intent(this, GeoPointActivity.class);
+                startActivityForResult(toGeoPointActivity, GEOPOINT_RESULT_CODE);
+
+            }
+        } else {
+            EasyPermissions.requestPermissions(this, "Provide location permission.",
+                    RESULT_LOCATION_PERMISSION, Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -339,14 +372,21 @@ public class ReportActivity extends AppCompatActivity {
         if (!validateSpinner()) {
             return;
         }
-        latitude = myLat + "";
-        longitude = myLong + "";
+//        latitude = myLat + "";
+//        longitude = myLong + "";
+
+        latitude ="27.8565454";
+        longitude =  "85.6554545";
+
         Gson gson = new Gson();
         reportDetailsEntity = new ReportDetailsEntity(spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
                 etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
-                spnWardNo.getSelectedItem().toString(), "", imageNameToBeSaved, "", etReporterName.getText().toString(),
-                etReporterAddress.getText().toString(), etReporterContact.getText().toString(), etMessage.getText().toString(),
-                "", latitude, longitude);
+                spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
+                spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
+                etReporterContact.getText().toString(), etMessage.getText().toString(), "", latitude, longitude,
+                etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
+                etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
+                etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString());
 
         String jsonInString = gson.toJson(reportDetailsEntity);
         Log.d(TAG, "convertDataToJson: " + jsonInString);

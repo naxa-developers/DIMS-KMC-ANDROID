@@ -139,7 +139,7 @@
                 android:padding="@dimen/spacing_medium" />
 
 
-            <!--photo- location-->
+            <!--photo_name- location-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

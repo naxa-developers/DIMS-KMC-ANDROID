@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="false"
-                android:text="@string/photo"
+                android:text="@string/photo_name"
                 android:textColor="@color/dark_gray" />
 
             <TextView

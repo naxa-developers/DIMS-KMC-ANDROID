@@ -160,7 +160,7 @@ import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static np.com.naxa.iset.activity.OpenSpaceActivity.LOCATION_RESULT;
+import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
 
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, LocationListener, MapEventsReceiver {
@@ -834,11 +834,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -902,6 +898,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             EasyPermissions.requestPermissions(this, "Provide location permission.",
                     RESULT_LOCATION_PERMISSION, Manifest.permission.ACCESS_FINE_LOCATION);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
 

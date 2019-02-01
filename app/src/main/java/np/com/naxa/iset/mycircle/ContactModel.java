@@ -69,11 +69,11 @@ public class ContactModel {
         this.mobileNumber = mobileNumber;
     }
 
-//    public Bitmap getPhoto() {
+//    public Bitmap getPhoto_name() {
 //        return photo;
 //    }
 //
-//    public void setPhoto(Bitmap photo) {
+//    public void setPhoto_name(Bitmap photo) {
 //        this.photo = photo;
 //    }
 
