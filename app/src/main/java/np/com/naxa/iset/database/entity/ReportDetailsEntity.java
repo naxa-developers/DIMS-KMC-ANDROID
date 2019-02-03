@@ -2,6 +2,7 @@ package np.com.naxa.iset.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,10 +10,17 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "ReportDetailsEntity")
+@Entity(tableName = "ReportDetailsEntity",
+        indices = {@Index(value = {"unique_id"},
+        unique = true)})
 public class ReportDetailsEntity implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @SerializedName("unique_id")
+    @Expose
+    @ColumnInfo(name = "unique_id")
+    private String unique_id;
 
     @SerializedName("incident_type")
     @Expose
@@ -140,7 +148,8 @@ public class ReportDetailsEntity implements Parcelable {
     @ColumnInfo(name = "edited")
     private String edited ;
 
-    public ReportDetailsEntity(String incident_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude, String ward_staff_name, String designation, String death_no, String injured_no, String affected_people_no, String infrastructure_damage, String affected_animal_no, String estimated_loss, String edited) {
+    public ReportDetailsEntity(String unique_id, String incident_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude, String ward_staff_name, String designation, String death_no, String injured_no, String affected_people_no, String infrastructure_damage, String affected_animal_no, String estimated_loss, String edited) {
+        this.unique_id = unique_id;
         this.incident_type = incident_type;
         this.date = date;
         this.time = time;
@@ -377,6 +386,7 @@ public class ReportDetailsEntity implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
+        dest.writeString(this.unique_id);
         dest.writeString(this.incident_type);
         dest.writeString(this.date);
         dest.writeString(this.time);
@@ -406,6 +416,7 @@ public class ReportDetailsEntity implements Parcelable {
 
     protected ReportDetailsEntity(Parcel in) {
         this.id = in.readInt();
+        this.unique_id = in.readString();
         this.incident_type = in.readString();
         this.date = in.readString();
         this.time = in.readString();
@@ -451,5 +462,13 @@ public class ReportDetailsEntity implements Parcelable {
 
     public void setEdited(String edited) {
         this.edited = edited;
+    }
+
+    public String getUnique_id() {
+        return unique_id;
+    }
+
+    public void setUnique_id(String unique_id) {
+        this.unique_id = unique_id;
     }
 }

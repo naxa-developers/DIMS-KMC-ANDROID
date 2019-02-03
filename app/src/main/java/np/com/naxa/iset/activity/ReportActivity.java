@@ -24,8 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,7 +31,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,13 +40,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
-import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.event.ReportSavedFormListItemEvent;
 import np.com.naxa.iset.gps.GeoPointActivity;
-import np.com.naxa.iset.mycircle.MyCircleAddRemove;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.mycircle.registeruser.UserModel;
 import np.com.naxa.iset.network.UrlClass;
@@ -60,7 +54,6 @@ import np.com.naxa.iset.utils.CalendarUtils;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.JsonGsonConverterUtils;
-import np.com.naxa.iset.utils.NetworkUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
@@ -419,14 +412,27 @@ public class ReportActivity extends AppCompatActivity {
 //        longitude =  "85.6554545";
 
         Gson gson = new Gson();
-        reportDetailsEntity = new ReportDetailsEntity(spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
-                etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
-                spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
-                spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
-                etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
-                etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
-                etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
-                etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "0");
+
+
+        if(isFromSavedForm){
+            reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+                    etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
+                    spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
+                    spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
+                    etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
+                    etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
+                    etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "1");
+        }else {
+            reportDetailsEntity = new ReportDetailsEntity(CalendarUtils.getTimeInMilisecond(),spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+                    etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
+                    spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
+                    spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
+                    etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
+                    etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
+                    etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "0");
+        }
 
         jsonInString = gson.toJson(reportDetailsEntity);
         Log.d(TAG, "convertDataToJson: " + jsonInString);
@@ -437,6 +443,8 @@ public class ReportActivity extends AppCompatActivity {
        long id =  reportDetailsViewModel.insert(reportDetailsEntity);
         Log.d(TAG, "saveDataToDatabase: insert "+id);
         btnSave.setEnabled(false);
+
+
 
     }
 
@@ -453,6 +461,9 @@ public class ReportActivity extends AppCompatActivity {
                             DialogFactory.createCustomDialog(ReportActivity.this, normalResponse.getMessage(), new DialogFactory.CustomDialogListener() {
                                 @Override
                                 public void onClick() {
+                                    if(isFromSavedForm) {
+                                        reportDetailsViewModel.deleteSpecificRow(unique_id);
+                                    }
                                     startActivity(new Intent(ReportActivity.this, SectionGridHomeActivity.class));
 
                                 }
@@ -506,12 +517,14 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private int dbID;
+    private String unique_id;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReportSavedRowItemClick(ReportSavedFormListItemEvent.ReportSavedFormListItemClick itemClick) {
 
         isFromSavedForm = true;
         hasNewImage = true;
         dbID = itemClick.getReportDetailsEntity().getId();
+        unique_id = itemClick.getReportDetailsEntity().getUnique_id();
 
         spnHazardType.setSelection(hazardAdapter.getPosition(itemClick.getReportDetailsEntity().getIncident_type()));
         etOccuranceDate.setText(itemClick.getReportDetailsEntity().getDate());

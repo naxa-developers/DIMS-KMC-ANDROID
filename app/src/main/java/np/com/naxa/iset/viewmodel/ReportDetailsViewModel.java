@@ -30,6 +30,10 @@ public class ReportDetailsViewModel extends AndroidViewModel {
     public Flowable<List<ReportDetailsEntity>> getAllReportDetailsList() { return mAllReportDetailsList; }
     public Flowable<List<ReportDetailsEntity>> getAllUnVerifiedReportDetailsList() { return mAllUnVerifiedReportDetailsList; }
 
+    public void deleteSpecificRow(String unique_id){
+        reportDetailsRepository.deleteSpecific(unique_id);
+    }
+
 
     public long insert(ReportDetailsEntity reportDetailsEntity) {
         Log.d("VIewholder", "insert: "+reportDetailsEntity.getIncident_type());

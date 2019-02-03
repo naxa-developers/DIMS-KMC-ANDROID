@@ -39,7 +39,7 @@ import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
         GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class
-}, version = 18, exportSchema = false)
+}, version = 19, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
 

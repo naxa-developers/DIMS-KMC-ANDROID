@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -30,8 +31,12 @@ public interface ReportDetailsDao {
     // add two items with the same primary key to the database. If the table has more than one
     // column, you can use @Insert(onConflict = OnConflictStrategy.REPLACE) to update a row.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(ReportDetailsEntity contact);
+    long insert(ReportDetailsEntity reportDetailsEntity);
 
-    @Query("DELETE FROM ContactModel")
+    @Query("DELETE FROM ReportDetailsEntity")
     void deleteAll();
+
+    @Query("DELETE FROM ReportDetailsEntity WHERE unique_id LIKE :unique_id")
+    void deleteSpecific(String unique_id);
+
 }
