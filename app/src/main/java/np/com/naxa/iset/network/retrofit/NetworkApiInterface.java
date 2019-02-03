@@ -66,5 +66,9 @@ public interface NetworkApiInterface {
                                                            @Field("mobile_no") String mobile_no);
 
 
+    @POST("insert_incident_report")
+    @FormUrlEncoded
+    Observable<NormalResponse> getReportSendResponse(@Field("api_key") String api_key,
+                                                           @Field("data") String jsonData);
 }
 

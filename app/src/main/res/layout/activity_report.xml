@@ -436,7 +436,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_medium"
-                    android:text="Estimated Loss" />
+                    android:text="Estimated Loss in NRs." />
 
                 <EditText
                     android:id="@+id/et_estimated_loss"
@@ -444,8 +444,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_large"
                     android:background="@drawable/rectangle_rounded_bordered_light_pink"
-                    android:hint="Your Name"
-                    android:inputType="text"
+                    android:hint="Estimated loss"
+                    android:inputType="number"
                     android:padding="@dimen/spacing_medium" />
 
             </LinearLayout>

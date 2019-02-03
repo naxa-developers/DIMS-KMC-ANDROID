@@ -61,6 +61,7 @@ import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.profile.municipalityprofile.MunicipalityProfileActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
+import np.com.naxa.iset.report.SavedFormListActivity;
 import np.com.naxa.iset.settings.SettingsActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.JsonGsonConverterUtils;
@@ -343,21 +344,21 @@ public class SectionGridHomeActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_profile:
-                        navItemIndex = 1;
                         startActivity(new Intent(SectionGridHomeActivity.this, MyCircleProfileActivity.class));
                         break;
                     case R.id.nav_ask_for_help:
-                        navItemIndex = 2;
                         startActivity(new Intent(SectionGridHomeActivity.this, ReportActivity.class));
-
                         break;
+
                     case R.id.nav_report:
-                        navItemIndex = 3;
                         startActivity(new Intent(SectionGridHomeActivity.this, ReportActivity.class));
-
                         break;
+
+                    case R.id.nav_view_saved_report:
+                        startActivity(new Intent(SectionGridHomeActivity.this, SavedFormListActivity.class));
+                        break;
+
                     case R.id.nav_notify_oithers:
-                        navItemIndex = 4;
                         startActivity(new Intent(SectionGridHomeActivity.this, NotifyOthersActivity.class));
 
                         break;

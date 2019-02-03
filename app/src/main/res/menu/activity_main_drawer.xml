@@ -21,6 +21,11 @@
             android:title="@string/nav_report" />
 
         <item
+            android:id="@+id/nav_view_saved_report"
+            android:icon="@drawable/ic_nav_report"
+            android:title="@string/view_saved_forms" />
+
+        <item
             android:id="@+id/nav_notify_oithers"
             android:icon="@drawable/ic_nav_notify_others"
             android:title="@string/nav_Notify_others" />

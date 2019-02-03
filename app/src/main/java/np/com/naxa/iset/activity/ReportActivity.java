@@ -24,7 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.List;
@@ -35,15 +41,26 @@ import butterknife.OnClick;
 import id.zelory.compressor.Compressor;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
+import np.com.naxa.iset.event.MyCircleContactEvent;
+import np.com.naxa.iset.event.ReportSavedFormListItemEvent;
 import np.com.naxa.iset.gps.GeoPointActivity;
+import np.com.naxa.iset.mycircle.MyCircleAddRemove;
+import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.mycircle.registeruser.UserModel;
+import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.network.retrofit.NetworkApiClient;
+import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
+import np.com.naxa.iset.newhomepage.SectionGridHomeActivity;
 import np.com.naxa.iset.utils.CalendarUtils;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
+import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.JsonGsonConverterUtils;
+import np.com.naxa.iset.utils.NetworkUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
@@ -117,6 +134,9 @@ public class ReportActivity extends AppCompatActivity {
     private Boolean hasNewImage = false;
 
     SharedPreferenceUtils sharedPreferenceUtils;
+    CreateAppMainFolderUtils createAppMainFolderUtils;
+
+    private boolean isFromSavedForm = false;
 
     public static final int GEOPOINT_RESULT_CODE = 1994;
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -127,6 +147,9 @@ public class ReportActivity extends AppCompatActivity {
     ReportDetailsEntity reportDetailsEntity;
 
     ReportDetailsViewModel reportDetailsViewModel;
+    NetworkApiInterface apiInterface;
+
+    ArrayAdapter<String> wardAdapter, hazardAdapter, riskLevelAdapter, disasterStatusAdapter, infrastructureDamageAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,7 +157,10 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report);
         ButterKnife.bind(this);
 
+        createAppMainFolderUtils = new CreateAppMainFolderUtils(ReportActivity.this, CreateAppMainFolderUtils.appmainFolderName);
         reportDetailsViewModel = ViewModelProviders.of(this).get(ReportDetailsViewModel.class);
+        apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
+
 
         sharedPreferenceUtils = new SharedPreferenceUtils(ReportActivity.this);
         setupToolBar();
@@ -151,27 +177,27 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void setUpSpinner() {
-        ArrayAdapter<String> wardAdapter = new ArrayAdapter<String>(ReportActivity.this,
+       wardAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.ward_no));
         wardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnWardNo.setAdapter(wardAdapter);
 
-        ArrayAdapter<String> hazardAdapter = new ArrayAdapter<String>(ReportActivity.this,
+       hazardAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.hazard_type));
         hazardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnHazardType.setAdapter(hazardAdapter);
 
-        ArrayAdapter<String> riskLevelAdapter = new ArrayAdapter<String>(ReportActivity.this,
+        riskLevelAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.risk_level));
         riskLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnRiskLevel.setAdapter(riskLevelAdapter);
 
-        ArrayAdapter<String> disasterStatusAdapter = new ArrayAdapter<String>(ReportActivity.this,
+         disasterStatusAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.disaster_status));
         disasterStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDisasterStatus.setAdapter(disasterStatusAdapter);
 
-        ArrayAdapter<String> infrastructureDamageAdapter = new ArrayAdapter<String>(ReportActivity.this,
+        infrastructureDamageAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.infrastructure_damage));
         infrastructureDamageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDamageOfTheInfrastructure.setAdapter(infrastructureDamageAdapter);
@@ -298,7 +324,6 @@ public class ReportActivity extends AppCompatActivity {
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
 
                 imageFilePath = imageFile.getAbsolutePath();
-                CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(ReportActivity.this, CreateAppMainFolderUtils.appmainFolderName);
 
                 int file_size = Integer.parseInt(String.valueOf(imageFile.length() / 1024));
                 Log.d(TAG, "onImagePicked: file size " + file_size + " KB");
@@ -352,6 +377,8 @@ public class ReportActivity extends AppCompatActivity {
 
     private boolean hasLocationAndImage() {
         boolean hasLocationAndImage;
+
+
         if (myLat == 0 && myLong == 0) {
             Toast.makeText(ReportActivity.this, "you need to take GPS Location first", Toast.LENGTH_SHORT).show();
             hasLocationAndImage = false;
@@ -415,20 +442,42 @@ public class ReportActivity extends AppCompatActivity {
 
     private void sentDataToServer(){
 
-        reportDetailsViewModel.getAllReportDetailsList()
+        apiInterface.getReportSendResponse(UrlClass.API_ACCESS_TOKEN, jsonInString)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new DisposableSubscriber<List<ReportDetailsEntity>>() {
+                .subscribe(new DisposableObserver<NormalResponse>() {
                     @Override
-                    public void onNext(List<ReportDetailsEntity> reportDetailsEntities) {
-                        Gson gson = new Gson();
-                        String json = gson.toJson(reportDetailsEntities.get(0));
-                        Log.d(TAG, "onNext: insert"+json);
+                    public void onNext(NormalResponse normalResponse) {
+
+                        if(normalResponse.getError() == 0){
+                            DialogFactory.createCustomDialog(ReportActivity.this, normalResponse.getMessage(), new DialogFactory.CustomDialogListener() {
+                                @Override
+                                public void onClick() {
+                                    startActivity(new Intent(ReportActivity.this, SectionGridHomeActivity.class));
+
+                                }
+                            }).show();
+                        }
+
+                        if(normalResponse.getError() == 1){
+                            DialogFactory.createCustomErrorDialog(ReportActivity.this, normalResponse.getMessage(), new DialogFactory.CustomDialogListener() {
+                                @Override
+                                public void onClick() {
+
+                                }
+                            }).show();
+                        }
+
                     }
 
                     @Override
-                    public void onError(Throwable t) {
+                    public void onError(Throwable e) {
+                        DialogFactory.createCustomErrorDialog(ReportActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
+                            @Override
+                            public void onClick() {
 
+                            }
+                        }).show();
                     }
 
                     @Override
@@ -436,6 +485,69 @@ public class ReportActivity extends AppCompatActivity {
 
                     }
                 });
+
+
+
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+        // Check for existing Google Sign In account, if the user is already signed in
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private int dbID;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReportSavedRowItemClick(ReportSavedFormListItemEvent.ReportSavedFormListItemClick itemClick) {
+
+        isFromSavedForm = true;
+        hasNewImage = true;
+        dbID = itemClick.getReportDetailsEntity().getId();
+
+        spnHazardType.setSelection(hazardAdapter.getPosition(itemClick.getReportDetailsEntity().getIncident_type()));
+        etOccuranceDate.setText(itemClick.getReportDetailsEntity().getDate());
+        etOccuranceTime.setText(itemClick.getReportDetailsEntity().getTime());
+        etVdcName.setText(itemClick.getReportDetailsEntity().getVdc_mun());
+        spnWardNo.setSelection(wardAdapter.getPosition(itemClick.getReportDetailsEntity().getWard()));
+        etNameOfThePlace.setText(itemClick.getReportDetailsEntity().getPlace_name());
+
+        imageFileToBeUploaded = new File(createAppMainFolderUtils.getAppMediaFolderName()+"/"+itemClick.getReportDetailsEntity().getPhoto_name()+".jpg");
+        getBitmapOfImageFile(imageFileToBeUploaded.getAbsolutePath());
+
+        myLat = Double.parseDouble(itemClick.getReportDetailsEntity().getLatitude());
+        myLong = Double.parseDouble(itemClick.getReportDetailsEntity().getLongitude());
+        btnGPSLocation.setText("Recorded");
+        btnGPSLocation.setEnabled(false);
+
+        etReporterName.setText(itemClick.getReportDetailsEntity().getName_reporter());
+        etReporterAddress.setText(itemClick.getReportDetailsEntity().getAddress());
+        etReporterContact.setText(itemClick.getReportDetailsEntity().getContact_reporter());
+        etMessage.setText(itemClick.getReportDetailsEntity().getRemarks());
+        etNameOfTheWardStaff.setText(itemClick.getReportDetailsEntity().getWard_staff_name());
+        etDesignation.setText(itemClick.getReportDetailsEntity().getDesignation());
+
+        spnRiskLevel.setSelection(riskLevelAdapter.getPosition(itemClick.getReportDetailsEntity().getRisk_level()));
+        spnDisasterStatus.setSelection(disasterStatusAdapter.getPosition(itemClick.getReportDetailsEntity().getStatus()));
+
+        etTotalNoOfDeath.setText(itemClick.getReportDetailsEntity().getDeath_no());
+        etTotalNoOfInjured.setText(itemClick.getReportDetailsEntity().getInjured_no());
+        etAffectedPeople.setText(itemClick.getReportDetailsEntity().getAffected_people_no());
+
+        spnDamageOfTheInfrastructure.setSelection(infrastructureDamageAdapter.getPosition(itemClick.getReportDetailsEntity().getInfrastructure_damage()));
+
+        etAnimalsAffected.setText(itemClick.getReportDetailsEntity().getAffected_animal_no());
+        etEstimatedLoss.setText(itemClick.getReportDetailsEntity().getEstimated_loss());
+
+
     }
 
 }
