@@ -130,6 +130,7 @@ public class ReportActivity extends AppCompatActivity {
     CreateAppMainFolderUtils createAppMainFolderUtils;
 
     private boolean isFromSavedForm = false;
+    private boolean isFromUnverifiedForm = false;
 
     public static final int GEOPOINT_RESULT_CODE = 1994;
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -143,6 +144,12 @@ public class ReportActivity extends AppCompatActivity {
     NetworkApiInterface apiInterface;
 
     ArrayAdapter<String> wardAdapter, hazardAdapter, riskLevelAdapter, disasterStatusAdapter, infrastructureDamageAdapter;
+
+    String edited = "0";
+
+    private static final int KEY_SAVE = 111;
+    private static final int KEY_SEND = 121;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,12 +177,12 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void setUpSpinner() {
-       wardAdapter = new ArrayAdapter<String>(ReportActivity.this,
+        wardAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.ward_no));
         wardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnWardNo.setAdapter(wardAdapter);
 
-       hazardAdapter = new ArrayAdapter<String>(ReportActivity.this,
+        hazardAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.hazard_type));
         hazardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnHazardType.setAdapter(hazardAdapter);
@@ -185,7 +192,7 @@ public class ReportActivity extends AppCompatActivity {
         riskLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnRiskLevel.setAdapter(riskLevelAdapter);
 
-         disasterStatusAdapter = new ArrayAdapter<String>(ReportActivity.this,
+        disasterStatusAdapter = new ArrayAdapter<String>(ReportActivity.this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.disaster_status));
         disasterStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDisasterStatus.setAdapter(disasterStatusAdapter);
@@ -231,8 +238,8 @@ public class ReportActivity extends AppCompatActivity {
 
             case R.id.btn_save:
                 if (hasLocationAndImage()) {
-                    if(validateSpinner()) {
-                        convertDataToJson();
+                    if (validateSpinner()) {
+                        convertDataToJson(KEY_SAVE);
                         saveDataToDatabase();
                     }
                 }
@@ -241,8 +248,8 @@ public class ReportActivity extends AppCompatActivity {
 
             case R.id.btn_submit:
                 if (hasLocationAndImage()) {
-                    if(validateSpinner()) {
-                        convertDataToJson();
+                    if (validateSpinner()) {
+                        convertDataToJson(KEY_SEND);
                         sentDataToServer();
                         btnSave.setEnabled(true);
                     }
@@ -400,7 +407,8 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     String jsonInString = "";
-    private void convertDataToJson() {
+
+    private void convertDataToJson(int KEY) {
 
         if (!validateSpinner()) {
             return;
@@ -414,7 +422,7 @@ public class ReportActivity extends AppCompatActivity {
         Gson gson = new Gson();
 
 
-        if(isFromSavedForm){
+        if (isFromSavedForm) {
             reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                     spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
@@ -422,51 +430,73 @@ public class ReportActivity extends AppCompatActivity {
                     etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
                     etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
                     etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
-                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "0");
-        }else {
-            reportDetailsEntity = new ReportDetailsEntity(CalendarUtils.getTimeInMilisecond(),spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
+        }
+        else if (isFromUnverifiedForm && KEY == KEY_SAVE) {
+            reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                     spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
                     spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
                     etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
                     etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
                     etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
-                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "0");
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
+        }
+        else if (isFromUnverifiedForm && KEY == KEY_SEND) {
+            reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+                    etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
+                    spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
+                    spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
+                    etReporterContact.getText().toString(), etMessage.getText().toString(), "1", latitude, longitude,
+                    etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
+                    etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
+        }
+        else {
+            reportDetailsEntity = new ReportDetailsEntity(CalendarUtils.getTimeInMilisecond(), spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+                    etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
+                    spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
+                    spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
+                    etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
+                    etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
+                    etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
         }
 
-        jsonInString = gson.toJson(reportDetailsEntity);
-        Log.d(TAG, "convertDataToJson: " + jsonInString);
 
-    }
+    jsonInString =gson.toJson(reportDetailsEntity);
+        Log.d(TAG,"convertDataToJson: "+jsonInString);
+
+}
     long id;
-    private void saveDataToDatabase(){
-        id =  reportDetailsViewModel.insert(reportDetailsEntity);
 
-       if(id <0){
-           DialogFactory.createCustomErrorDialog(ReportActivity.this, "Unable to save data", new DialogFactory.CustomDialogListener() {
-               @Override
-               public void onClick() {
+    private void saveDataToDatabase() {
+        id = reportDetailsViewModel.insert(reportDetailsEntity);
 
-               }
-           }).show();
+        if (id < 0) {
+            DialogFactory.createCustomErrorDialog(ReportActivity.this, "Unable to save data", new DialogFactory.CustomDialogListener() {
+                @Override
+                public void onClick() {
 
-       }else {
-           DialogFactory.createCustomDialog(ReportActivity.this, "Data saved successfully", new DialogFactory.CustomDialogListener() {
-               @Override
-               public void onClick() {
-                   btnSave.setEnabled(false);
+                }
+            }).show();
 
-               }
-           }).show();
-       }
+        } else {
+            DialogFactory.createCustomDialog(ReportActivity.this, "Data saved successfully", new DialogFactory.CustomDialogListener() {
+                @Override
+                public void onClick() {
+                    btnSave.setEnabled(false);
 
-        Log.d(TAG, "saveDataToDatabase: insert "+id);
+                }
+            }).show();
+        }
 
+        Log.d(TAG, "saveDataToDatabase: insert " + id);
 
 
     }
 
-    private void sentDataToServer(){
+    private void sentDataToServer() {
 
         apiInterface.getReportSendResponse(UrlClass.API_ACCESS_TOKEN, jsonInString)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -475,11 +505,11 @@ public class ReportActivity extends AppCompatActivity {
                     @Override
                     public void onNext(NormalResponse normalResponse) {
 
-                        if(normalResponse.getError() == 0){
+                        if (normalResponse.getError() == 0) {
                             DialogFactory.createCustomDialog(ReportActivity.this, normalResponse.getMessage(), new DialogFactory.CustomDialogListener() {
                                 @Override
                                 public void onClick() {
-                                    if(isFromSavedForm) {
+                                    if (isFromSavedForm || isFromUnverifiedForm) {
                                         reportDetailsViewModel.deleteSpecificRow(unique_id);
                                     }
                                     startActivity(new Intent(ReportActivity.this, SectionGridHomeActivity.class));
@@ -488,7 +518,7 @@ public class ReportActivity extends AppCompatActivity {
                             }).show();
                         }
 
-                        if(normalResponse.getError() == 1){
+                        if (normalResponse.getError() == 1) {
                             DialogFactory.createCustomErrorDialog(ReportActivity.this, normalResponse.getMessage(), new DialogFactory.CustomDialogListener() {
                                 @Override
                                 public void onClick() {
@@ -516,8 +546,6 @@ public class ReportActivity extends AppCompatActivity {
                 });
 
 
-
-
     }
 
 
@@ -536,6 +564,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private int dbID;
     private String unique_id;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReportSavedRowItemClick(ReportSavedFormListItemEvent.ReportSavedFormListItemClick itemClick) {
 
@@ -552,7 +581,55 @@ public class ReportActivity extends AppCompatActivity {
         spnWardNo.setSelection(wardAdapter.getPosition(itemClick.getReportDetailsEntity().getWard()));
         etNameOfThePlace.setText(itemClick.getReportDetailsEntity().getPlace_name());
 
-        imageFileToBeUploaded = new File(createAppMainFolderUtils.getAppMediaFolderName()+"/"+itemClick.getReportDetailsEntity().getPhoto_name()+".jpg");
+        imageFileToBeUploaded = new File(createAppMainFolderUtils.getAppMediaFolderName() + "/" + itemClick.getReportDetailsEntity().getPhoto_name() + ".jpg");
+        getBitmapOfImageFile(imageFileToBeUploaded.getAbsolutePath());
+
+        myLat = Double.parseDouble(itemClick.getReportDetailsEntity().getLatitude());
+        myLong = Double.parseDouble(itemClick.getReportDetailsEntity().getLongitude());
+        btnGPSLocation.setText("Recorded");
+        btnGPSLocation.setEnabled(false);
+
+        etReporterName.setText(itemClick.getReportDetailsEntity().getName_reporter());
+        etReporterAddress.setText(itemClick.getReportDetailsEntity().getAddress());
+        etReporterContact.setText(itemClick.getReportDetailsEntity().getContact_reporter());
+        etMessage.setText(itemClick.getReportDetailsEntity().getRemarks());
+        etNameOfTheWardStaff.setText(itemClick.getReportDetailsEntity().getWard_staff_name());
+        etDesignation.setText(itemClick.getReportDetailsEntity().getDesignation());
+
+        spnRiskLevel.setSelection(riskLevelAdapter.getPosition(itemClick.getReportDetailsEntity().getRisk_level()));
+        spnDisasterStatus.setSelection(disasterStatusAdapter.getPosition(itemClick.getReportDetailsEntity().getStatus()));
+
+        etTotalNoOfDeath.setText(itemClick.getReportDetailsEntity().getDeath_no());
+        etTotalNoOfInjured.setText(itemClick.getReportDetailsEntity().getInjured_no());
+        etAffectedPeople.setText(itemClick.getReportDetailsEntity().getAffected_people_no());
+
+        spnDamageOfTheInfrastructure.setSelection(infrastructureDamageAdapter.getPosition(itemClick.getReportDetailsEntity().getInfrastructure_damage()));
+
+        etAnimalsAffected.setText(itemClick.getReportDetailsEntity().getAffected_animal_no());
+        etEstimatedLoss.setText(itemClick.getReportDetailsEntity().getEstimated_loss());
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReportUnverifiedRowItemClick(ReportSavedFormListItemEvent.ReportUnverifiedFormListItemClick itemClick) {
+
+        edited = "1";
+
+        isFromUnverifiedForm = true;
+        hasNewImage = true;
+        imageNameToBeSaved = itemClick.getReportDetailsEntity().getPhoto_name();
+        dbID = itemClick.getReportDetailsEntity().getId();
+        unique_id = itemClick.getReportDetailsEntity().getUnique_id();
+
+        spnHazardType.setSelection(hazardAdapter.getPosition(itemClick.getReportDetailsEntity().getIncident_type()));
+        etOccuranceDate.setText(itemClick.getReportDetailsEntity().getDate());
+        etOccuranceTime.setText(itemClick.getReportDetailsEntity().getTime());
+        etVdcName.setText(itemClick.getReportDetailsEntity().getVdc_mun());
+        spnWardNo.setSelection(wardAdapter.getPosition(itemClick.getReportDetailsEntity().getWard()));
+        etNameOfThePlace.setText(itemClick.getReportDetailsEntity().getPlace_name());
+
+        imageFileToBeUploaded = new File(createAppMainFolderUtils.getAppMediaFolderName() + "/" + itemClick.getReportDetailsEntity().getPhoto_name() + ".jpg");
         getBitmapOfImageFile(imageFileToBeUploaded.getAbsolutePath());
 
         myLat = Double.parseDouble(itemClick.getReportDetailsEntity().getLatitude());
