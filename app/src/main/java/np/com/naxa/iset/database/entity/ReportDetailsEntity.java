@@ -15,7 +15,7 @@ import com.google.gson.annotations.SerializedName;
         unique = true)})
 public class ReportDetailsEntity implements Parcelable {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int rid;
 
     @SerializedName("unique_id")
     @Expose
@@ -177,13 +177,6 @@ public class ReportDetailsEntity implements Parcelable {
         this.edited = edited;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getIncident_type() {
         return incident_type;
@@ -385,7 +378,7 @@ public class ReportDetailsEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeInt(this.rid);
         dest.writeString(this.unique_id);
         dest.writeString(this.incident_type);
         dest.writeString(this.date);
@@ -415,7 +408,7 @@ public class ReportDetailsEntity implements Parcelable {
     }
 
     protected ReportDetailsEntity(Parcel in) {
-        this.id = in.readInt();
+        this.rid = in.readInt();
         this.unique_id = in.readString();
         this.incident_type = in.readString();
         this.date = in.readString();
@@ -470,5 +463,13 @@ public class ReportDetailsEntity implements Parcelable {
 
     public void setUnique_id(String unique_id) {
         this.unique_id = unique_id;
+    }
+
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
+        this.rid = rid;
     }
 }

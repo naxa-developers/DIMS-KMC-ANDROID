@@ -571,7 +571,7 @@ public class ReportActivity extends AppCompatActivity {
         isFromSavedForm = true;
         hasNewImage = true;
         imageNameToBeSaved = itemClick.getReportDetailsEntity().getPhoto_name();
-        dbID = itemClick.getReportDetailsEntity().getId();
+        dbID = itemClick.getReportDetailsEntity().getRid();
         unique_id = itemClick.getReportDetailsEntity().getUnique_id();
 
         spnHazardType.setSelection(hazardAdapter.getPosition(itemClick.getReportDetailsEntity().getIncident_type()));
@@ -619,7 +619,7 @@ public class ReportActivity extends AppCompatActivity {
         isFromUnverifiedForm = true;
         hasNewImage = true;
         imageNameToBeSaved = itemClick.getReportDetailsEntity().getPhoto_name();
-        dbID = itemClick.getReportDetailsEntity().getId();
+        dbID = itemClick.getReportDetailsEntity().getRid();
         unique_id = itemClick.getReportDetailsEntity().getUnique_id();
 
         spnHazardType.setSelection(hazardAdapter.getPosition(itemClick.getReportDetailsEntity().getIncident_type()));

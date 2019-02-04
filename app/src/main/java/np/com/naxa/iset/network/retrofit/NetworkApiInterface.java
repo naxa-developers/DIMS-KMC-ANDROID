@@ -7,6 +7,7 @@ import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.network.model.AskForHelpResponse;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
+import np.com.naxa.iset.report.wardstaff.model.UnverifiedFormListResponse;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -70,5 +71,9 @@ public interface NetworkApiInterface {
     @FormUrlEncoded
     Observable<NormalResponse> getReportSendResponse(@Field("api_key") String api_key,
                                                            @Field("data") String jsonData);
+
+    @POST("get_unverified_report")
+    @FormUrlEncoded
+    Observable<UnverifiedFormListResponse> getUnverifiedReportResponse(@Field("api_key") String api_key);
 }
 

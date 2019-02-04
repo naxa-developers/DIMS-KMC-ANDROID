@@ -18,7 +18,7 @@ public interface ReportDetailsDao {
     // Always holds/caches latest version of data. Notifies its active observers when the
     // data has changed. Since we are getting all the contents of the database,
     // we are notified whenever any of the database contents have changed.
-    @Query("SELECT * from ReportDetailsEntity ORDER BY id ASC")
+    @Query("SELECT * from ReportDetailsEntity ORDER BY rid ASC")
     Flowable<List<ReportDetailsEntity>> getAllReportDetailsList();
 
     @Query("SELECT * from ReportDetailsEntity WHERE verify LIKE '0' AND edited LIKE '0'")
