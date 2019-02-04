@@ -422,7 +422,7 @@ public class ReportActivity extends AppCompatActivity {
                     etReporterContact.getText().toString(), etMessage.getText().toString(), "0", latitude, longitude,
                     etNameOfTheWardStaff.getText().toString(), etDesignation.getText().toString(), etTotalNoOfDeath.getText().toString(),
                     etTotalNoOfInjured.getText().toString(), etAffectedPeople.getText().toString(), spnDamageOfTheInfrastructure.getSelectedItem().toString(),
-                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "1");
+                    etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), "0");
         }else {
             reportDetailsEntity = new ReportDetailsEntity(CalendarUtils.getTimeInMilisecond(),spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
@@ -438,11 +438,29 @@ public class ReportActivity extends AppCompatActivity {
         Log.d(TAG, "convertDataToJson: " + jsonInString);
 
     }
-
+    long id;
     private void saveDataToDatabase(){
-       long id =  reportDetailsViewModel.insert(reportDetailsEntity);
+        id =  reportDetailsViewModel.insert(reportDetailsEntity);
+
+       if(id <0){
+           DialogFactory.createCustomErrorDialog(ReportActivity.this, "Unable to save data", new DialogFactory.CustomDialogListener() {
+               @Override
+               public void onClick() {
+
+               }
+           }).show();
+
+       }else {
+           DialogFactory.createCustomDialog(ReportActivity.this, "Data saved successfully", new DialogFactory.CustomDialogListener() {
+               @Override
+               public void onClick() {
+                   btnSave.setEnabled(false);
+
+               }
+           }).show();
+       }
+
         Log.d(TAG, "saveDataToDatabase: insert "+id);
-        btnSave.setEnabled(false);
 
 
 
@@ -523,6 +541,7 @@ public class ReportActivity extends AppCompatActivity {
 
         isFromSavedForm = true;
         hasNewImage = true;
+        imageNameToBeSaved = itemClick.getReportDetailsEntity().getPhoto_name();
         dbID = itemClick.getReportDetailsEntity().getId();
         unique_id = itemClick.getReportDetailsEntity().getUnique_id();
 

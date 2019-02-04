@@ -37,7 +37,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-
+        <activity android:name=".report.wardstaff.UnverifiedReportFormListActivity"></activity>
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true">
@@ -195,14 +195,12 @@
             android:name=".mapboxmap.OpenSpaceMapActivity"
             android:exported="true" />
         <activity android:name=".TerminologiesActivity" />
-
         <activity android:name=".report.SavedFormListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
         </activity>
-
-        <activity android:name=".instroslider.WelcomeActivity"></activity>
+        <activity android:name=".instroslider.WelcomeActivity" />
         <activity android:name=".mycircle.LoginActivity" />
         <activity android:name=".UserRegistrationActivity" />
     </application>

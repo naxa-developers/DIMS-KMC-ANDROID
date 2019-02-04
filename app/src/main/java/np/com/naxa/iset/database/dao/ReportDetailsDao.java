@@ -21,10 +21,11 @@ public interface ReportDetailsDao {
     @Query("SELECT * from ReportDetailsEntity ORDER BY id ASC")
     Flowable<List<ReportDetailsEntity>> getAllReportDetailsList();
 
-    @Query("SELECT * from ReportDetailsEntity WHERE verify LIKE '0'")
+    @Query("SELECT * from ReportDetailsEntity WHERE verify LIKE '0' AND edited LIKE '0'")
     Flowable<List<ReportDetailsEntity>> getUnVerifiedReportDetailsList();
 
-
+    @Query("SELECT * from ReportDetailsEntity WHERE verify LIKE '0' AND edited LIKE '1'")
+    Flowable<List<ReportDetailsEntity>> getUnVerifiedReportDetailsEditedList();
 
 
     // We do not need a conflict strategy, because the word is our primary key, and you cannot

@@ -17,12 +17,14 @@ public class ReportDetailsRepository {
      private ReportDetailsDao mReportDetailsDao;
      Flowable<List<ReportDetailsEntity>> mAllReportDetailsList;
      Flowable<List<ReportDetailsEntity>> mAllUnverifiedReportDetailsList;
+     Flowable<List<ReportDetailsEntity>> mAllUnverifiedReportDetailsEditedList;
 
     public ReportDetailsRepository(Application application) {
         ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
         mReportDetailsDao = db.reportDetailsDao();
         mAllReportDetailsList = mReportDetailsDao.getAllReportDetailsList();
         mAllUnverifiedReportDetailsList = mReportDetailsDao.getUnVerifiedReportDetailsList();
+        mAllUnverifiedReportDetailsEditedList = mReportDetailsDao.getUnVerifiedReportDetailsEditedList();
 
     }
 
@@ -34,6 +36,9 @@ public class ReportDetailsRepository {
 
     public Flowable<List<ReportDetailsEntity>> getAllUnVerifiedReportDetailsList() {
         return mAllUnverifiedReportDetailsList;
+    }
+    public Flowable<List<ReportDetailsEntity>> getAllUnVerifiedReportDetailsEditedList() {
+        return mAllUnverifiedReportDetailsEditedList;
     }
 
     public void deleteSpecific(String unique_id){

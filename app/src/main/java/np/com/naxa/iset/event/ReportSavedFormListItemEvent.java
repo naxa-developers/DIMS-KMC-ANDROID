@@ -19,4 +19,27 @@ public class ReportSavedFormListItemEvent {
             this.reportDetailsEntity = reportDetailsEntity;
         }
     }
+
+    public static class ReportUnverifiedFormListItemClick{
+        private ReportDetailsEntity reportDetailsEntity;
+        private boolean isNormal;
+
+        public ReportUnverifiedFormListItemClick(ReportDetailsEntity reportDetailsEntity, boolean isNormal) {
+            this.reportDetailsEntity = reportDetailsEntity;
+            this.isNormal = isNormal;
+        }
+
+
+        public ReportDetailsEntity getReportDetailsEntity() {
+            return reportDetailsEntity;
+        }
+
+        public void setReportDetailsEntity(ReportDetailsEntity reportDetailsEntity) {
+            this.reportDetailsEntity = reportDetailsEntity;
+        }
+
+        public boolean getIsNormal() {
+            return isNormal;
+        }
+    }
 }

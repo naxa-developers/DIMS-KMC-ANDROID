@@ -35,12 +35,12 @@ public class UserModel {
     private String address;
     @SerializedName("my_circle")
     @Expose
-    private List<MyCircleContactListData> myCircle;
+    private String myCircle;
     @SerializedName("token")
     @Expose
     private String token;
 
-    public UserModel(String email, String mobileNo, String fullName, String imageUrl, String getNotification, String bloodGroup, String address, List<MyCircleContactListData> myCircle, String token) {
+    public UserModel(String email, String mobileNo, String fullName, String imageUrl, String getNotification, String bloodGroup, String address, String myCircle, String token) {
         this.email = email;
         this.mobileNo = mobileNo;
         this.fullName = fullName;
@@ -119,11 +119,11 @@ public class UserModel {
         this.address = address;
     }
 
-    public List<MyCircleContactListData> getMyCircle() {
+    public String getMyCircle() {
         return myCircle;
     }
 
-    public void setMyCircle(List<MyCircleContactListData> myCircle) {
+    public void setMyCircle(String myCircle) {
         this.myCircle = myCircle;
     }
 

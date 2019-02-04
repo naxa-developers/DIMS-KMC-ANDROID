@@ -62,6 +62,7 @@ import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.profile.municipalityprofile.MunicipalityProfileActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
 import np.com.naxa.iset.report.SavedFormListActivity;
+import np.com.naxa.iset.report.wardstaff.UnverifiedReportFormListActivity;
 import np.com.naxa.iset.settings.SettingsActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.JsonGsonConverterUtils;
@@ -356,6 +357,10 @@ public class SectionGridHomeActivity extends AppCompatActivity {
 
                     case R.id.nav_view_saved_report:
                         startActivity(new Intent(SectionGridHomeActivity.this, SavedFormListActivity.class));
+                        break;
+
+                    case R.id.nav_view_unverified_report:
+                        startActivity(new Intent(SectionGridHomeActivity.this, UnverifiedReportFormListActivity.class));
                         break;
 
                     case R.id.nav_notify_oithers:
