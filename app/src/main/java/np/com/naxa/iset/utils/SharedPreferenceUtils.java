@@ -27,6 +27,8 @@ public class SharedPreferenceUtils {
     public static final String MAP_OVERLAY_LAYER = "overlay_layer";
     public static final int KEY_STREET = 0 , KEY_SATELLITE = 1, KEY_OPENSTREET = 2, KEY_MUNICIPAL_BOARDER = 3, KEY_WARD = 4;
 
+    public static final String KEY_TERMINOLOGIES = "terminologies";
+
 
 
     public SharedPreferenceUtils(Context context) {

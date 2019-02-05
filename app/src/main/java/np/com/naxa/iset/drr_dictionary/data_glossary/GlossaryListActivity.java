@@ -1,5 +1,6 @@
 package np.com.naxa.iset.drr_dictionary.data_glossary;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Color;
@@ -27,12 +28,21 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.drr_dictionary.JSONAssetLoadListener;
 import np.com.naxa.iset.drr_dictionary.JSONAssetLoadTask;
 import np.com.naxa.iset.drr_dictionary.JSONLoadImpl;
+import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.network.retrofit.NetworkApiClient;
+import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
+import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.NetworkUtils;
+import np.com.naxa.iset.utils.SharedPreferenceUtils;
 
-public class GlossaryListActivity extends AppCompatActivity implements JSONAssetLoadListener {
+public class GlossaryListActivity extends AppCompatActivity {
     final private String TAG = "WordsWithDetails";
 
     RecyclerView mRecyclerView;
@@ -49,6 +59,9 @@ public class GlossaryListActivity extends AppCompatActivity implements JSONAsset
     private JSONAssetLoadTask jsonAssetLoadTask;
     public static List<WordsWithDetailsModel> wordsWithDetailsList;
 
+    NetworkApiInterface apiInterface;
+    SharedPreferenceUtils sharedPreferenceUtils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +70,13 @@ public class GlossaryListActivity extends AppCompatActivity implements JSONAsset
         ButterKnife.bind(this);
 
         initToolbar();
+        apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
+        sharedPreferenceUtils = new SharedPreferenceUtils(GlossaryListActivity.this);
 
-        new JSONLoadImpl().getGlossaryObject();
-        jsonAssetLoadTask = new JSONAssetLoadTask(R.raw.data_glossary, this, this);
-        jsonAssetLoadTask.execute();
+        getTerminologies();
+//        new JSONLoadImpl().getGlossaryObject();
+//        jsonAssetLoadTask = new JSONAssetLoadTask(R.raw.data_glossary, this, this);
+//        jsonAssetLoadTask.execute();
 
     }
 
@@ -162,24 +178,103 @@ public class GlossaryListActivity extends AppCompatActivity implements JSONAsset
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFileLoadComplete(String s) {
+//    @Override
+//    public void onFileLoadComplete(String s) {
+//
+//        Type listType = new TypeToken<List<WordsWithDetailsModel>>() {
+//        }.getType();
+//        wordsWithDetailsList = new Gson().fromJson(s, listType);
+//
+//        Log.d(TAG, "SAMIR This data is: " + s);
+//
+//
+//        mAdapter = new SimpleAdapter(this, wordsWithDetailsList);
+//        mFilteredAdapter = new SimpleAdapter(this, wordsWithDetailsList);
+//        setSectionedRecycleView(mAdapter);
+//
+//    }
+//
+//    @Override
+//    public void onFileLoadError(String errorMsg) {
+//
+//    }
 
-        Type listType = new TypeToken<List<WordsWithDetailsModel>>() {
-        }.getType();
-        wordsWithDetailsList = new Gson().fromJson(s, listType);
+    private void getTerminologies() {
 
-        Log.e(TAG, "SAMIR This data is: " + s);
+        Dialog dialog = DialogFactory.createProgressDialog(GlossaryListActivity.this, "Loading ...");
+        dialog.show();
+
+        if (NetworkUtils.isNetworkAvailable()) {
+
+            apiInterface.getTerminologiesResponse(UrlClass.API_ACCESS_TOKEN)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<TerminologiesListResponse>() {
+                        @Override
+                        public void onNext(TerminologiesListResponse terminologiesListResponse) {
+                            dialog.dismiss();
+                            if (terminologiesListResponse.getData() == null) {
+                                DialogFactory.createCustomErrorDialog(GlossaryListActivity.this, "No data found", new DialogFactory.CustomDialogListener() {
+                                    @Override
+                                    public void onClick() {
+
+                                    }
+                                }).show();
+                            } else {
+                                wordsWithDetailsList = terminologiesListResponse.getData();
+                                Gson gson = new Gson();
+                                String jsonFromGson = gson.toJson(wordsWithDetailsList);
+
+                                sharedPreferenceUtils.setValue(SharedPreferenceUtils.KEY_TERMINOLOGIES, jsonFromGson);
+
+                                mAdapter = new SimpleAdapter(GlossaryListActivity.this, wordsWithDetailsList);
+                                mFilteredAdapter = new SimpleAdapter(GlossaryListActivity.this, wordsWithDetailsList);
+                                setSectionedRecycleView(mAdapter);
 
 
-        mAdapter = new SimpleAdapter(this, wordsWithDetailsList);
-        mFilteredAdapter = new SimpleAdapter(this, wordsWithDetailsList);
-        setSectionedRecycleView(mAdapter);
+                            }
+                        }
 
-    }
+                        @Override
+                        public void onError(Throwable e) {
+                            dialog.dismiss();
+                            DialogFactory.createCustomErrorDialog(GlossaryListActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
+                                @Override
+                                public void onClick() {
 
-    @Override
-    public void onFileLoadError(String errorMsg) {
+                                }
+                            }).show();
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            dialog.dismiss();
+                        }
+                    });
+        } else {
+
+            Type listType = new TypeToken<List<WordsWithDetailsModel>>() {
+            }.getType();
+
+            wordsWithDetailsList = new Gson().fromJson(sharedPreferenceUtils.getStringValue(SharedPreferenceUtils.KEY_TERMINOLOGIES, null), listType);
+
+            dialog.dismiss();
+
+            if (wordsWithDetailsList == null && wordsWithDetailsList.size() < 0) {
+                DialogFactory.createCustomErrorDialog(GlossaryListActivity.this, "No data found", new DialogFactory.CustomDialogListener() {
+                    @Override
+                    public void onClick() {
+
+                    }
+                }).show();
+            } else {
+                mAdapter = new SimpleAdapter(GlossaryListActivity.this, wordsWithDetailsList);
+                mFilteredAdapter = new SimpleAdapter(GlossaryListActivity.this, wordsWithDetailsList);
+                setSectionedRecycleView(mAdapter);
+            }
+
+        }
+
 
     }
 
@@ -201,16 +296,18 @@ public class GlossaryListActivity extends AppCompatActivity implements JSONAsset
 
         } else {
             //This is the code to provide a sectioned list
-            String category = wordsWithDetailsList.get(0).getCategory();
+
+            String category = wordsWithDetailsList.get(0).getWord().substring(0, 1);
 
             List<SimpleSectionedRecyclerViewAdapter.Section> sections =
                     new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "" + category));
 
             for (int i = 0; i < wordsWithDetailsList.size(); i++) {
-                if (!category.equals(wordsWithDetailsList.get(i).getCategory())) {
-                    category = wordsWithDetailsList.get(i).getCategory();
-                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i, "" + wordsWithDetailsList.get(i).getCategory()));
+                String categoryRaw = wordsWithDetailsList.get(i).getWord().substring(0, 1);
+                if (!category.equals(categoryRaw)) {
+                    category = categoryRaw;
+                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i, "" + categoryRaw));
                 }
             }
 

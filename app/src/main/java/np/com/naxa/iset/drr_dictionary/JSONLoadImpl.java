@@ -35,7 +35,7 @@ public class JSONLoadImpl {
                 .subscribe(new DisposableObserver<WordsWithDetailsModel>() {
                     @Override
                     public void onNext(WordsWithDetailsModel wordsWithDetailsModel) {
-                        wordsWithDetailsModel.getTitle();
+                        wordsWithDetailsModel.getWord();
                     }
 
                     @Override
@@ -95,7 +95,7 @@ public class JSONLoadImpl {
                 .filter(new Predicate<WordsWithDetailsModel>() {
                     @Override
                     public boolean test(WordsWithDetailsModel wordsWithDetailsModel) throws Exception {
-                        return wordsWithDetailsModel.getTitle().equalsIgnoreCase(searchString.trim());
+                        return wordsWithDetailsModel.getWord().equalsIgnoreCase(searchString.trim());
 
                     }
                 })

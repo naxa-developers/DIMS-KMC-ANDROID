@@ -2,6 +2,7 @@ package np.com.naxa.iset.network.retrofit;
 
 
 import io.reactivex.Observable;
+import np.com.naxa.iset.drr_dictionary.data_glossary.TerminologiesListResponse;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
 import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
@@ -75,5 +76,9 @@ public interface NetworkApiInterface {
     @POST("get_unverified_report")
     @FormUrlEncoded
     Observable<UnverifiedFormListResponse> getUnverifiedReportResponse(@Field("api_key") String api_key);
+
+    @POST("get_term_data")
+    @FormUrlEncoded
+    Observable<TerminologiesListResponse> getTerminologiesResponse(@Field("api_key") String api_key);
 }
 

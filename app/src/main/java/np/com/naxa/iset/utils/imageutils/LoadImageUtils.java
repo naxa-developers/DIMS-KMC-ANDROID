@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 
@@ -121,5 +123,13 @@ public class LoadImageUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void loadImageToViewFromSrc(@NonNull ImageView imageView, String imageSrc){
+        Glide
+                .with(imageView.getContext())
+                .load(imageSrc)
+                .fitCenter()
+                .into(imageView);
     }
 }
