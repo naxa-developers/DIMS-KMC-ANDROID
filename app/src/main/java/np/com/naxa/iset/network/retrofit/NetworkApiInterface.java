@@ -2,6 +2,7 @@ package np.com.naxa.iset.network.retrofit;
 
 
 import io.reactivex.Observable;
+import np.com.naxa.iset.disasterinfo.model.DisasterInfoListResponse;
 import np.com.naxa.iset.drr_dictionary.data_glossary.TerminologiesListResponse;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
 import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
@@ -80,5 +81,9 @@ public interface NetworkApiInterface {
     @POST("get_term_data")
     @FormUrlEncoded
     Observable<TerminologiesListResponse> getTerminologiesResponse(@Field("api_key") String api_key);
+
+    @POST("get_drrinfo_data")
+    @FormUrlEncoded
+    Observable<DisasterInfoListResponse> getDisasterInfoResponse(@Field("api_key") String api_key);
 }
 

@@ -3,10 +3,16 @@ package np.com.naxa.iset.utils.imageutils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.text.Html;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 
@@ -17,12 +23,18 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.ExecutionException;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.home.ISET;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 public class LoadImageUtils {
+    private static final String TAG = "LoadImageUtils";
 
     public static int getImageFromDrawable(@NonNull Context context, String imageName){
         int drawableResourceId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
@@ -131,5 +143,75 @@ public class LoadImageUtils {
                 .load(imageSrc)
                 .fitCenter()
                 .into(imageView);
+    }
+
+
+    public static class ImageGetter implements Html.ImageGetter {
+
+        public Drawable getDrawable(String source) {
+            final int[] id = new int[1];
+            final Bitmap[] bitmap = {null};
+
+            if (!source.equals("")) {
+                Observable.just(source)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe(new DisposableObserver<String>() {
+                            @Override
+                            public void onNext(String s) {
+                                try {
+                                    File file = new File(Glide.with(ISET.getInstance())
+                                            .load(new File(source))
+                                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                                            .get(), ".jpg");
+
+                                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                                    bmOptions.inJustDecodeBounds = true;
+                                    bitmap[0] = BitmapFactory.decodeFile(file.getAbsoluteFile().getAbsolutePath(),bmOptions);
+                                    Log.d(TAG, "onNext: "+bitmap[0].getByteCount());
+//                    if(bmOptions.outWidth != -1 && bmOptions.outHeight != -1){
+
+//                    }
+
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                id[0] = R.drawable.earthquake;
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+
+                            @Override
+                            public void onComplete() {
+                            }
+                        });
+            }
+
+
+
+            else {
+                return null;
+            }
+
+//            Drawable d = ISET.getInstance().getResources().getDrawable(id);
+//            d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
+//            return d;
+
+            BitmapDrawable drawable = new BitmapDrawable(ISET.getInstance().getResources(), bitmap[0]);
+            drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+            return drawable;
+
+        }
+
+        public String getSrc(String source){
+            String source1 = null;
+            return source1;
+        }
+
+
     }
 }

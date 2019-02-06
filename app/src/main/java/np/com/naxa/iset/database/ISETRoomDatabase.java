@@ -13,6 +13,7 @@ import java.io.File;
 
 import np.com.naxa.iset.database.dao.CommonPlacesAttrbDao;
 import np.com.naxa.iset.database.dao.ContactDao;
+import np.com.naxa.iset.database.dao.DisasterInfoDetailsDao;
 import np.com.naxa.iset.database.dao.EducationalInstitutesDao;
 import np.com.naxa.iset.database.dao.GeoJsonCategoryDao;
 import np.com.naxa.iset.database.dao.GeoJsonListDao;
@@ -38,7 +39,8 @@ import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
  */
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
-        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class
+        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class,
+        DisasterInfoDetailsDao.class
 }, version = 20, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
@@ -53,6 +55,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     public abstract GeoJsonCategoryDao geoJsonCategoryDao();
     public abstract GeoJsonListDao geoJsonListDao();
     public abstract ReportDetailsDao reportDetailsDao();
+    public abstract DisasterInfoDetailsDao disasterInfoDetailsDao();
 
     private static ISETRoomDatabase INSTANCE;
 
@@ -104,6 +107,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
         private final GeoJsonCategoryDao mGeoJsonCategoryDao;
         private final GeoJsonListDao mGeoJsonListDao;
         private final ReportDetailsDao mReportDetailsDao;
+        private final DisasterInfoDetailsDao mDisasterInfoDetailsDao;
 
         PopulateDbAsync(ISETRoomDatabase db) {
             mContactDao = db.contactDao();
@@ -116,6 +120,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mGeoJsonCategoryDao = db.geoJsonCategoryDao();
             mGeoJsonListDao = db.geoJsonListDao();
             mReportDetailsDao = db.reportDetailsDao();
+            mDisasterInfoDetailsDao = db.disasterInfoDetailsDao();
 
         }
 
