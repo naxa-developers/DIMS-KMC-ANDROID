@@ -203,7 +203,7 @@ public class HazardInfoDetailsActivity extends AppCompatActivity {
 
     public void startNewActivity(){
         Intent intent = new Intent(HazardInfoDetailsActivity.this, HazardThingsToDoActivity.class);
-        intent.putExtra("OBJ", hazardListModel);
+        intent.putExtra("OBJ", category);
         startActivity(intent);
     }
 
