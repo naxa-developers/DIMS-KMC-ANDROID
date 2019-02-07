@@ -174,7 +174,7 @@ public class HazardInfoActivity extends AppCompatActivity {
                 .subscribe(new DisposableSubscriber<List<String>>() {
                     @Override
                     public void onNext(List<String> strings) {
-                        Log.d(TAG, "onNext: "+strings.size());
+//                        Log.d(TAG, "onNext: "+strings.size());
                         ((HazardListAdapter) hazardListrecycler.getAdapter()).replaceData(strings);
 
                     }

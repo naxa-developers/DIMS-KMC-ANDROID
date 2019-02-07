@@ -1,5 +1,6 @@
 package np.com.naxa.iset.disasterinfo;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -25,9 +26,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 import np.com.naxa.iset.quiz.QuizTestActivity;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.DataServer;
+import np.com.naxa.iset.viewmodel.DisasterInfoDetailsViewModel;
 
 import static android.text.Html.*;
 
@@ -52,6 +58,9 @@ public class HazardInfoDetailsActivity extends AppCompatActivity {
     Button btnAfterHappens;
 
     HazardListModel hazardListModel;
+    String category = "";
+
+    DisasterInfoDetailsViewModel disasterInfoDetailsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +69,22 @@ public class HazardInfoDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        hazardListModel = intent.getParcelableExtra("OBJ");
+        category = intent.getStringExtra("OBJ");
+        disasterInfoDetailsViewModel = ViewModelProviders.of(this).get(DisasterInfoDetailsViewModel.class);
 
         setupToolBar();
-        initUI(hazardListModel);
+        initUI(category);
     }
 
     private void setupToolBar() {
         setSupportActionBar(toolbar);
-        if(hazardListModel == null){
+        if(category == null){
         getSupportActionBar().setTitle("Hazard Details");
         }else {
-            getSupportActionBar().setTitle(hazardListModel.getTitle());
-            btnBeforeHappens.setText("Before "+hazardListModel.getTitle());
+            getSupportActionBar().setTitle(category);
+            btnBeforeHappens.setText("Before "+category);
 
-            tvTitle.setText(hazardListModel.getTitle());
+            tvTitle.setText(category);
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,30 +94,65 @@ public class HazardInfoDetailsActivity extends AppCompatActivity {
 
     DataServer dataServer = new DataServer();
     HazardListModel hazardListModel1 = new HazardListModel();
-    private void initUI(HazardListModel hazardListModel){
-        if(hazardListModel.getTitle().equals("Earthquake") || hazardListModel.getTitle().equals("Landslide")){
-            if(hazardListModel.getTitle().equals("Earthquake")) {
-                hazardListModel1 = dataServer.getEarthquakeDetails();
-            }else {
-                hazardListModel1 = dataServer.getLandslideDetails();
+    private void initUI(String category){
 
-            }
+        disasterInfoDetailsViewModel.getSpecificDisasterInfo(category, "introduction")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<DisasterInfoDetailsEntity>() {
+                    @Override
+                    public void onNext(DisasterInfoDetailsEntity disasterInfoDetailsEntity) {
 
-            WindowManager mWinMgr = (WindowManager)HazardInfoDetailsActivity.this.getSystemService(Context.WINDOW_SERVICE);
-            int displayWidth = mWinMgr.getDefaultDisplay().getWidth();
-            Glide.with(HazardInfoDetailsActivity.this)
-                    .load(hazardListModel1.getImage())
-                    .override(displayWidth, 200)
-                    .into(imageView);
+                        WindowManager mWinMgr = (WindowManager)HazardInfoDetailsActivity.this.getSystemService(Context.WINDOW_SERVICE);
+                        int displayWidth = mWinMgr.getDefaultDisplay().getWidth();
+                        Glide.with(HazardInfoDetailsActivity.this)
+                                .load(disasterInfoDetailsEntity.getPhoto())
+                                .override(displayWidth, 200)
+                                .into(imageView);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                tvBody.setText(Html.fromHtml(hazardListModel1.getDesc(), Html.FROM_HTML_MODE_COMPACT));
-                tvBody.setText(fromHtml(getStringContstant(),0 ,new ImageGetter(), null));
-            } else {
-//                tvBody.setText(Html.fromHtml(hazardListModel1.getDesc()));
-                tvBody.setText(fromHtml(getStringContstant()));
-            }
-        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            tvBody.setText(fromHtml(disasterInfoDetailsEntity.getDesc(),0 ,new ImageGetter(), null));
+                        } else {
+                            tvBody.setText(fromHtml(disasterInfoDetailsEntity.getDesc()));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
+
+//        if(hazardListModel.getTitle().equals("Earthquake") || hazardListModel.getTitle().equals("Landslide")){
+//            if(hazardListModel.getTitle().equals("Earthquake")) {
+//                hazardListModel1 = dataServer.getEarthquakeDetails();
+//            }else {
+//                hazardListModel1 = dataServer.getLandslideDetails();
+//
+//            }
+
+//            WindowManager mWinMgr = (WindowManager)HazardInfoDetailsActivity.this.getSystemService(Context.WINDOW_SERVICE);
+//            int displayWidth = mWinMgr.getDefaultDisplay().getWidth();
+//            Glide.with(HazardInfoDetailsActivity.this)
+//                    .load(hazardListModel1.getImage())
+//                    .override(displayWidth, 200)
+//                    .into(imageView);
+
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+////                tvBody.setText(Html.fromHtml(hazardListModel1.getDesc(), Html.FROM_HTML_MODE_COMPACT));
+//                tvBody.setText(fromHtml(getStringContstant(),0 ,new ImageGetter(), null));
+//            } else {
+////                tvBody.setText(Html.fromHtml(hazardListModel1.getDesc()));
+//                tvBody.setText(fromHtml(getStringContstant()));
+//            }
+////        }
 
 //        if(hazardListModel.getTitle().equals("Landslide")){
 //            this.hazardListModel = dataServer.getEarthquakeDetails();

@@ -29,7 +29,7 @@ public class DisasterInfoDetailsViewModel extends AndroidViewModel {
 
     public Flowable<List<DisasterInfoDetailsEntity>> getAllReportDetailsList() { return mAllDisasterInfoDetailsList; }
     public Flowable<List<String>> getAllDistinctCategories() { return mAllDistinctCategories; }
-    public Flowable<DisasterInfoDetailsEntity> getAllUnVerifiedReportDetailsList(String categoryname, String subcatname) {
+    public Flowable<DisasterInfoDetailsEntity> getSpecificDisasterInfo(String categoryname, String subcatname) {
         mSpecificDisasterInfo = mRepository.getSpecificDisasterInfo(categoryname, subcatname);
         return mSpecificDisasterInfo; }
 
