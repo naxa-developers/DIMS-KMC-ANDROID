@@ -15,6 +15,7 @@ public class DisasterInfoDetailsViewModel extends AndroidViewModel {
 
     private DisasterInfoDetailsRepository mRepository;
     private Flowable<List<DisasterInfoDetailsEntity>> mAllDisasterInfoDetailsList;
+    private Flowable<List<String>> mAllDistinctCategories;
     private Flowable<DisasterInfoDetailsEntity> mSpecificDisasterInfo;
 
     public DisasterInfoDetailsViewModel(@NonNull Application application) {
@@ -23,9 +24,11 @@ public class DisasterInfoDetailsViewModel extends AndroidViewModel {
         mRepository = new DisasterInfoDetailsRepository(application);
 
         mAllDisasterInfoDetailsList = mRepository.getAllReportDetailsList();
+        mAllDistinctCategories = mRepository.getAllDistinctCategories();
     }
 
     public Flowable<List<DisasterInfoDetailsEntity>> getAllReportDetailsList() { return mAllDisasterInfoDetailsList; }
+    public Flowable<List<String>> getAllDistinctCategories() { return mAllDistinctCategories; }
     public Flowable<DisasterInfoDetailsEntity> getAllUnVerifiedReportDetailsList(String categoryname, String subcatname) {
         mSpecificDisasterInfo = mRepository.getSpecificDisasterInfo(categoryname, subcatname);
         return mSpecificDisasterInfo; }

@@ -15,12 +15,14 @@ import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 
 public class DisasterInfoDetailsRepository {private DisasterInfoDetailsDao mDao;
     Flowable<List<DisasterInfoDetailsEntity>> mAllDisasterInfoDetailsList;
+    Flowable<List<String>> mAllDistinctDisasterList;
     Flowable<DisasterInfoDetailsEntity> mSpecificDisasterInfoDetails;
 
     public DisasterInfoDetailsRepository(Application application) {
         ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
         mDao = db.disasterInfoDetailsDao();
         mAllDisasterInfoDetailsList = mDao.getAllDisasterInfoDetailsEntityList();
+        mAllDistinctDisasterList = mDao.getAllDistinctCategories();
 
     }
 
@@ -28,6 +30,9 @@ public class DisasterInfoDetailsRepository {private DisasterInfoDetailsDao mDao;
     // Observed LiveData will notify the observer when the data has changed.
     public Flowable<List<DisasterInfoDetailsEntity>> getAllReportDetailsList() {
         return mAllDisasterInfoDetailsList;
+    }
+    public Flowable<List<String>> getAllDistinctCategories() {
+        return mAllDistinctDisasterList;
     }
 
     public Flowable<DisasterInfoDetailsEntity> getSpecificDisasterInfo(String categoryname, String subcatname) {
@@ -54,8 +59,8 @@ public class DisasterInfoDetailsRepository {private DisasterInfoDetailsDao mDao;
                 .subscribe(new DisposableObserver<DisasterInfoDetailsEntity>() {
                     @Override
                     public void onNext(DisasterInfoDetailsEntity disasterInfoDetailsEntity1) {
-                        id[0] =   mDao.insert(disasterInfoDetailsEntity1);
                         Log.d("MessageHelperRepository", "insert: "+ disasterInfoDetailsEntity1.getSubcatname());
+                        id[0] =   mDao.insert(disasterInfoDetailsEntity1);
                     }
 
                     @Override

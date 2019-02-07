@@ -15,7 +15,7 @@ import com.google.gson.annotations.SerializedName;
 public class DisasterInfoDetailsEntity {
 
     @PrimaryKey(autoGenerate = true)
-    private String id;
+    private int did;
 
     @SerializedName("id")
     @ColumnInfo(name = "id_from_server")
@@ -47,13 +47,16 @@ public class DisasterInfoDetailsEntity {
     @Expose
     private String subcatname;
 
-    public String getId() {
-        return id;
+    public DisasterInfoDetailsEntity(String id_from_server, String shortDesc, String desc, String photo, String categoryname, String subcatname) {
+        this.id_from_server = id_from_server;
+        this.shortDesc = shortDesc;
+        this.desc = desc;
+        this.photo = photo;
+        this.categoryname = categoryname;
+        this.subcatname = subcatname;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+
 
     public String getShortDesc() {
         return shortDesc;
@@ -95,4 +98,19 @@ public class DisasterInfoDetailsEntity {
         this.subcatname = subcatname;
     }
 
+    public String getId_from_server() {
+        return id_from_server;
+    }
+
+    public void setId_from_server(String id_from_server) {
+        this.id_from_server = id_from_server;
+    }
+
+    public int getDid() {
+        return did;
+    }
+
+    public void setDid(int did) {
+        this.did = did;
+    }
 }

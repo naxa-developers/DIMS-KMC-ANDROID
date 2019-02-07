@@ -30,6 +30,7 @@ import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
+import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 import np.com.naxa.iset.firebase.MessageHelper;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
@@ -40,8 +41,8 @@ import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
         GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class,
-        DisasterInfoDetailsDao.class
-}, version = 20, exportSchema = false)
+        DisasterInfoDetailsEntity.class
+}, version = 21, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
 

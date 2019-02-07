@@ -17,18 +17,18 @@ import java.util.List;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.detailspage.MarkerDetailsKeyValue;
 
-public class HazardListAdapter extends BaseQuickAdapter<HazardListModel, BaseViewHolder> {
+public class HazardListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
-    public HazardListAdapter(int layoutResId, @Nullable List<HazardListModel> data) {
+    public HazardListAdapter(int layoutResId, @Nullable List<String> data) {
         super(layoutResId, data);
     }
 
 
     @Override
-    protected void convert(BaseViewHolder helper, HazardListModel item) {
+    protected void convert(BaseViewHolder helper, String item) {
         LinearLayout linearLayout = helper.getView(R.id.hazard_list_item_row_layout);
 
-        helper.setText(R.id.tv_hazard_list_title,item.getTitle());
+        helper.setText(R.id.tv_hazard_list_title,item);
 
 
         if(((helper.getLayoutPosition()+1) %2) == 0){
