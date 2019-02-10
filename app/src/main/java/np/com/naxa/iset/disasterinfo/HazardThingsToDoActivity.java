@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -15,9 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.disasterinfo.imagesliderviewpager.ImageSliderViewPagerAdapter;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.DataServer;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
-import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItemAdapter;
 import np.com.naxa.iset.viewmodel.DisasterInfoDetailsViewModel;
 
 import static android.text.Html.fromHtml;
@@ -50,11 +50,13 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
     @BindView(R.id.btnAfterHappens)
     Button btnAfterHappens;
 
-//    HazardListModel hazardListModel;
+    //    HazardListModel hazardListModel;
     @BindView(R.id.tvThingsToDoDetails)
     TextView tvThingsToDoDetails;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
 
 
     private List<SectionMultipleItem> mData;
@@ -75,11 +77,16 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         category = intent.getStringExtra("OBJ");
 
+        viewPager.setVisibility(View.GONE);
+
         setupToolBar();
 
+//        setupImageSliderViewPager();
+
+
         // 1. create entityList which item data extend SectionMultiEntity
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mData = DataServer.getThingsToDoBefore();
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mData = DataServer.getThingsToDoBefore();
 //        setupRecyclerView();
 
     }
@@ -90,10 +97,11 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Things To Do");
         } else {
             getSupportActionBar().setTitle(category);
-            btnBeforeHappens.setText("Before " +category);
+            btnBeforeHappens.setText("Before " + category);
 
 //            if (hazardListModel.getTitle().equals("Earthquake") || hazardListModel.getTitle().equals("Landslide")) {
-                setThingsToDo(category);
+            setThingsToDo("before");
+//            setupSliderLayout();
 //            }
         }
 
@@ -101,6 +109,35 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
+
+    private void setupImageSliderViewPager() {
+         String[] imageUrls = new String[]{
+                "https://cdn.pixabay.com/photo/2016/11/11/23/34/cat-1817970_960_720.jpg",
+                "https://cdn.pixabay.com/photo/2017/12/21/12/26/glowworm-3031704_960_720.jpg",
+                "https://cdn.pixabay.com/photo/2017/12/24/09/09/road-3036620_960_720.jpg",
+                "https://cdn.pixabay.com/photo/2017/11/07/00/07/fantasy-2925250_960_720.jpg",
+                "https://cdn.pixabay.com/photo/2017/10/10/15/28/butterfly-2837589_960_720.jpg"
+        };
+
+//        String[] imageUrls = imageList.toArray(new String[imageList.size()]);
+
+        ImageSliderViewPagerAdapter adapter = new ImageSliderViewPagerAdapter(this, imageUrls);
+        viewPager.setAdapter(adapter);
+
+
+        CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+
+        indicator.setViewPager(viewPager);
+
+        final float density = getResources().getDisplayMetrics().density;
+
+        //Set circle indicator radius
+        indicator.setRadius(5 * density);
+
+
+        viewPager.setVisibility(View.VISIBLE);
+    }
+
 
     HazardListModel hazardListModel1 = new HazardListModel();
 
@@ -130,6 +167,7 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
     }
 
     DataServer dataServer = new DataServer();
+
     private void setThingsToDo(String when) {
 
 //        String todo = "";
@@ -158,10 +196,13 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
                     public void onNext(DisasterInfoDetailsEntity disasterInfoDetailsEntity) {
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            tvThingsToDoDetails.setText(fromHtml(disasterInfoDetailsEntity.getDesc(),0 ,new ImageGetter(), null));
+                            tvThingsToDoDetails.setText(fromHtml(disasterInfoDetailsEntity.getDesc(), 0, new ImageGetter(), null));
                         } else {
                             tvThingsToDoDetails.setText(fromHtml(disasterInfoDetailsEntity.getDesc()));
                         }
+
+                        setupImageSliderViewPager();
+
                     }
 
                     @Override
@@ -172,21 +213,15 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
 
+//                        if (imageList != null) {
+//                        }
                     }
                 });
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            tvThingsToDoDetails.setText(Html.fromHtml(todo, Html.FROM_HTML_MODE_COMPACT));
-//        } else {
-//            tvThingsToDoDetails.setText(Html.fromHtml(todo));
-//        }
-//
-
-
     }
 
 
     List<String> imageList = new ArrayList<String>();
+
     private class ImageGetter implements Html.ImageGetter {
 
         public Drawable getDrawable(String source) {
@@ -194,9 +229,8 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
             if (!source.equals("")) {
 //                id = R.drawable.hughjackman;
                 imageList.add(source);
-                Log.d(TAG, "getDrawable: "+imageList.size()+" "+source);
-            }
-            else {
+                Log.d(TAG, "getDrawable: " + imageList.size() + " " + source);
+            } else {
                 return null;
             }
             return null;

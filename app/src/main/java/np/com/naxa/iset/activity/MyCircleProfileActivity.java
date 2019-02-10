@@ -196,6 +196,8 @@ public class MyCircleProfileActivity extends AppCompatActivity {
     private void initUI() {
 
         if (userPhotoUri != null) {
+
+
             Glide.with(this)
                     .load(userPhotoUri)
                     .asBitmap()
