@@ -84,9 +84,6 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
         setThingsToDo(subcatname);
 
 
-//        setupImageSliderViewPager();
-
-
         // 1. create entityList which item data extend SectionMultiEntity
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        mData = DataServer.getThingsToDoBefore();
@@ -101,10 +98,6 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
         } else {
             getSupportActionBar().setTitle(category);
             btnBeforeHappens.setText("Before " + category);
-
-//            if (hazardListModel.getTitle().equals("Earthquake") || hazardListModel.getTitle().equals("Landslide")) {
-//            setupSliderLayout();
-//            }
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -173,12 +166,10 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
 
     private void setThingsToDo(String when) {
 
-//        String todo = "";
         if ( when != null) {
             switch (when) {
                 case "before":
                     getSupportActionBar().setTitle("Before "+category);
-//                    todo = hazardListModel1.getBefore_incident();
                     break;
 
                 case "during":

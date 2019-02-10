@@ -49,51 +49,12 @@ public class TabbedDialog extends DialogFragment {
         CustomAdapter adapter = new CustomAdapter(getChildFragmentManager());
 
         myCircleContactViewModel = ViewModelProviders.of(this).get(MyCircleContactViewModel.class);
+        adapter.addFragment("Registered", new  RegisteredContactListFragment());
+        adapter.addFragment("UnRegistered", new UnregisteredContactListFragment());
+//        adapter.notifyDataSetChanged();
 
-
-        myCircleContactViewModel.getAllRegisteredContacts()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new DisposableSubscriber<List<ContactModel>>() {
-                    @Override
-                    public void onNext(List<ContactModel> contactModels) {
-
-                        adapter.addFragment("Registered", CustomFragment.createInstance(contactModels, true));
-                        myCircleContactViewModel.getAllUnRegisteredContacts()
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new DisposableSubscriber<List<ContactModel>>() {
-                                    @Override
-                                    public void onNext(List<ContactModel> contactModels) {
-                                        adapter.addFragment("UnRegistered", CustomFragment.createInstance(contactModels, false));
-                                        adapter.notifyDataSetChanged();
-
-                                        viewPager.setAdapter(adapter);
-                                        tabLayout.setupWithViewPager(viewPager);
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable t) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
 
         btnClose.setOnClickListener(new View.OnClickListener() {
