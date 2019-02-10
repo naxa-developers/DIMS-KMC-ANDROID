@@ -190,20 +190,21 @@ public class HazardInfoDetailsActivity extends AppCompatActivity {
                 startActivity(new Intent(HazardInfoDetailsActivity.this, QuizTestActivity.class));
                 break;
             case R.id.btnBeforeHappens:
-                startNewActivity();
+                startNewActivity("before");
                 break;
             case R.id.btnWhenHappens:
-                startNewActivity();
+                startNewActivity("during");
                 break;
             case R.id.btnAfterHappens:
-                startNewActivity();
+                startNewActivity("after");
                 break;
         }
     }
 
-    public void startNewActivity(){
+    public void startNewActivity( String subcatname){
         Intent intent = new Intent(HazardInfoDetailsActivity.this, HazardThingsToDoActivity.class);
         intent.putExtra("OBJ", category);
+        intent.putExtra("OBJ1", subcatname);
         startActivity(intent);
     }
 

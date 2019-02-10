@@ -61,7 +61,7 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
 
     private List<SectionMultipleItem> mData;
     private static final String TAG = "HazardThingsToDo";
-    String category = "";
+    String category = "", subcatname = "";
 
     DisasterInfoDetailsViewModel disasterInfoDetailsViewModel;
 
@@ -76,10 +76,13 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         category = intent.getStringExtra("OBJ");
+        subcatname = intent.getStringExtra("OBJ1");
 
         viewPager.setVisibility(View.GONE);
 
-        setupToolBar();
+        setupToolBar(category);
+        setThingsToDo(subcatname);
+
 
 //        setupImageSliderViewPager();
 
@@ -91,7 +94,7 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
 
     }
 
-    private void setupToolBar() {
+    private void setupToolBar(String category) {
         setSupportActionBar(toolbar);
         if (category == null) {
             getSupportActionBar().setTitle("Things To Do");
@@ -100,7 +103,6 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
             btnBeforeHappens.setText("Before " + category);
 
 //            if (hazardListModel.getTitle().equals("Earthquake") || hazardListModel.getTitle().equals("Landslide")) {
-            setThingsToDo("before");
 //            setupSliderLayout();
 //            }
         }
@@ -111,6 +113,7 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
     }
 
     private void setupImageSliderViewPager() {
+
          String[] imageUrls = new String[]{
                 "https://cdn.pixabay.com/photo/2016/11/11/23/34/cat-1817970_960_720.jpg",
                 "https://cdn.pixabay.com/photo/2017/12/21/12/26/glowworm-3031704_960_720.jpg",
@@ -132,7 +135,7 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
         final float density = getResources().getDisplayMetrics().density;
 
         //Set circle indicator radius
-        indicator.setRadius(5 * density);
+        indicator.setRadius(imageUrls.length * density);
 
 
         viewPager.setVisibility(View.VISIBLE);
@@ -146,20 +149,20 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btnBeforeHappens:
                 // 1. create entityList which item data extend SectionMultiEntity
-                mData = DataServer.getThingsToDoBefore();
+//                mData = DataServer.getThingsToDoBefore();
 //                setupRecyclerView();
                 setThingsToDo("before");
 
                 break;
             case R.id.btnWhenHappens:
                 // 1. create entityList which item data extend SectionMultiEntity
-                mData = DataServer.getThingsToDoWhenHappens();
+//                mData = DataServer.getThingsToDoWhenHappens();
 //                setupRecyclerView();
                 setThingsToDo("during");
                 break;
             case R.id.btnAfterHappens:
                 // 1. create entityList which item data extend SectionMultiEntity
-                mData = DataServer.getThingsToDoAfter();
+//                mData = DataServer.getThingsToDoAfter();
 //                setupRecyclerView();
                 setThingsToDo("after");
                 break;
@@ -171,21 +174,22 @@ public class HazardThingsToDoActivity extends AppCompatActivity {
     private void setThingsToDo(String when) {
 
 //        String todo = "";
-//        if (category != null && when != null) {
-//            switch (when) {
-//                case "before":
+        if ( when != null) {
+            switch (when) {
+                case "before":
+                    getSupportActionBar().setTitle("Before "+category);
 //                    todo = hazardListModel1.getBefore_incident();
-//                    break;
-//
-//                case "during":
-//                    todo = hazardListModel1.getDuring_incident();
-//                    break;
-//
-//                case "after":
-//                    todo = hazardListModel1.after_incident;
-//                    break;
-//            }
-//        }
+                    break;
+
+                case "during":
+                    getSupportActionBar().setTitle("When "+category+ " happens");
+                    break;
+
+                case "after":
+                    getSupportActionBar().setTitle("After "+category+" passes");
+                    break;
+            }
+        }
 
 
         disasterInfoDetailsViewModel.getSpecificDisasterInfo(category, when)
