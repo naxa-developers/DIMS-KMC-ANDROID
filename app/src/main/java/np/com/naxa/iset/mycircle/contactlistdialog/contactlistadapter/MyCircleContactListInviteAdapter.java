@@ -1,4 +1,4 @@
-package np.com.naxa.iset.mycircle;
+package np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import np.com.naxa.iset.BuildConfig;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
 public class MyCircleContactListInviteAdapter  extends BaseQuickAdapter<ContactModel, BaseViewHolder> {

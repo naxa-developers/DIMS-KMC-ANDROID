@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -29,6 +30,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import np.com.naxa.iset.R;
@@ -43,7 +47,7 @@ import static np.com.naxa.iset.Permissions.RC_PHONE;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class ExpandableUseActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class EmergencyContactsActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
     RecyclerView mRecyclerView;
     ExpandableItemAdapter adapter;
     ArrayList<MultiItemEntity> list;
@@ -52,10 +56,16 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
 
     String currentNumber = null;
     int jsonPosition;
-    private static final String TAG = "ExpandableUseActivity";
+    private static final String TAG = "EmergencyContacts";
+    @BindView(R.id.toolbar_general)
+    Toolbar toolbar;
+    @BindView(R.id.btnTollFreeNo1)
+    Button btnTollFreeNo1;
+    @BindView(R.id.btnTollFreeNo2)
+    Button btnTollFreeNo2;
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, ExpandableUseActivity.class);
+        Intent intent = new Intent(context, EmergencyContactsActivity.class);
         context.startActivity(intent);
     }
 
@@ -64,6 +74,7 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_expandable_item_use);
+        ButterKnife.bind(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
 
@@ -102,11 +113,11 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
     }
 
     private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar_general);
+//        Toolbar toolbar = findViewById(R.id.toolbar_general);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(ExpandableUseActivity.this.getResources().getString(R.string.emergency_contacts));
+        getSupportActionBar().setTitle(EmergencyContactsActivity.this.getResources().getString(R.string.emergency_contacts));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @SuppressLint("MissingPermission")
@@ -159,36 +170,38 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==RC_PHONE){
+        if (requestCode == RC_PHONE) {
             checkPhonePermissionAndGo();
         }
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                startActivity(new Intent(ExpandableUseActivity.this, HomeActivity.class));
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//
+//            case android.R.id.home:
+//                startActivity(new Intent(EmergencyContactsActivity.this, HomeActivity.class));
+//                finish();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     ArrayList<MultiItemEntity> res = new ArrayList<>();
     Level0Item lv0 = null;
     Level1Item lv1 = null;
-    private Level0Item getContactList(int position){
-        Log.d(TAG, "onNext: "+position);
+
+    private Level0Item getContactList(int position) {
+        Log.d(TAG, "onNext: " + position);
 
         repository.getContactJsonString(position)
                 .subscribe(new Observer<Pair>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
+
                     @Override
                     public void onNext(Pair pair) {
                         String assetName = (String) pair.first;
@@ -199,11 +212,11 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
                         Gson gson = new Gson();
                         try {
                             JSONArray jsonArray = new JSONArray(fileContent);
-                            for (int i =0; i < jsonArray.length() ; i++){
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 lv1 = new Level1Item(jsonObject.getString("Name"),
                                         (jsonObject.getString("Phone no.") == null) ? (" ") : (jsonObject.getString("Phone no.")),
-                                        jsonObject.getString("Post")+", "+jsonObject.getString("Organization"),
+                                        jsonObject.getString("Post") + ", " + jsonObject.getString("Organization"),
                                         jsonObject.getString("Address"));
                                 lv0.addSubItem(lv1);
                             }
@@ -214,15 +227,15 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(ExpandableUseActivity.this, "An error occurred while loading json", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EmergencyContactsActivity.this, "An error occurred while loading json", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete: "+jsonPosition);
+                        Log.d(TAG, "onComplete: " + jsonPosition);
                         jsonPosition++;
-                        if (jsonPosition > 6){
+                        if (jsonPosition > 6) {
                             list = res;
                             adapter = new ExpandableItemAdapter(list);
                             return;
@@ -232,10 +245,10 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
 
                     }
                 });
-        return lv0 ;
+        return lv0;
     }
 
-    private String getContactCategoryName(int position){
+    private String getContactCategoryName(int position) {
         String categoryName = "";
         switch (position) {
             case 0:
@@ -266,5 +279,20 @@ public class ExpandableUseActivity extends AppCompatActivity implements EasyPerm
     protected void attachBaseContext(Context newBase) {
         newBase = LocaleChanger.configureBaseContext(newBase);
         super.attachBaseContext(newBase);
+    }
+
+    @OnClick({R.id.btnTollFreeNo1, R.id.btnTollFreeNo2})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnTollFreeNo1:
+
+                currentNumber = "9898999986";
+                checkPhonePermissionAndGo();
+                break;
+            case R.id.btnTollFreeNo2:
+                currentNumber = "9898999999";
+                checkPhonePermissionAndGo();
+                break;
+        }
     }
 }

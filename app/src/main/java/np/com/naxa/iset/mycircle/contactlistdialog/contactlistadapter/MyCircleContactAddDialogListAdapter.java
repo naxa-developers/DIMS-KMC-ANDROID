@@ -1,4 +1,4 @@
-package np.com.naxa.iset.mycircle;
+package np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter;
 
 import android.support.annotation.Nullable;
 import android.widget.CompoundButton;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactEvent;
+import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
 public class MyCircleContactAddDialogListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {

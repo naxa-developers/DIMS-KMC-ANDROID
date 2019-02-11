@@ -526,7 +526,7 @@ public class SectionGridHomeActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick() {
 
-                                    startActivity(new Intent(SectionGridHomeActivity.this, MyCircleContactViewModel.class));
+                                    startActivity(new Intent(SectionGridHomeActivity.this, MyCircleProfileActivity.class));
                                 }
                             }).show();
                         }

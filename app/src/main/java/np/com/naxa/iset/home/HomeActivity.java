@@ -126,7 +126,7 @@ import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.detailspage.MarkerDetailsDisplayActivity;
-import np.com.naxa.iset.emergencyContacts.ExpandableUseActivity;
+import np.com.naxa.iset.emergencyContacts.EmergencyContactsActivity;
 import np.com.naxa.iset.firebase.MessageActivity;
 import np.com.naxa.iset.geojasonPojo.lineStringAndMultiLineString.lineString.LineStringFeature;
 import np.com.naxa.iset.geojasonPojo.lineStringAndMultiLineString.lineString.LineStringFeatureCollection;
@@ -543,19 +543,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         viewSwitcherSlideLayout.setInAnimation(in);
     }
 
-    private void setupBottomBar() {
-        bnve.enableAnimation(false);
-        bnve.enableShiftingMode(false);
-        bnve.enableItemShiftingMode(false);
 
-        bnve.setOnNavigationItemSelectedListener(item -> {
+    private void setupBottomBar() {
+        try {
+
+
+            bnve.enableAnimation(false);
+            bnve.enableShiftingMode(false);
+            bnve.enableItemShiftingMode(false);
+
+            bnve.setOnNavigationItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.menu_ask_for_help:
                     ReportActivityOld.start(HomeActivity.this);
                     break;
                 case R.id.menu_emergency_contacts:
-                    ExpandableUseActivity.start(HomeActivity.this);
+                    EmergencyContactsActivity.start(HomeActivity.this);
                     break;
                 case R.id.menu_open_spaces:
                     if (NetworkUtils.isNetworkAvailable()) {
@@ -568,11 +572,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //                    HospitalFilterActivity.start(HomeActivity.this);
                     break;
             }
-            return true;
+                return true;
         });
-        int gridHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 550, getResources().getDisplayMetrics());
-        SlidingUpPanelLayout.LayoutParams params = new SlidingUpPanelLayout.LayoutParams(SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, gridHeight);
-        dragView.setLayoutParams(params);
+            int gridHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 550, getResources().getDisplayMetrics());
+            SlidingUpPanelLayout.LayoutParams params = new SlidingUpPanelLayout.LayoutParams(SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, gridHeight);
+            dragView.setLayoutParams(params);
+
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     private void toggleSliderHeight() {

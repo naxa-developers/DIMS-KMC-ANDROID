@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,8 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.mycircle.ContactModel;
-import np.com.naxa.iset.mycircle.MyCircleContactAddDialogListAdapter;
-import np.com.naxa.iset.mycircle.MyCircleContactListInviteAdapter;
+import np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter.MyCircleContactAddDialogListAdapter;
 import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 
 /**

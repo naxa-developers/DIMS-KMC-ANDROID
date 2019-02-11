@@ -82,11 +82,11 @@
             android:label="@string/title_activity_home_new_new"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".emergencyContacts.ExpandableUseActivity"
+            android:name=".emergencyContacts.EmergencyContactsActivity"
             android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="np.com.naxa.iset.home.HomeActivity" />
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
         </activity>
         <activity
             android:name=".activity.ContactActivity"

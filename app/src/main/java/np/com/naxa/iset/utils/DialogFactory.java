@@ -40,7 +40,7 @@ import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mycircle.ContactModel;
-import np.com.naxa.iset.mycircle.MyCircleContactAddDialogListAdapter;
+import np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter.MyCircleContactAddDialogListAdapter;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItemAdapter;
 
