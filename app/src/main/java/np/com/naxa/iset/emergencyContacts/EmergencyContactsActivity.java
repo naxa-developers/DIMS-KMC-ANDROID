@@ -117,7 +117,7 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(EmergencyContactsActivity.this.getResources().getString(R.string.emergency_contacts));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @SuppressLint("MissingPermission")
@@ -175,19 +175,6 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
         }
     }
 
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//
-//            case android.R.id.home:
-//                startActivity(new Intent(EmergencyContactsActivity.this, HomeActivity.class));
-//                finish();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     ArrayList<MultiItemEntity> res = new ArrayList<>();
     Level0Item lv0 = null;
@@ -275,11 +262,11 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
     }
 
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        newBase = LocaleChanger.configureBaseContext(newBase);
-        super.attachBaseContext(newBase);
-    }
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        newBase = LocaleChanger.configureBaseContext(newBase);
+//        super.attachBaseContext(newBase);
+//    }
 
     @OnClick({R.id.btnTollFreeNo1, R.id.btnTollFreeNo2})
     public void onViewClicked(View view) {
