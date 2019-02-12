@@ -55,7 +55,7 @@ import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
-import np.com.naxa.iset.viewmodel.MessageHelperViewModel;
+import np.com.naxa.iset.database.viewmodel.MessageHelperViewModel;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

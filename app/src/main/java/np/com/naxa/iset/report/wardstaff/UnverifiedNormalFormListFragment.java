@@ -6,25 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
-import np.com.naxa.iset.report.ReportSavedFormListAdapter;
-import np.com.naxa.iset.viewmodel.ReportDetailsViewModel;
+import np.com.naxa.iset.database.viewmodel.ReportDetailsViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

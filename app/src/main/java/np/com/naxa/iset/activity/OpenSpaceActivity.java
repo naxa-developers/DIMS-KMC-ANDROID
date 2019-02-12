@@ -31,7 +31,7 @@ import butterknife.OnClick;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.gps.GeoPointActivity;
-import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
+import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
 
 import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
 

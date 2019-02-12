@@ -57,7 +57,7 @@ import np.com.naxa.iset.utils.JsonGsonConverterUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
-import np.com.naxa.iset.viewmodel.ReportDetailsViewModel;
+import np.com.naxa.iset.database.viewmodel.ReportDetailsViewModel;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.AfterPermissionGranted;

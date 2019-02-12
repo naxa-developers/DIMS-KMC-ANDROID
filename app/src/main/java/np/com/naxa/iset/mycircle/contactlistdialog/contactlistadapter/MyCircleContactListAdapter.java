@@ -19,7 +19,7 @@ import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
-import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
+import np.com.naxa.iset.database.viewmodel.MyCircleContactViewModel;
 
 public class MyCircleContactListAdapter extends BaseQuickAdapter<ContactModel, BaseViewHolder> {
 

@@ -18,7 +18,7 @@ import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter.MyCircleContactListInviteAdapter;
-import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
+import np.com.naxa.iset.database.viewmodel.MyCircleContactViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

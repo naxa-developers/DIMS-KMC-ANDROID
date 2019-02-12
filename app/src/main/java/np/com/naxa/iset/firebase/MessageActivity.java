@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.home.HomeActivity;
-import np.com.naxa.iset.viewmodel.MessageHelperViewModel;
+import np.com.naxa.iset.database.viewmodel.MessageHelperViewModel;
 
 public class MessageActivity extends AppCompatActivity {
 

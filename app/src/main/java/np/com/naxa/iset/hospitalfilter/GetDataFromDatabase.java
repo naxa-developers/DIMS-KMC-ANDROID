@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
 
 public class GetDataFromDatabase {
     private static final String TAG = "GetDataFromDatabase";

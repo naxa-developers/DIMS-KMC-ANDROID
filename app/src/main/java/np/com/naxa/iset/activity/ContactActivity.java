@@ -12,7 +12,7 @@ import java.util.List;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.Contact;
-import np.com.naxa.iset.viewmodel.ContactViewModel;
+import np.com.naxa.iset.database.viewmodel.ContactViewModel;
 
 public class ContactActivity extends AppCompatActivity {
 

@@ -356,27 +356,18 @@ public class DataServer {
 
 
         list.add(new SectionMultipleItem(true, "Disaster prevention facility", false, false));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("Temporary Shelters", "", context.getResources().getDrawable(R.drawable.ic_industry)));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Evacuation Center", "", context.getResources().getDrawable(R.drawable.ic_marker_openspace))));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Evacuation Area", "", context.getResources().getDrawable(R.drawable.ic_marker_openspace))));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Water Supply location", "", context.getResources().getDrawable(R.drawable.ic_water_bodies))));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Medical institutions", "", context.getResources().getDrawable(R.drawable.ic_hospital))));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_industry", "Temporary Shelters", "")));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_marker_openspace", "Evacuation Center", "")));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_marker_openspace", "Evacuation Area", "")));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_water_bodies", "Water Supply location", "")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_industry", "Government Buildings", "government_buildings.json")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_marker_openspace", "Open Spaces", "openspace_polygons.json")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_marker_openspace", "Parks", "park.json")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_water_bodies", "Water Supply location", "water_tower_points.json")));
         list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_marker_hospital", "Medical institutions", "health_facilities.geojson")));
 
-
         list.add(new SectionMultipleItem(true, "Support Station", false, false));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("Schools run by the Kathmandu Metropolitan Government", "", context.getResources().getDrawable(R.drawable.ic_college))));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Convenience Center", "", context.getResources().getDrawable(R.drawable.ic_airport))));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Hotel, Restaurants Area", "", context.getResources().getDrawable(R.drawable.ic_restaurant))));
-//        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel( "Gas stations", "", context.getResources().getDrawable(R.drawable.ic_gas_station))));
         list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_marker_education", "Schools run by the Kathmandu Metropolitan Government", "educational_Institution_geojson.geojson")));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_airport", "Convenience Center", "")));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_restaurant", "Hotel, Restaurants Area", "")));
-        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_gas_station", "Gas stations", "")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_airport", "Youth Clubs", "youthclub.json")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_restaurant", "Hotel, Restaurants Area", "hotels.json")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_industry", "Industries", "industries.json")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.MAP_DATA_LIST, new MultiItemSectionModel("ic_gas_station", "Gas stations", "petrol_pump_points.json")));
 
         return list;
     }

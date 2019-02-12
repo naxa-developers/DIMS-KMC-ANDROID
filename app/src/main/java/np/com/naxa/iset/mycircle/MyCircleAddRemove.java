@@ -19,7 +19,7 @@ import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.JsonGsonConverterUtils;
 import np.com.naxa.iset.utils.NetworkUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
-import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
+import np.com.naxa.iset.database.viewmodel.MyCircleContactViewModel;
 
 public class MyCircleAddRemove {
     SharedPreferenceUtils sharedPreferenceUtils;

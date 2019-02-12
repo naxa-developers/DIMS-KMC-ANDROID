@@ -70,7 +70,6 @@ import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.imageutils.CircleTransform;
 import np.com.naxa.iset.utils.recycleviewutils.LinearLayoutManagerWithSmoothScroller;
 import np.com.naxa.iset.utils.recycleviewutils.RecyclerViewType;
-import np.com.naxa.iset.viewmodel.MyCircleContactViewModel;
 
 public class SectionGridHomeActivity extends AppCompatActivity {
 

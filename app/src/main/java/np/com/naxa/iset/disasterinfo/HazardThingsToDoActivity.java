@@ -33,7 +33,7 @@ import np.com.naxa.iset.disasterinfo.imagesliderviewpager.ImageSliderViewPagerAd
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.DataServer;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
-import np.com.naxa.iset.viewmodel.DisasterInfoDetailsViewModel;
+import np.com.naxa.iset.database.viewmodel.DisasterInfoDetailsViewModel;
 
 import static android.text.Html.fromHtml;
 

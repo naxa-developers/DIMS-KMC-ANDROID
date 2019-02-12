@@ -151,12 +151,12 @@ import np.com.naxa.iset.utils.maputils.MapMarkerOverlayUtils;
 import np.com.naxa.iset.utils.maputils.MyLocationService;
 import np.com.naxa.iset.utils.maputils.PolygonMapUtils;
 import np.com.naxa.iset.utils.maputils.SortingDistance;
-import np.com.naxa.iset.viewmodel.CommonPlacesAttribViewModel;
-import np.com.naxa.iset.viewmodel.EducationalInstitutesViewModel;
-import np.com.naxa.iset.viewmodel.GeoJsonCategoryViewModel;
-import np.com.naxa.iset.viewmodel.GeoJsonListViewModel;
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
-import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
+import np.com.naxa.iset.database.viewmodel.CommonPlacesAttribViewModel;
+import np.com.naxa.iset.database.viewmodel.EducationalInstitutesViewModel;
+import np.com.naxa.iset.database.viewmodel.GeoJsonCategoryViewModel;
+import np.com.naxa.iset.database.viewmodel.GeoJsonListViewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 

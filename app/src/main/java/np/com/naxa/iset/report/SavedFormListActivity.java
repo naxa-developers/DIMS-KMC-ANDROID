@@ -19,8 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
-import np.com.naxa.iset.disasterinfo.HazardListAdapter;
-import np.com.naxa.iset.viewmodel.ReportDetailsViewModel;
+import np.com.naxa.iset.database.viewmodel.ReportDetailsViewModel;
 
 public class SavedFormListActivity extends AppCompatActivity {
 

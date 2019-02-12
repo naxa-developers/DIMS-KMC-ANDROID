@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 
@@ -22,14 +21,13 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.detailspage.MarkerDetailedDisplayAdapter;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoListResponse;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
-import np.com.naxa.iset.viewmodel.DisasterInfoDetailsViewModel;
+import np.com.naxa.iset.database.viewmodel.DisasterInfoDetailsViewModel;
 
 public class HazardInfoActivity extends AppCompatActivity {
 

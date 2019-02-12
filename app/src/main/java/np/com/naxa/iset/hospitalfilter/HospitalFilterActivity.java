@@ -38,7 +38,7 @@ import np.com.naxa.iset.database.dao.HospitalFacilitiesDao;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.home.HomeActivity;
 import np.com.naxa.iset.utils.QueryBuildWithSplitter;
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
 
 
 public class HospitalFilterActivity extends AppCompatActivity implements OnFormElementValueChangedListener {

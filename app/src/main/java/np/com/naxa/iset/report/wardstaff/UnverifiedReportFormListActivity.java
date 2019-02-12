@@ -1,7 +1,6 @@
 package np.com.naxa.iset.report.wardstaff;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.net.Network;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -23,17 +22,13 @@ import np.com.naxa.iset.mycircle.registeruser.UserModel;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
-import np.com.naxa.iset.profile.wardprofile.fragments.ManagementBoardFragment;
-import np.com.naxa.iset.profile.wardprofile.fragments.PeopleFragment;
-import np.com.naxa.iset.profile.wardprofile.fragments.RiskHazardFragment;
 import np.com.naxa.iset.profile.wardprofile.fragments.ViewPagerAdapter;
-import np.com.naxa.iset.profile.wardprofile.fragments.WardProfileFragment;
 import np.com.naxa.iset.report.wardstaff.model.UnverifiedFormListResponse;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.JsonGsonConverterUtils;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
-import np.com.naxa.iset.viewmodel.ReportDetailsViewModel;
+import np.com.naxa.iset.database.viewmodel.ReportDetailsViewModel;
 
 public class UnverifiedReportFormListActivity extends AppCompatActivity {
 

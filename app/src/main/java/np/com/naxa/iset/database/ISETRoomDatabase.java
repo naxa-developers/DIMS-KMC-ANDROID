@@ -21,6 +21,7 @@ import np.com.naxa.iset.database.dao.HospitalFacilitiesDao;
 import np.com.naxa.iset.database.dao.MessageHelperDao;
 import np.com.naxa.iset.database.dao.MyCircleContactDao;
 import np.com.naxa.iset.database.dao.OpenSpaceDao;
+import np.com.naxa.iset.database.dao.PublicationsListDao;
 import np.com.naxa.iset.database.dao.ReportDetailsDao;
 import np.com.naxa.iset.database.entity.CommonPlacesAttrb;
 import np.com.naxa.iset.database.entity.Contact;
@@ -33,6 +34,7 @@ import np.com.naxa.iset.database.entity.ReportDetailsEntity;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
 import np.com.naxa.iset.firebase.MessageHelper;
 import np.com.naxa.iset.mycircle.ContactModel;
+import np.com.naxa.iset.publications.entity.PublicationsListDetails;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 /**
@@ -41,7 +43,7 @@ import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
         GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class,
-        DisasterInfoDetailsEntity.class
+        DisasterInfoDetailsEntity.class, PublicationsListDetails.class
 }, version = 21, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
@@ -57,6 +59,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     public abstract GeoJsonListDao geoJsonListDao();
     public abstract ReportDetailsDao reportDetailsDao();
     public abstract DisasterInfoDetailsDao disasterInfoDetailsDao();
+    public abstract PublicationsListDao publicationsListDao();
 
     private static ISETRoomDatabase INSTANCE;
 
@@ -109,6 +112,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
         private final GeoJsonListDao mGeoJsonListDao;
         private final ReportDetailsDao mReportDetailsDao;
         private final DisasterInfoDetailsDao mDisasterInfoDetailsDao;
+        private final PublicationsListDao mPublicationsListDao;
 
         PopulateDbAsync(ISETRoomDatabase db) {
             mContactDao = db.contactDao();
@@ -122,6 +126,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mGeoJsonListDao = db.geoJsonListDao();
             mReportDetailsDao = db.reportDetailsDao();
             mDisasterInfoDetailsDao = db.disasterInfoDetailsDao();
+            mPublicationsListDao = db.publicationsListDao();
 
         }
 
@@ -132,7 +137,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mContactDao.deleteAll();
 //            mCommonPlacesAttrbDao.deleteAll();
 //            mHospitalFacilitiesDao.deleteAll();
-            insertContact();
+//            insertContact();
             return null;
         }
 
