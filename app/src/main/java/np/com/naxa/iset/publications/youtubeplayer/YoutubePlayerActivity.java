@@ -36,6 +36,7 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
 
                         // do any work here to cue video, play video, etc.
                         youTubePlayer.cueVideo(videoId);
+
                     }
                     @Override
                     public void onInitializationFailure(YouTubePlayer.Provider provider,

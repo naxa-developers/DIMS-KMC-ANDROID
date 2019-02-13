@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -138,11 +139,13 @@ public class LoadImageUtils {
     }
 
     public static void loadImageToViewFromSrc(@NonNull ImageView imageView, String imageSrc){
-        Glide
-                .with(imageView.getContext())
-                .load(imageSrc)
-                .fitCenter()
-                .into(imageView);
+        if(!TextUtils.isEmpty(imageSrc)) {
+            Glide
+                    .with(imageView.getContext())
+                    .load(imageSrc)
+                    .fitCenter()
+                    .into(imageView);
+        }
     }
 
 
