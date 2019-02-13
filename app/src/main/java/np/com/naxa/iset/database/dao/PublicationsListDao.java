@@ -31,6 +31,7 @@ public interface PublicationsListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(PublicationsListDetails PublicationsListDetails);
 
+
     @Query("DELETE FROM PublicationsListDetails")
     void deleteAll();
 

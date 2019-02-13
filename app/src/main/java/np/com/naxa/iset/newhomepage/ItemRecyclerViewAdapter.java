@@ -23,6 +23,7 @@ import np.com.naxa.iset.drr_dictionary.data_glossary.GlossaryListActivity;
 import np.com.naxa.iset.emergencyContacts.EmergencyContactsActivity;
 import np.com.naxa.iset.emergencynumbers.EmergencyNumbersActivity;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
+import np.com.naxa.iset.publications.PublicationsListActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 
@@ -130,6 +131,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 break;
 
             case "Library":
+                break;
+
+            case "Multimedia":
+                context.startActivity(new Intent(context, PublicationsListActivity.class));
                 break;
 
             case "MAP":

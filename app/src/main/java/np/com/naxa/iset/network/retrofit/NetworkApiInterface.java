@@ -9,6 +9,7 @@ import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
 import np.com.naxa.iset.network.model.AskForHelpResponse;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
+import np.com.naxa.iset.publications.entity.PublicationsListResponse;
 import np.com.naxa.iset.report.wardstaff.model.UnverifiedFormListResponse;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -85,5 +86,9 @@ public interface NetworkApiInterface {
     @POST("get_drrinfo_data")
     @FormUrlEncoded
     Observable<DisasterInfoListResponse> getDisasterInfoResponse(@Field("api_key") String api_key);
+
+    @POST("get_publication_data")
+    @FormUrlEncoded
+    Observable<PublicationsListResponse> getPublicationsListDetailsResponse(@Field("api_key") String api_key);
 }
 
