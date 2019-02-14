@@ -2,6 +2,7 @@ package np.com.naxa.iset.emergencyContacts;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,10 +34,22 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.database.viewmodel.ContactCategoryListViewModel;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListDetails;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListResponse;
 import np.com.naxa.iset.home.HomeActivity;
+import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.network.retrofit.NetworkApiClient;
+import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
+import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.ToastUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -69,12 +82,18 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
         context.startActivity(intent);
     }
 
+    ContactCategoryListViewModel contactCategoryListViewModel;
+    NetworkApiInterface apiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_expandable_item_use);
         ButterKnife.bind(this);
+
+        contactCategoryListViewModel = ViewModelProviders.of(this).get(ContactCategoryListViewModel.class);
+        apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
 
@@ -118,6 +137,8 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
         getSupportActionBar().setTitle(EmergencyContactsActivity.this.getResources().getString(R.string.emergency_contacts));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        fetchContactCategoryListFromServer();
     }
 
     @SuppressLint("MissingPermission")
@@ -282,4 +303,83 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
                 break;
         }
     }
+
+
+    private void fetchContactCategoryListFromServer(){
+
+        apiInterface.getContactCategoryListResponse(UrlClass.API_ACCESS_TOKEN)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<ContactCategoryListResponse>() {
+                    @Override
+                    public void onNext(ContactCategoryListResponse contactCategoryListResponse) {
+
+                        if(contactCategoryListResponse.getError() == 1){
+                            DialogFactory.createCustomErrorDialog(EmergencyContactsActivity.this, contactCategoryListResponse.getMessage(),
+                                    new DialogFactory.CustomDialogListener() {
+                                        @Override
+                                        public void onClick() {
+
+                                        }
+                                    }).show();
+                        }
+                        if(contactCategoryListResponse.getError() == 0 && contactCategoryListResponse.getData() != null){
+                            saveContactCategoryListToDatabase(contactCategoryListResponse.getData());
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DialogFactory.createCustomErrorDialog(EmergencyContactsActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
+                                    @Override
+                                    public void onClick() {
+
+                                    }
+                                }).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    private void saveContactCategoryListToDatabase(List<ContactCategoryListDetails> contactCategoryListDetails){
+        Observable.just(contactCategoryListDetails)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapIterable(new Function<List<ContactCategoryListDetails>, Iterable<ContactCategoryListDetails>>() {
+                    @Override
+                    public Iterable<ContactCategoryListDetails> apply(List<ContactCategoryListDetails> contactCategoryListDetails) throws Exception {
+                        return contactCategoryListDetails;
+                    }
+                })
+                .map(new Function<ContactCategoryListDetails, ContactCategoryListDetails>() {
+                    @Override
+                    public ContactCategoryListDetails apply(ContactCategoryListDetails contactCategoryListDetails) throws Exception {
+                        return contactCategoryListDetails;
+                    }
+                })
+                .subscribe(new DisposableObserver<ContactCategoryListDetails>() {
+                    @Override
+                    public void onNext(ContactCategoryListDetails contactCategoryListDetails) {
+                        contactCategoryListViewModel.insert(contactCategoryListDetails);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
 }

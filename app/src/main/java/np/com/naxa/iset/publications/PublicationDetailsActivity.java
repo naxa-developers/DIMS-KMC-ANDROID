@@ -155,8 +155,10 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         PDFFileName = publicationsListDetails.getTitle();
 
         File targetFile = new File(createAppMainFolderUtils.getAppMediaFolderName() + File.separator + PDFFileName + ".pdf");
+//        File targetFile = new File("/storage/emulated/0/Kathmandu Metropolitan City/media/"+ PDFFileName + ".pdf");
         if (targetFile.exists()) {
             viewPDFFile( createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
+//            viewPDFFile( "/storage/emulated/0/Kathmandu Metropolitan City/media/", PDFFileName);
         } else {
             pdf_DownloadId = DownloadData(publicationsListDetails);
         }
@@ -205,6 +207,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
 
 //                if (isPDFView) {
                     viewPDFFile(createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
+//                    viewPDFFile("/storage/emulated/0/Kathmandu Metropolitan City/media/", PDFFileName);
 //                    viewPDFFile("Directory browsing/SD Card/storage/sdcard0/Naxa Collect/media/", "Sample one.pdf");
 //                }
             }
@@ -217,6 +220,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         Log.d(TAG, "viewPDFFile: " + path);
         Log.d(TAG, "viewPDFFile Name: " + fileName + ".pdf");
         File targetFile = new File(path + File.separator + fileName + ".pdf".trim());
+//        File targetFile = new File("/storage/emulated/0/Kathmandu Metropolitan City/media/" + fileName + ".pdf".trim());
         Log.d(TAG, "viewPDFFile path: " + targetFile.getAbsolutePath() + " " + targetFile.exists());
 //        Uri targetUri = Uri.parse(targetFile.getAbsoluteFile().getAbsolutePath());
 

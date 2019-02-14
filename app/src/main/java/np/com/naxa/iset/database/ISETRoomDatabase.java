@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import java.io.File;
 
 import np.com.naxa.iset.database.dao.CommonPlacesAttrbDao;
+import np.com.naxa.iset.database.dao.ContactCategoryListDao;
 import np.com.naxa.iset.database.dao.ContactDao;
 import np.com.naxa.iset.database.dao.DisasterInfoDetailsDao;
 import np.com.naxa.iset.database.dao.EducationalInstitutesDao;
@@ -32,6 +33,7 @@ import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListDetails;
 import np.com.naxa.iset.firebase.MessageHelper;
 import np.com.naxa.iset.mycircle.ContactModel;
 import np.com.naxa.iset.publications.entity.PublicationsListDetails;
@@ -43,8 +45,8 @@ import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
         GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class,
-        DisasterInfoDetailsEntity.class, PublicationsListDetails.class
-}, version = 22, exportSchema = false)
+        DisasterInfoDetailsEntity.class, PublicationsListDetails.class, ContactCategoryListDetails.class
+}, version = 23, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
 
@@ -60,6 +62,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     public abstract ReportDetailsDao reportDetailsDao();
     public abstract DisasterInfoDetailsDao disasterInfoDetailsDao();
     public abstract PublicationsListDao publicationsListDao();
+    public abstract ContactCategoryListDao contactCategoryListDao();
 
     private static ISETRoomDatabase INSTANCE;
 
@@ -113,6 +116,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
         private final ReportDetailsDao mReportDetailsDao;
         private final DisasterInfoDetailsDao mDisasterInfoDetailsDao;
         private final PublicationsListDao mPublicationsListDao;
+        private final ContactCategoryListDao mContactCategoryListDao;
 
         PopulateDbAsync(ISETRoomDatabase db) {
             mContactDao = db.contactDao();
@@ -127,6 +131,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mReportDetailsDao = db.reportDetailsDao();
             mDisasterInfoDetailsDao = db.disasterInfoDetailsDao();
             mPublicationsListDao = db.publicationsListDao();
+            mContactCategoryListDao = db.contactCategoryListDao();
 
         }
 

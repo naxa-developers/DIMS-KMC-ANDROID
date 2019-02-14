@@ -4,6 +4,7 @@ package np.com.naxa.iset.network.retrofit;
 import io.reactivex.Observable;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoListResponse;
 import np.com.naxa.iset.drr_dictionary.data_glossary.TerminologiesListResponse;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListResponse;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
 import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
@@ -90,5 +91,9 @@ public interface NetworkApiInterface {
     @POST("get_publication_data")
     @FormUrlEncoded
     Observable<PublicationsListResponse> getPublicationsListDetailsResponse(@Field("api_key") String api_key);
+
+    @POST("contact_category")
+    @FormUrlEncoded
+    Observable<ContactCategoryListResponse> getContactCategoryListResponse(@Field("api_key") String api_key);
 }
 
