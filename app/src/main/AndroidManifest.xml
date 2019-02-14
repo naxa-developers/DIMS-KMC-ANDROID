@@ -37,7 +37,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".publications.PublicationsListActivity"></activity>
+
+        <provider
+            android:name=".home.GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <activity android:name=".publications.PublicationDetailsActivity"></activity>
+        <activity android:name=".publications.PublicationsListActivity" />
         <activity android:name=".report.wardstaff.UnverifiedReportFormListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

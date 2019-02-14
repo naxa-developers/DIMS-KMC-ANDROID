@@ -1,5 +1,6 @@
 package np.com.naxa.iset.publications;
 
+import android.app.DownloadManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,6 +50,11 @@ public class PublicationsListActivity extends AppCompatActivity {
 
     NetworkApiInterface apiInterface;
     PublicationsListDetailsViewModel publicationsListDetailsViewModel;
+
+    private DownloadManager downloadManager;
+    private long pdf_DownloadId;
+    private boolean isPDFView = false;
+    private String PDFFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,25 +232,9 @@ public class PublicationsListActivity extends AppCompatActivity {
     public void onRVItemClick(PublicationListItemEvent.PublicationListitemClick itemClick) {
         String name = itemClick.getPublicationsListDetails().getTitle();
 
-        String type = itemClick.getPublicationsListDetails().getType();
-
-        switch (type) {
-            case PublicationListItemEvent.KEY_IMAGE:
-
-                break;
-
-            case PublicationListItemEvent.KEY_VIDEO:
-
-                String temp = itemClick.getPublicationsListDetails().getVideolink().replaceAll("https://www.youtube.com/embed/", "");
-
-                Intent intent = new Intent(PublicationsListActivity.this, YoutubePlayerActivity.class);
-                intent.putExtra(YoutubeConstants.VIDEO_KEY, temp);
-                startActivity(intent);
-                break;
-
-            case PublicationListItemEvent.KEY_FILES:
-                break;
-        }
+        Intent intent = new Intent(PublicationsListActivity.this, PublicationDetailsActivity.class);
+        intent.putExtra(YoutubeConstants.VIDEO_KEY, itemClick.getPublicationsListDetails());
+        startActivity(intent);
 
         ToastUtils.showShortToast(name);
     }

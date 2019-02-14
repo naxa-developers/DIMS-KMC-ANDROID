@@ -5,6 +5,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "PublicationsListDetails",
         indices = {@Index(value = "id",
                 unique = true)})
-public class PublicationsListDetails {
+public class PublicationsListDetails implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int pid;
@@ -139,4 +141,46 @@ public class PublicationsListDetails {
     public void setPid(int pid) {
         this.pid = pid;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.pid);
+        dest.writeString(this.type);
+        dest.writeString(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.summary);
+        dest.writeString(this.photo);
+        dest.writeString(this.file);
+        dest.writeString(this.videolink);
+        dest.writeString(this.name);
+    }
+
+    protected PublicationsListDetails(Parcel in) {
+        this.pid = in.readInt();
+        this.type = in.readString();
+        this.id = in.readString();
+        this.title = in.readString();
+        this.summary = in.readString();
+        this.photo = in.readString();
+        this.file = in.readString();
+        this.videolink = in.readString();
+        this.name = in.readString();
+    }
+
+    public static final Parcelable.Creator<PublicationsListDetails> CREATOR = new Parcelable.Creator<PublicationsListDetails>() {
+        @Override
+        public PublicationsListDetails createFromParcel(Parcel source) {
+            return new PublicationsListDetails(source);
+        }
+
+        @Override
+        public PublicationsListDetails[] newArray(int size) {
+            return new PublicationsListDetails[size];
+        }
+    };
 }

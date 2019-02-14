@@ -9,6 +9,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.publications.entity.PublicationsListDetails;
 import np.com.naxa.iset.publications.youtubeplayer.helper.YoutubeConstants;
 
 
@@ -23,7 +24,10 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
         setContentView(R.layout.activity_youtube_player);
 
         Intent intent = getIntent();
-        String videoId = intent.getStringExtra(YoutubeConstants.VIDEO_KEY);
+        PublicationsListDetails publicationsListDetails = intent.getParcelableExtra(YoutubeConstants.VIDEO_KEY);
+
+        String videoId = publicationsListDetails.getVideolink().replaceAll("https://www.youtube.com/embed/", "");
+
 
         YouTubePlayerView youTubePlayerView =
                 (YouTubePlayerView) findViewById(R.id.player);
