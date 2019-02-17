@@ -89,6 +89,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         } else if (publicationsListDetails.getType().equals(PublicationListItemEvent.KEY_FILES)) {
             btnViewFilesVideo.setText("View PDF Files");
         }
+        setupToolBar(publicationsListDetails.getTitle());
 
         tvPublicationTitle.setText(publicationsListDetails.getTitle());
 
@@ -102,6 +103,19 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         }
 
         LoadImageUtils.loadImageToViewFromSrc(imageViewPublicationDetails, publicationsListDetails.getPhoto());
+
+    }
+
+    private void setupToolBar(String toolbarTitle) {
+        setSupportActionBar(toolbar);
+        if (toolbarTitle == null) {
+            getSupportActionBar().setTitle("Multimedia and Publications");
+        } else {
+            getSupportActionBar().setTitle(toolbarTitle);
+        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
@@ -211,7 +225,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         }
     };
 
-    private void viewPDFFile(String filePath, String fileName) {
+    private void viewPDFFile(String filePath, @NonNull String fileName) {
         String path = filePath;
         File targetFile = new File(path + File.separator + fileName.trim());
 
