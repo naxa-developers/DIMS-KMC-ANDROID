@@ -10,8 +10,8 @@ public class CreateAppMainFolderUtils {
     public static final String appmainFolderName = "Kathmandu Metropolitan City";
     Context context;
     String mainFolderName ;
-    String databaseFolderName  = "data" ;
-    String mediaFolderName = "media" ;
+    public static final String databaseFolderName  = "data" ;
+    public static final String mediaFolderName = "media" ;
 
     public CreateAppMainFolderUtils(Context context, String mainFolderName) {
         this.context = context;

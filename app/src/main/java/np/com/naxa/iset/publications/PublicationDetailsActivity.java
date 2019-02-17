@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.github.barteksc.pdfviewer.PDFView;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.disasterinfo.HazardThingsToDoActivity;
 import np.com.naxa.iset.event.PublicationListItemEvent;
 import np.com.naxa.iset.publications.entity.PublicationsListDetails;
 import np.com.naxa.iset.publications.youtubeplayer.YoutubePlayerActivity;
@@ -57,6 +58,8 @@ public class PublicationDetailsActivity extends AppCompatActivity {
     Button btnViewFilesVideo;
 
     PublicationsListDetails publicationsListDetails;
+//    @BindView(R.id.pdfView)
+//    PDFView pdfView;
 
     private DownloadManager downloadManager;
     CreateAppMainFolderUtils createAppMainFolderUtils;
@@ -125,7 +128,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
                 break;
 
             case PublicationListItemEvent.KEY_FILES:
-                Log.d(TAG, "viewFilesVideo: "+publicationsListDetails.getFile());
+                Log.d(TAG, "viewFilesVideo: " + publicationsListDetails.getFile());
                 viewPDFData(publicationsListDetails);
                 break;
         }
@@ -152,13 +155,11 @@ public class PublicationDetailsActivity extends AppCompatActivity {
 
     private void viewPDFData(@NonNull PublicationsListDetails publicationsListDetails) {
 //        isPDFView = true;
-        PDFFileName = publicationsListDetails.getTitle();
+        PDFFileName = publicationsListDetails.getTitle() + ".pdf";
 
-        File targetFile = new File(createAppMainFolderUtils.getAppMediaFolderName() + File.separator + PDFFileName + ".pdf");
-//        File targetFile = new File("/storage/emulated/0/Kathmandu Metropolitan City/media/"+ PDFFileName + ".pdf");
+        File targetFile = new File(createAppMainFolderUtils.getAppMediaFolderName() + File.separator + PDFFileName);
         if (targetFile.exists()) {
-            viewPDFFile( createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
-//            viewPDFFile( "/storage/emulated/0/Kathmandu Metropolitan City/media/", PDFFileName);
+            viewPDFFile(createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
         } else {
             pdf_DownloadId = DownloadData(publicationsListDetails);
         }
@@ -182,8 +183,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         request.setDescription("Kathmandu Metropolitan City DRR Management System");
 
         //Set the local destination for the downloaded file to a path within the application's external files directory
-        request.setDestinationInExternalFilesDir(this, createAppMainFolderUtils.getAppMediaFolderName(), publicationsListDetails.getTitle() + ".pdf");
-//        request.setDestinationInExternalPublicDir(Collect.MEDIA_PATH, "Photos" + ".zip");
+        request.setDestinationInExternalPublicDir(CreateAppMainFolderUtils.appmainFolderName + "/" + CreateAppMainFolderUtils.mediaFolderName, publicationsListDetails.getTitle() + ".pdf");
 
         //Enqueue download and save the referenceId
         downloadReference = downloadManager.enqueue(request);
@@ -205,11 +205,7 @@ public class PublicationDetailsActivity extends AppCompatActivity {
                 toast.setGravity(Gravity.TOP, 25, 400);
                 toast.show();
 
-//                if (isPDFView) {
-                    viewPDFFile(createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
-//                    viewPDFFile("/storage/emulated/0/Kathmandu Metropolitan City/media/", PDFFileName);
-//                    viewPDFFile("Directory browsing/SD Card/storage/sdcard0/Naxa Collect/media/", "Sample one.pdf");
-//                }
+                viewPDFFile(createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
             }
 
         }
@@ -217,22 +213,19 @@ public class PublicationDetailsActivity extends AppCompatActivity {
 
     private void viewPDFFile(String filePath, String fileName) {
         String path = filePath;
-        Log.d(TAG, "viewPDFFile: " + path);
-        Log.d(TAG, "viewPDFFile Name: " + fileName + ".pdf");
-        File targetFile = new File(path + File.separator + fileName + ".pdf".trim());
-//        File targetFile = new File("/storage/emulated/0/Kathmandu Metropolitan City/media/" + fileName + ".pdf".trim());
-        Log.d(TAG, "viewPDFFile path: " + targetFile.getAbsolutePath() + " " + targetFile.exists());
-//        Uri targetUri = Uri.parse(targetFile.getAbsoluteFile().getAbsolutePath());
+        File targetFile = new File(path + File.separator + fileName.trim());
 
-//        Uri targetUri = Uri.fromFile(targetFile.getAbsoluteFile());
-        Uri targetUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".my.package.name.provider", targetFile.getAbsoluteFile());
-
+        Uri targetUri1 = Uri.fromFile(targetFile.getAbsoluteFile());
+        Uri targetUri;
+        path = targetFile.getAbsolutePath();
+        targetUri = FileProvider.getUriForFile(PublicationDetailsActivity.this,
+                getString(R.string.file_provider_authority),
+                targetFile);
         Intent intent;
         intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(targetUri);
-        startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setDataAndType(targetUri, "application/pdf");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(Intent.createChooser(intent, "Choose Viewer"));
     }
 }

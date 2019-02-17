@@ -12,10 +12,10 @@ import np.com.naxa.iset.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WardProfileFragment extends Fragment {
+public class WardElectedRepresentativeFragment extends Fragment {
 
 
-    public WardProfileFragment() {
+    public WardElectedRepresentativeFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class WardProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ward_profile, container, false);
+        return inflater.inflate(R.layout.fragment_management_board, container, false);
     }
 
 }

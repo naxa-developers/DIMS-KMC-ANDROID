@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.ogaclejapan.arclayout:library:1.1.0@aar'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.daasuu:BubbleLayout:1.2.0'
+//    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
 //    login integration libs
     implementation 'com.google.android.gms:play-services-auth:15.0.1'

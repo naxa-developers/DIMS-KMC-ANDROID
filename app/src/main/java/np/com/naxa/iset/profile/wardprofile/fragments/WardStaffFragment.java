@@ -12,10 +12,10 @@ import np.com.naxa.iset.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RiskHazardFragment extends Fragment {
+public class WardStaffFragment extends Fragment {
 
 
-    public RiskHazardFragment() {
+    public WardStaffFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class RiskHazardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_risk_hazard, container, false);
+        return inflater.inflate(R.layout.fragment_people, container, false);
     }
 
 }

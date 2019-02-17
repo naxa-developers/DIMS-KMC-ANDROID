@@ -95,5 +95,6 @@ public interface NetworkApiInterface {
     @POST("contact_category")
     @FormUrlEncoded
     Observable<ContactCategoryListResponse> getContactCategoryListResponse(@Field("api_key") String api_key);
+
 }
 

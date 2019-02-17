@@ -87,4 +87,9 @@
             android:layout_alignParentBottom="true"/>
     <!--</RelativeLayout>-->
 
+    <!--<com.github.barteksc.pdfviewer.PDFView-->
+        <!--android:id="@+id/pdfView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
 </RelativeLayout>

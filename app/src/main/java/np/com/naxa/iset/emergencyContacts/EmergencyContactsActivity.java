@@ -50,6 +50,7 @@ import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.NetworkUtils;
 import np.com.naxa.iset.utils.ToastUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -138,7 +139,9 @@ public class EmergencyContactsActivity extends AppCompatActivity implements Easy
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        fetchContactCategoryListFromServer();
+        if(NetworkUtils.isNetworkAvailable()) {
+            fetchContactCategoryListFromServer();
+        }
     }
 
     @SuppressLint("MissingPermission")

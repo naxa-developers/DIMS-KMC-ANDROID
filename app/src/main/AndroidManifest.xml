@@ -40,7 +40,7 @@
 
         <provider
             android:name=".home.GenericFileProvider"
-            android:authorities="${applicationId}.my.package.name.provider"
+            android:authorities="@string/file_provider_authority"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
