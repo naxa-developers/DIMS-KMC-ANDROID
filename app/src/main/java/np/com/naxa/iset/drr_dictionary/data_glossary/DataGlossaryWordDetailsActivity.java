@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +37,8 @@ public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.imageViewGlossaryDetails)
     ImageView imageViewGlossaryDetails;
+    @BindView(R.id.tv_word_comment)
+    TextView tvWordComment;
     private WordsWithDetailsModel wordsWithDetailsModel;
 
 
@@ -56,8 +57,10 @@ public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
 
         tvWordTitle.setText(wordsWithDetailsModel.getWord().trim());
         tvWordDesc.setText(wordsWithDetailsModel.getMeaning());
+        tvWordComment.setText(wordsWithDetailsModel.getComment());
 
-        if(wordsWithDetailsModel.getImage() != null && !wordsWithDetailsModel.getImage().equals("")) {
+
+        if (wordsWithDetailsModel.getImage() != null && !wordsWithDetailsModel.getImage().equals("")) {
             LoadImageUtils.loadImageToViewFromSrc(imageViewGlossaryDetails, wordsWithDetailsModel.getImage());
         }
 

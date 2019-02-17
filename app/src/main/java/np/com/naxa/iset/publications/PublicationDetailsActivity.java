@@ -23,10 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.github.barteksc.pdfviewer.PDFView;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,8 @@ import np.com.naxa.iset.publications.entity.PublicationsListDetails;
 import np.com.naxa.iset.publications.youtubeplayer.YoutubePlayerActivity;
 import np.com.naxa.iset.publications.youtubeplayer.helper.YoutubeConstants;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
+import np.com.naxa.iset.utils.NetworkUtils;
+import np.com.naxa.iset.utils.ToastUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 
 import static android.text.Html.fromHtml;
@@ -136,9 +135,13 @@ public class PublicationDetailsActivity extends AppCompatActivity {
                 break;
 
             case PublicationListItemEvent.KEY_VIDEO:
-                Intent intent = new Intent(PublicationDetailsActivity.this, YoutubePlayerActivity.class);
-                intent.putExtra(YoutubeConstants.VIDEO_KEY, publicationsListDetails);
-                startActivity(intent);
+                if(NetworkUtils.isNetworkAvailable()) {
+                    Intent intent = new Intent(PublicationDetailsActivity.this, YoutubePlayerActivity.class);
+                    intent.putExtra(YoutubeConstants.VIDEO_KEY, publicationsListDetails);
+                    startActivity(intent);
+                }else {
+                    ToastUtils.showShortToast("No internet connection");
+                }
                 break;
 
             case PublicationListItemEvent.KEY_FILES:
@@ -175,7 +178,11 @@ public class PublicationDetailsActivity extends AppCompatActivity {
         if (targetFile.exists()) {
             viewPDFFile(createAppMainFolderUtils.getAppMediaFolderName(), PDFFileName);
         } else {
-            pdf_DownloadId = DownloadData(publicationsListDetails);
+            if(NetworkUtils.isNetworkAvailable()) {
+                pdf_DownloadId = DownloadData(publicationsListDetails);
+            }else{
+                ToastUtils.showShortToast("No internet connection");
+            }
         }
     }
 
