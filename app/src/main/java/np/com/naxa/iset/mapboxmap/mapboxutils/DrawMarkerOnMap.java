@@ -107,7 +107,9 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
                     @Override
                     public void onNext(Feature feature) {
 
-                        String title = feature.getStringProperty("name");
+
+//                        String title = feature.getStringProperty("name");
+
                         String snippest = feature.toString();
                         Log.d(TAG, "onNext: JSON Object "+snippest);
                         Log.d(TAG, "onNext: JSON Object Geometry "+feature.geometry().toJson());
@@ -128,11 +130,13 @@ public class DrawMarkerOnMap implements MapboxMap.OnInfoWindowClickListener,
 //                         Add the custom icon marker to the map
                         Marker marker = mapboxMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(location))
-                                .title(title)
+//                                .title(title)
+                                .title("title")
                                 .snippet(snippest)
                                 .icon(icon));
 ////
-                        items.add(new MyItem(location,title,snippest, icon));
+//                        items.add(new MyItem(location,title,snippest, icon));
+                        items.add(new MyItem(location,"title",snippest, icon));
 
                         mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                             @Override

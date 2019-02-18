@@ -275,16 +275,16 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
             @Override
             public void onMetropolitanClick() {
-                filename = "kathmandu_boundary.json";
+                filename = "kathmandu_boundary.geojson";
                 drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
-                removeLayerFromMap("kathmandu_wards.json");
+                removeLayerFromMap("kathmandu_wards.geojson");
             }
 
             @Override
             public void onWardClick() {
-                filename = "kathmandu_wards.json";
+                filename = "kathmandu_wards.geojson";
                 drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
-                removeLayerFromMap("kathmandu_boundary.json");
+                removeLayerFromMap("kathmandu_boundary.geojson");
 
 
             }
@@ -349,6 +349,8 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
                 .subscribe(new DisposableObserver<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>() {
                     @Override
                     public void onNext(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent mapDataLayerListCheckedEvent) {
+                        Log.d(TAG, "onNext: "+mapDataLayerListCheckedEvent.getMultiItemSectionModel().getData_key());
+                        Log.d(TAG, "onNext: "+mapDataLayerListCheckedEvent.getChecked());
 
                         drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(mapDataLayerListCheckedEvent.getMultiItemSectionModel().getData_value(),
                                 mapDataLayerListCheckedEvent.getChecked(), mapDataLayerListCheckedEvent.getMultiItemSectionModel().getImage());
@@ -708,6 +710,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
             if (alreadyExist) {
                 if (!itemClick.getChecked()) {
                     mapDataLayerListCheckedEventList.remove(itemPosition);
+                    mapDataLayerListCheckedEventList.add(itemClick);
                     Log.d(TAG, "onRVItemClick: Item Removed");
 
                 }

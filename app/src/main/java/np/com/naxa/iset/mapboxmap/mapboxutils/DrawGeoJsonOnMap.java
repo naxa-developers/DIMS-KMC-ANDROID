@@ -295,7 +295,7 @@ public class DrawGeoJsonOnMap implements MapboxMap.OnMapClickListener, MapboxMap
                         PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
                         PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
                         PropertyFactory.lineWidth(2f),
-                        PropertyFactory.lineColor(context.getResources().getColor(R.color.colorAccent))
+                        PropertyFactory.lineColor(context.getResources().getColor(R.color.isetPurple))
                 );
 
                 if(isChecked) {
