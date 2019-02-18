@@ -69,8 +69,8 @@ public class SavedFormListActivity extends AppCompatActivity {
                     @Override
                     public void onNext(List<ReportDetailsEntity> reportDetailsEntities) {
                         Gson gson = new Gson();
-                        String json = gson.toJson(reportDetailsEntities.get(0));
-                        Log.d(TAG, "onNext: insert" + json);
+//                        String json = gson.toJson(reportDetailsEntities.get(0));
+//                        Log.d(TAG, "onNext: insert" + json);
 
                         ((ReportSavedFormListAdapter) recyclerViewSavedFormList.getAdapter()).replaceData(reportDetailsEntities);
 

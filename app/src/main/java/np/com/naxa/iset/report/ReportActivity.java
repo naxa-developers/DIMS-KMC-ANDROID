@@ -247,13 +247,12 @@ public class ReportActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_submit:
-                if (hasLocationAndImage()) {
-                    if (validateSpinner()) {
-                        convertDataToJson(KEY_SEND);
-                        sentDataToServer();
-                        btnSave.setEnabled(true);
-                    }
-                }
+//                if (hasLocationAndImage()) {
+//                    if (validateSpinner()) {
+//                        convertDataToJson(KEY_SEND);
+//                        sentDataToServer();
+//                    }
+//                }
                 break;
         }
     }
@@ -423,7 +422,7 @@ public class ReportActivity extends AppCompatActivity {
 
 
         if (isFromSavedForm) {
-            reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+            reportDetailsEntity = new ReportDetailsEntity(unique_id, "ward", spnHazardType.getSelectedItem().toString(),"", etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                     spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
                     spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
@@ -433,7 +432,7 @@ public class ReportActivity extends AppCompatActivity {
                     etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
         }
         else if (isFromUnverifiedForm && KEY == KEY_SAVE) {
-            reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+            reportDetailsEntity = new ReportDetailsEntity(unique_id,"ward", spnHazardType.getSelectedItem().toString(), "" , etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                     spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
                     spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
@@ -443,7 +442,7 @@ public class ReportActivity extends AppCompatActivity {
                     etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
         }
         else if (isFromUnverifiedForm && KEY == KEY_SEND) {
-            reportDetailsEntity = new ReportDetailsEntity(unique_id, spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+            reportDetailsEntity = new ReportDetailsEntity(unique_id,"ward", spnHazardType.getSelectedItem().toString(),"", etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                     spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
                     spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),
@@ -453,7 +452,7 @@ public class ReportActivity extends AppCompatActivity {
                     etAffectedPeople.getText().toString(), etEstimatedLoss.getText().toString(), edited);
         }
         else {
-            reportDetailsEntity = new ReportDetailsEntity(CalendarUtils.getTimeInMilisecond(), spnHazardType.getSelectedItem().toString(), etOccuranceDate.getText().toString(),
+            reportDetailsEntity = new ReportDetailsEntity(CalendarUtils.getTimeInMilisecond(),"ward",spnHazardType.getSelectedItem().toString(), "", etOccuranceDate.getText().toString(),
                     etOccuranceTime.getText().toString(), etVdcName.getText().toString(), etNameOfThePlace.getText().toString(),
                     spnWardNo.getSelectedItem().toString(), spnRiskLevel.getSelectedItem().toString(), imageNameToBeSaved,
                     spnDisasterStatus.getSelectedItem().toString(), etReporterName.getText().toString(), etReporterAddress.getText().toString(),

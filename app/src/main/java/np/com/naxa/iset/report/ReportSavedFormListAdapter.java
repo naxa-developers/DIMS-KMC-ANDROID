@@ -29,13 +29,25 @@ public class ReportSavedFormListAdapter extends BaseQuickAdapter<ReportDetailsEn
     protected void convert(BaseViewHolder helper, ReportDetailsEntity item) {
         CardView cardView = helper.getView(R.id.cardViewSavedFormList);
 
-        helper.setText(R.id.textViewFormName,item.getIncident_type()+" ward-"+item.getWard());
+        if(item.getForm_type().equals("civic")){
+            helper.setText(R.id.textViewFormName,item.getProblem_type()+" ward-"+item.getWard());
+        }else {
+            helper.setText(R.id.textViewFormName,item.getIncident_type()+" ward-"+item.getWard());
+        }
         helper.setText(R.id.textViewSavedFormDate,item.getDate()+", "+item.getTime());
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.startActivity(new Intent(mContext, ReportActivity.class));
+                if(item.getForm_type().equals("civic")){
+                    mContext.startActivity(new Intent(mContext, CivicReportActivity.class));
+                }
+                if (item.getForm_type().equals("disaster")){
+                    mContext.startActivity(new Intent(mContext, DisasterReportActivity.class));
+                }
+                if (item.getForm_type().equals("ward")){
+                    mContext.startActivity(new Intent(mContext, ReportActivity.class));
+                }
 
                 final android.os.Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {

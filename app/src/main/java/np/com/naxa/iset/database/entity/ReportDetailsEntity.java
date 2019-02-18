@@ -22,10 +22,20 @@ public class ReportDetailsEntity implements Parcelable {
     @ColumnInfo(name = "unique_id")
     private String unique_id;
 
+    @SerializedName("form_type")
+    @Expose
+    @ColumnInfo(name = "form_type")
+    private String form_type;
+
     @SerializedName("incident_type")
     @Expose
     @ColumnInfo(name = "incident_type")
     private String incident_type;
+
+    @SerializedName("problem_type")
+    @Expose
+    @ColumnInfo(name = "problem_type")
+    private String problem_type;
 
     @SerializedName("date")
     @Expose
@@ -148,9 +158,11 @@ public class ReportDetailsEntity implements Parcelable {
     @ColumnInfo(name = "edited")
     private String edited ;
 
-    public ReportDetailsEntity(String unique_id, String incident_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude, String ward_staff_name, String designation, String death_no, String injured_no, String affected_people_no, String infrastructure_damage, String affected_animal_no, String estimated_loss, String edited) {
+    public ReportDetailsEntity(String unique_id,String form_type, String incident_type, String problem_type, String date, String time, String vdc_mun, String place_name, String ward, String risk_level, String photo_name, String status, String name_reporter, String address, String contact_reporter, String remarks, String verify, String latitude, String longitude, String ward_staff_name, String designation, String death_no, String injured_no, String affected_people_no, String infrastructure_damage, String affected_animal_no, String estimated_loss, String edited) {
         this.unique_id = unique_id;
+        this.form_type = form_type;
         this.incident_type = incident_type;
+        this.problem_type = problem_type;
         this.date = date;
         this.time = time;
         this.vdc_mun = vdc_mun;
@@ -380,7 +392,9 @@ public class ReportDetailsEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.rid);
         dest.writeString(this.unique_id);
+        dest.writeString(this.form_type);
         dest.writeString(this.incident_type);
+        dest.writeString(this.problem_type);
         dest.writeString(this.date);
         dest.writeString(this.time);
         dest.writeString(this.vdc_mun);
@@ -410,7 +424,9 @@ public class ReportDetailsEntity implements Parcelable {
     protected ReportDetailsEntity(Parcel in) {
         this.rid = in.readInt();
         this.unique_id = in.readString();
+        this.form_type = in.readString();
         this.incident_type = in.readString();
+        this.problem_type = in.readString();
         this.date = in.readString();
         this.time = in.readString();
         this.vdc_mun = in.readString();
@@ -471,5 +487,21 @@ public class ReportDetailsEntity implements Parcelable {
 
     public void setRid(int rid) {
         this.rid = rid;
+    }
+
+    public String getProblem_type() {
+        return problem_type;
+    }
+
+    public void setProblem_type(String problem_type) {
+        this.problem_type = problem_type;
+    }
+
+    public String getForm_type() {
+        return form_type;
+    }
+
+    public void setForm_type(String form_type) {
+        this.form_type = form_type;
     }
 }
