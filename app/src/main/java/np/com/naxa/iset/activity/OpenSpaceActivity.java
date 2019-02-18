@@ -33,7 +33,7 @@ import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.gps.GeoPointActivity;
 import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
 
-import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
 
 
 public class OpenSpaceActivity extends AppCompatActivity {

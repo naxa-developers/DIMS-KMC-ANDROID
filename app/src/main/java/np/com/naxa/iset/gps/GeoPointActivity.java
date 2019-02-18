@@ -42,7 +42,7 @@ import np.com.naxa.iset.gps.client.LocationClients;
 import np.com.naxa.iset.utils.ToastUtils;
 import timber.log.Timber;
 
-import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
 
 
 public class GeoPointActivity extends AppCompatActivity implements LocationListener,

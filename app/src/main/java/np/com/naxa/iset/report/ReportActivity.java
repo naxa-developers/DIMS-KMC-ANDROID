@@ -1,4 +1,4 @@
-package np.com.naxa.iset.activity;
+package np.com.naxa.iset.report;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;

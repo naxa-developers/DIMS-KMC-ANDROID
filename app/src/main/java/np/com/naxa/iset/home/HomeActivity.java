@@ -160,7 +160,7 @@ import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
 
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, LocationListener, MapEventsReceiver {

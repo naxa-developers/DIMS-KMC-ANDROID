@@ -14,9 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.activity.ReportActivity;
 import np.com.naxa.iset.database.entity.ReportDetailsEntity;
-import np.com.naxa.iset.event.MyCircleContactEvent;
 import np.com.naxa.iset.event.ReportSavedFormListItemEvent;
 
 

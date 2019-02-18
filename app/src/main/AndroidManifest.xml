@@ -37,6 +37,27 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+        <activity android:name=".report.DisasterReportActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".report.ReportCtegoryActivity" />
+        </activity>
+        <activity android:name=".report.CivicReportActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".report.ReportCtegoryActivity" />
+        </activity>
+        <activity android:name=".report.ReportCtegoryActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".newhomepage.SectionGridHomeActivity" />
+        </activity>
 
         <provider
             android:name=".home.GenericFileProvider"
@@ -45,10 +66,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".publications.PublicationDetailsActivity"></activity>
+        <activity android:name=".publications.PublicationDetailsActivity" />
         <activity android:name=".publications.PublicationsListActivity" />
         <activity android:name=".report.wardstaff.UnverifiedReportFormListActivity">
             <meta-data
@@ -166,12 +187,12 @@
                 android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
         </activity>
         <activity
-            android:name=".activity.ReportActivity"
+            android:name=".report.ReportActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+                android:value=".report.ReportCtegoryActivity" />
         </activity>
         <activity
             android:name=".quiz.QuizTestActivity"

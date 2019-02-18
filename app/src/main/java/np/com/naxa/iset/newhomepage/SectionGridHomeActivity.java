@@ -50,7 +50,7 @@ import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.activity.MyCircleProfileActivity;
 import np.com.naxa.iset.activity.NotifyOthersActivity;
-import np.com.naxa.iset.activity.ReportActivity;
+import np.com.naxa.iset.report.ReportActivity;
 import np.com.naxa.iset.bloodrequest.BloodRequestActivity;
 import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.event.GmailLoginEvent;

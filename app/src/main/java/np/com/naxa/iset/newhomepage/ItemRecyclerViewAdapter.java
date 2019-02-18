@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.activity.NotifyOthersActivity;
 import np.com.naxa.iset.activity.MyCircleProfileActivity;
-import np.com.naxa.iset.activity.ReportActivity;
+import np.com.naxa.iset.report.ReportActivity;
 import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.drr_dictionary.data_glossary.GlossaryListActivity;
 import np.com.naxa.iset.emergencyContacts.EmergencyContactsActivity;
-import np.com.naxa.iset.emergencynumbers.EmergencyNumbersActivity;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
 import np.com.naxa.iset.publications.PublicationsListActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
+import np.com.naxa.iset.report.ReportCtegoryActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 
 /**
@@ -93,14 +93,14 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 break;
 
             case "Report an incident":
-                DialogFactory.createCustomDialog(context,
-                        "If you want to submit a detailed report, fill the following form.",
-                        new DialogFactory.CustomDialogListener() {
-                            @Override
-                            public void onClick() {
-                                context.startActivity(new Intent(context, ReportActivity.class));
-                            }
-                        }).show();
+//                DialogFactory.createCustomDialog(context,
+//                        "If you want to submit a detailed report, fill the following form.",
+//                        new DialogFactory.CustomDialogListener() {
+//                            @Override
+//                            public void onClick() {
+                                context.startActivity(new Intent(context, ReportCtegoryActivity.class));
+//                            }
+//                        }).show();
                 break;
             case "Report":
                 context.startActivity(new Intent(context, ReportActivity.class));

@@ -1,5 +1,7 @@
-{"type":"FeatureCollection", "features": [
-{"type":"Feature","geometry":{"type":"Point","coordinates":[85.32825120000007,27.714767400000028,0,-1.7976931348623157e+308]},"properties":{"Name":"Nepal Police Petrol Pump","address":"","type":"","contact_no":0,"contact_pe":"","open_space":"","structure_":"","earthquake":"","evacuation":"","fire_extin":"","X":85.3282512,"Y":27.7147674,"Data_sourc":"","Remarks":"","ward_no":1}},
+{
+  "type":"FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[85.32825120000007,27.714767400000028,0,-1.7976931348623157e+308]},"properties":{"Name":"Nepal Police Petrol Pump","address":"","type":"","contact_no":0,"contact_pe":"","open_space":"","structure_":"","earthquake":"","evacuation":"","fire_extin":"","X":85.3282512,"Y":27.7147674,"Data_sourc":"","Remarks":"","ward_no":1}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[85.29983530000004,27.69861460000004,0,-1.7976931348623157e+308]},"properties":{"Name":"Mali Oil Stores","address":"","type":"","contact_no":0,"contact_pe":"","open_space":"","structure_":"","earthquake":"","evacuation":"","fire_extin":"","X":85.2998353,"Y":27.6986146,"Data_sourc":"","Remarks":"","ward_no":13}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[85.35142930000006,27.689205800000025,0,-1.7976931348623157e+308]},"properties":{"Name":"Placemark","address":"","type":"","contact_no":0,"contact_pe":"","open_space":"","structure_":"","earthquake":"","evacuation":"","fire_extin":"","X":85.3514293,"Y":27.6892058,"Data_sourc":"","Remarks":"","ward_no":9}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[85.34772970000006,27.69853610000007,0,-1.7976931348623157e+308]},"properties":{"Name":"Tapasya Traders","address":"","type":"","contact_no":0,"contact_pe":"","open_space":"","structure_":"","earthquake":"","evacuation":"","fire_extin":"","X":85.3477297,"Y":27.6985361,"Data_sourc":"","Remarks":"","ward_no":9}},

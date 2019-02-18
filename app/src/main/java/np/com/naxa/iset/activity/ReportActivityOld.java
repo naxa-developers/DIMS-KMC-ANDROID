@@ -65,7 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static np.com.naxa.iset.activity.ReportActivity.LOCATION_RESULT;
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
 import static np.com.naxa.iset.network.UrlClass.REQUEST_OK;
 import static np.com.naxa.iset.network.retrofit.NetworkApiClient.getAPIClient;
 
