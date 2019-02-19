@@ -19,6 +19,8 @@ public class InventoryListDetailsViewModel extends AndroidViewModel {
     private Flowable<List<InventoryListDetails>> mCategoryWiseList;
     private Flowable<List<InventoryListDetails>> mSubCategoryWiseList;
     private Flowable<List<InventoryListDetails>> mCatSubCatWiseList;
+    private Flowable<List<String>> mAllDistinctCatName;
+    private Flowable<List<String>> mAllDistinctSubCatName;
 
     public InventoryListDetailsViewModel(@NonNull Application application) {
         super(application);
@@ -26,11 +28,21 @@ public class InventoryListDetailsViewModel extends AndroidViewModel {
         mRepository = new InventoryListDetailsRepository(application);
 
         mAllInventoryListDetailsList = mRepository.getAllInventoryListDetailsList();
+        mAllDistinctCatName = mRepository.getDistinctCategoryList();
+        mAllDistinctSubCatName = mRepository.getDistinctSubCategoryist();
 
     }
 
     public Flowable<List<InventoryListDetails>> getAllInventoryListDetailsList() {
         return mAllInventoryListDetailsList;
+    }
+
+    public Flowable<List<String>> getDistinctCategoryList() {
+        return mAllDistinctCatName;
+    }
+
+    public Flowable<List<String>> getDistinctSubCategoryist() {
+        return mAllDistinctSubCatName;
     }
 
     public Flowable<List<InventoryListDetails>> getCategoryWiseList(String category) {

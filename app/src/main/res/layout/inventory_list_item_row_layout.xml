@@ -10,8 +10,7 @@
     android:orientation="horizontal"
     android:paddingTop="@dimen/spacing_medium"
     android:paddingBottom="@dimen/spacing_medium"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin">
+    android:paddingStart="@dimen/spacing_medium">
 
     <!--android:background="?android:selectableItemBackground"-->
 
@@ -20,6 +19,7 @@
         android:id="@+id/img_inventory_thumbnail"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:background="@color/isetPurple"
         android:src="@drawable/ic_nav_profile"
         />
 

@@ -37,6 +37,7 @@ import java.util.List;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.GmailLoginEvent;
 import np.com.naxa.iset.event.MyCircleContactEvent;
+import np.com.naxa.iset.inventory.InventoryActivity;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mycircle.ContactModel;
@@ -160,16 +161,16 @@ public final class DialogFactory {
         TextView text = (TextView) dialog.findViewById(R.id.tv_message);
         text.setText(message);
 
-        Button dialogButton = (Button) dialog.findViewById(R.id.btn_ok);
-        dialogButton.setOnClickListener(new View.OnClickListener() {
+        Button btnOk = (Button) dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                listener.onClick();
             }
         });
         return dialog;
     }
+
 
     public interface CustomDialogListener {
         void onClick();
@@ -374,7 +375,7 @@ public final class DialogFactory {
     }
 
     public static Dialog createMapDataLayerDialog(@NonNull Context context, List<SectionMultipleItem> mapDataCategoryArrayList,
-                                                  DrawGeoJsonOnMap drawGeoJsonOnMap,boolean isFirsttime ,@NonNull MapDataLayerDialogCloseListen listner) {
+                                                  DrawGeoJsonOnMap drawGeoJsonOnMap, boolean isFirsttime, @NonNull MapDataLayerDialogCloseListen listner) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -408,8 +409,7 @@ public final class DialogFactory {
                 switch (view.getId()) {
                     case R.id.card_view:
                         if (item.getMultiItemSectionModel() != null) {
-                            if (item.getMultiItemSectionModel().getData_value().equals("") || item.getMultiItemSectionModel().getData_value() == null)
-                            {
+                            if (item.getMultiItemSectionModel().getData_value().equals("") || item.getMultiItemSectionModel().getData_value() == null) {
                                 Log.d(TAG, "onItemChildClick: null value ");
                                 return;
                             }
@@ -426,7 +426,7 @@ public final class DialogFactory {
         });
         recyclerView.setAdapter(sectionAdapter);
 
-        if(isFirsttime){
+        if (isFirsttime) {
             listner.isFirstTime();
         }
 
@@ -454,11 +454,6 @@ public final class DialogFactory {
         });
         return dialog;
     }
-
-
-
-
-
 
 
 }

@@ -21,11 +21,15 @@ public class InventoryListDetailsRepository {
     Flowable<List<InventoryListDetails>> mAllCategoryWiseList;
     Flowable<List<InventoryListDetails>> mAllSubCategoryWiseList;
     Flowable<List<InventoryListDetails>> mAllCatSubCatWiseList;
+    Flowable<List<String>> mAllDistinctCatName;
+    Flowable<List<String>> mAllDistinctSubCatName;
 
     public InventoryListDetailsRepository(Application application) {
         ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
         mDao = db.inventoryListDetailsDao();
         mAllPublicationslsList = mDao.getAllInventoryListDetailsList();
+        mAllDistinctCatName = mDao.getDistinctCategoryList();
+        mAllDistinctSubCatName = mDao.getDistinctSubCategoryist();
 
     }
 
@@ -33,6 +37,14 @@ public class InventoryListDetailsRepository {
     // Observed LiveData will notify the observer when the data has changed.
     public Flowable<List<InventoryListDetails>> getAllInventoryListDetailsList() {
         return mAllPublicationslsList;
+    }
+
+    public Flowable<List<String>> getDistinctCategoryList() {
+        return mAllDistinctCatName;
+    }
+
+    public Flowable<List<String>> getDistinctSubCategoryist() {
+        return mAllDistinctSubCatName;
     }
 
     public Flowable<List<InventoryListDetails>> getCategoryWiseList(String category) {

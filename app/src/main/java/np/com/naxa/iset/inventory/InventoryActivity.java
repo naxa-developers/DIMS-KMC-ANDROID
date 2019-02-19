@@ -1,16 +1,27 @@
 package np.com.naxa.iset.inventory;
 
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -27,12 +38,18 @@ import np.com.naxa.iset.utils.NetworkUtils;
 
 public class InventoryActivity extends AppCompatActivity {
 
+    private static final String TAG = "InventoryActivity";
     NetworkApiInterface apiInterface;
     InventoryListDetailsViewModel inventoryListDetailsViewModel;
     @BindView(R.id.toolbar_general)
     Toolbar toolbarGeneral;
     @BindView(R.id.recyclerViewInventoryList)
     RecyclerView recyclerViewInventoryList;
+
+    List<String> categoryName = new ArrayList<String>();
+    List<String> subCategoryName = new ArrayList<String>();
+    @BindView(R.id.fab_filter)
+    FloatingActionButton fabFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +65,9 @@ public class InventoryActivity extends AppCompatActivity {
 
         if (NetworkUtils.isNetworkAvailable()) {
             fetchDataFromServer();
-        }else {
-            getDataFromDatabase();
+        } else {
+            getAllDataFromDatabase();
+            getDistinctCategorySubCategoryList();
         }
 
     }
@@ -117,7 +135,7 @@ public class InventoryActivity extends AppCompatActivity {
 
     }
 
-    private void getDataFromDatabase(){
+    private void getAllDataFromDatabase() {
         inventoryListDetailsViewModel.getAllInventoryListDetailsList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,6 +143,8 @@ public class InventoryActivity extends AppCompatActivity {
                     @Override
                     public void onNext(List<InventoryListDetails> inventoryListDetails) {
                         ((InventoryListAdapter) recyclerViewInventoryList.getAdapter()).replaceData(inventoryListDetails);
+                        Log.d(TAG, "getDistinctCategoryCategoryList: " + inventoryListDetails.size());
+
 
                     }
 
@@ -138,5 +158,90 @@ public class InventoryActivity extends AppCompatActivity {
 
                     }
                 });
+
+    }
+
+    private void getDistinctCategorySubCategoryList() {
+        inventoryListDetailsViewModel.getDistinctCategoryList()
+                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<List<String>>() {
+                    @Override
+                    public void onNext(List<String> strings) {
+                        categoryName.addAll(strings);
+                        Log.d(TAG, "getDistinctCategoryCategoryList: " + categoryName.size());
+
+                        inventoryListDetailsViewModel.getDistinctSubCategoryist()
+                                .observeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new DisposableSubscriber<List<String>>() {
+                                    @Override
+                                    public void onNext(List<String> strings) {
+                                        subCategoryName.addAll(strings);
+                                        Log.d(TAG, "getDistinctCategorySubCategoryList: " + subCategoryName.size());
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable t) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+
+
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+
+    @OnClick(R.id.fab_filter)
+    public void onViewClicked() {
+//        public  Dialog createCustomDialog(@NonNull Context context, @NonNull String message, @NonNull CustomDialogListener listener) {
+        final Dialog dialog = new Dialog(InventoryActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.inventory_filter_dialog_layout);
+
+//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//        lp.copyFrom(dialog.getWindow().getAttributes());
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        TextView text = (TextView) dialog.findViewById(R.id.tv_message);
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        Button btnSearch = (Button) dialog.findViewById(R.id.btn_search);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+//        dialog.getWindow().setAttributes(lp);
+        dialog.show();
+//            return dialog;
+//        }
     }
 }
