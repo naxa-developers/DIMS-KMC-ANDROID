@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.activity.NotifyOthersActivity;
 import np.com.naxa.iset.activity.MyCircleProfileActivity;
+import np.com.naxa.iset.inventory.InventoryActivity;
 import np.com.naxa.iset.report.ReportActivity;
 import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.drr_dictionary.data_glossary.GlossaryListActivity;
@@ -130,7 +131,8 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 context.startActivity(new Intent(context, GlossaryListActivity.class));
                 break;
 
-            case "Library":
+            case "Emergency materials":
+                context.startActivity(new Intent(context, InventoryActivity.class));
                 break;
 
             case "Multimedia":

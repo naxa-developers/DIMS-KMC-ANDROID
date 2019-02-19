@@ -201,7 +201,7 @@ public class SectionGridHomeActivity extends AppCompatActivity {
     private void populateRecyclerView() {
         String[] sectionHeader = {"REACT QUICKLY", "DISASTER INFORMATION"};
 //        String[] sectionChildTitle = {"FIND OPEN SPACE", "ASK FOR HELP", "Report", "NOTIFY OTHERS", "HAZARD INFO", "DRR QUIZ", "DRR Dictionary", "MAP"};
-        String[] sectionChildTitle = {"FIND OPEN SPACE", "Report an incident", "My CIRCLE", "EMERGENCY NUMBERS", "HAZARD INFO", "Terminologies", "QUIZ", "Multimedia", "Library", "Who Does What"};
+        String[] sectionChildTitle = {"FIND OPEN SPACE", "Report an incident", "My CIRCLE", "EMERGENCY NUMBERS", "HAZARD INFO", "Terminologies", "QUIZ", "Multimedia", "Emergency materials", "Who Does What"};
 
         ArrayList<Drawable> gridIcon = new ArrayList<Drawable>();
         gridIcon.add(getResources().getDrawable(R.drawable.ic_open_space_grid));

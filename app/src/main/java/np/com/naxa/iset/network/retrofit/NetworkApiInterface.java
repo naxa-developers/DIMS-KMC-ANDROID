@@ -5,6 +5,7 @@ import io.reactivex.Observable;
 import np.com.naxa.iset.disasterinfo.model.DisasterInfoListResponse;
 import np.com.naxa.iset.drr_dictionary.data_glossary.TerminologiesListResponse;
 import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListResponse;
+import np.com.naxa.iset.inventory.model.InventoryListResponse;
 import np.com.naxa.iset.mycircle.MyCircleContactListResponse;
 import np.com.naxa.iset.mycircle.registeruser.LoginResponse;
 import np.com.naxa.iset.mycircle.registeruser.NormalResponse;
@@ -95,6 +96,10 @@ public interface NetworkApiInterface {
     @POST("contact_category")
     @FormUrlEncoded
     Observable<ContactCategoryListResponse> getContactCategoryListResponse(@Field("api_key") String api_key);
+
+    @POST("inventory_data")
+    @FormUrlEncoded
+    Observable<InventoryListResponse> getInventoryListResponse(@Field("api_key") String api_key);
 
 }
 

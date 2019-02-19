@@ -37,21 +37,25 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".report.DisasterReportActivity"
+        <activity android:name=".inventory.InventoryActivity"></activity>
+        <activity
+            android:name=".report.DisasterReportActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".report.ReportCtegoryActivity" />
         </activity>
-        <activity android:name=".report.CivicReportActivity"
+        <activity
+            android:name=".report.CivicReportActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".report.ReportCtegoryActivity" />
         </activity>
-        <activity android:name=".report.ReportCtegoryActivity"
+        <activity
+            android:name=".report.ReportCtegoryActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
             <meta-data

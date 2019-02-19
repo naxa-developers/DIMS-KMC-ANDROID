@@ -1,0 +1,65 @@
+package np.com.naxa.iset.database.viewmodel;
+
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import java.util.List;
+
+import io.reactivex.Flowable;
+import np.com.naxa.iset.database.databaserepository.InventoryListDetailsRepository;
+import np.com.naxa.iset.inventory.model.InventoryListDetails;
+
+
+public class InventoryListDetailsViewModel extends AndroidViewModel {
+
+    private InventoryListDetailsRepository mRepository;
+    private Flowable<List<InventoryListDetails>> mAllInventoryListDetailsList;
+    private Flowable<List<InventoryListDetails>> mCategoryWiseList;
+    private Flowable<List<InventoryListDetails>> mSubCategoryWiseList;
+    private Flowable<List<InventoryListDetails>> mCatSubCatWiseList;
+
+    public InventoryListDetailsViewModel(@NonNull Application application) {
+        super(application);
+
+        mRepository = new InventoryListDetailsRepository(application);
+
+        mAllInventoryListDetailsList = mRepository.getAllInventoryListDetailsList();
+
+    }
+
+    public Flowable<List<InventoryListDetails>> getAllInventoryListDetailsList() {
+        return mAllInventoryListDetailsList;
+    }
+
+    public Flowable<List<InventoryListDetails>> getCategoryWiseList(String category) {
+        mCategoryWiseList = mRepository.getCategoryWiseList(category);
+        return mCategoryWiseList;
+    }
+
+    public Flowable<List<InventoryListDetails>> getSubCategoryWiseList(String subCategory) {
+        mSubCategoryWiseList = mRepository.getSubCategoryWiseList(subCategory);
+        return mSubCategoryWiseList;
+    }
+
+    public Flowable<List<InventoryListDetails>> getCatSubCatWiseList(String category, String subCategory) {
+        mCatSubCatWiseList = mRepository.getCatSubCatWiseList(category, subCategory);
+        return mCatSubCatWiseList;
+    }
+
+    public void deleteSpecificRow(String unique_id) {
+        mRepository.deleteSpecific(unique_id);
+    }
+
+
+    public long insert(InventoryListDetails InventoryListDetails) {
+        Log.d("VIewholder", "insert: " + InventoryListDetails.getSubcatName());
+        return mRepository.insert(InventoryListDetails);
+    }
+
+    public void insertAll(List<InventoryListDetails> InventoryListDetails) {
+        Log.d("VIewholder", "insert: " + InventoryListDetails.get(0).getSubcatName());
+         mRepository.insertAll(InventoryListDetails);
+    }
+}
