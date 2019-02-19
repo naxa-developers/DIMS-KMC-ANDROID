@@ -109,8 +109,8 @@ public class InventoryListDetailsRepository {
                     @Override
                     public void onNext(InventoryListDetails inventoryListDetails) {
                        mDao.insert(inventoryListDetails);
-                        Log.d("MessageHelperRepository", "insert: "+ inventoryListDetails.getCategoryName());
-                        Log.d("MessageHelperRepository", "insert: "+ inventoryListDetails.getSubcatName());
+                        Log.d("MessageHelperRepository", "insert: "+ inventoryListDetails.getCategorySlug());
+                        Log.d("MessageHelperRepository", "insert: "+ inventoryListDetails.getSubCatSlug());
 
                     }
 
