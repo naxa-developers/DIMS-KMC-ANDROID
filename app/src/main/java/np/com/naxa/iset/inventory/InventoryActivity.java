@@ -51,7 +51,7 @@ public class InventoryActivity extends AppCompatActivity {
     @BindView(R.id.recyclerViewInventoryList)
     RecyclerView recyclerViewInventoryList;
 
-    List<String> categoryName = new ArrayList<String>();
+    List<String> categoryName;
     List<String> subCategoryName;
     @BindView(R.id.fab_filter)
     FloatingActionButton fabFilter;
@@ -71,7 +71,7 @@ public class InventoryActivity extends AppCompatActivity {
         if (NetworkUtils.isNetworkAvailable()) {
             fetchDataFromServer();
         } else {
-            getAllDataFromDatabase();
+            getAllCatSubCatFIlteredDataFromDatabase("All", "All");
             getDistinctCategorySubCategoryList();
         }
 
@@ -106,6 +106,7 @@ public class InventoryActivity extends AppCompatActivity {
                         if (inventoryListResponse.getError() == 0) {
                             if (inventoryListResponse.getData() != null) {
                                 inventoryListDetailsViewModel.insertAll(inventoryListResponse.getData());
+                                getDistinctCategorySubCategoryList();
                                 ((InventoryListAdapter) recyclerViewInventoryList.getAdapter()).replaceData(inventoryListResponse.getData());
 
                             }
@@ -140,32 +141,6 @@ public class InventoryActivity extends AppCompatActivity {
 
     }
 
-    private void getAllDataFromDatabase() {
-        inventoryListDetailsViewModel.getAllInventoryListDetailsList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSubscriber<List<InventoryListDetails>>() {
-                    @Override
-                    public void onNext(List<InventoryListDetails> inventoryListDetails) {
-                        ((InventoryListAdapter) recyclerViewInventoryList.getAdapter()).replaceData(inventoryListDetails);
-                        Log.d(TAG, "getDistinctCategoryCategoryList: " + inventoryListDetails.size());
-
-
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
-    }
-
     private void getDistinctCategorySubCategoryList() {
         inventoryListDetailsViewModel.getDistinctCategoryList()
                 .observeOn(Schedulers.io())
@@ -173,6 +148,7 @@ public class InventoryActivity extends AppCompatActivity {
                 .subscribe(new DisposableSubscriber<List<String>>() {
                     @Override
                     public void onNext(List<String> strings) {
+                        categoryName = new ArrayList<String>();
                         categoryName.add("All");
                         for (int i = 0 ; i<strings.size() ; i++){
                             if(strings.get(i)!= null){
@@ -219,7 +195,6 @@ public class InventoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                getAllDataFromDatabase();
             }
         });
 
