@@ -1,24 +1,34 @@
 package np.com.naxa.iset.publications;
 
-import android.app.DownloadManager;
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
@@ -34,7 +44,6 @@ import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.publications.adapter.PublicationsListItemAdapter;
 import np.com.naxa.iset.publications.entity.PublicationsListDetails;
 import np.com.naxa.iset.publications.entity.PublicationsListResponse;
-import np.com.naxa.iset.publications.youtubeplayer.YoutubePlayerActivity;
 import np.com.naxa.iset.publications.youtubeplayer.helper.YoutubeConstants;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.NetworkUtils;
@@ -50,11 +59,11 @@ public class PublicationsListActivity extends AppCompatActivity {
 
     NetworkApiInterface apiInterface;
     PublicationsListDetailsViewModel publicationsListDetailsViewModel;
+    @BindView(R.id.fab_filter)
+    FloatingActionButton fabFilter;
 
-    private DownloadManager downloadManager;
-    private long pdf_DownloadId;
-    private boolean isPDFView = false;
-    private String PDFFileName;
+    List<String> categoryName;
+    List<String> subCategoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +82,9 @@ public class PublicationsListActivity extends AppCompatActivity {
         if (NetworkUtils.isNetworkAvailable()) {
             fetchPublicationsDetails();
         } else {
-            getDataFromDatabase();
+//            getDataFromDatabase();
+            getAllCatSubCatFIlteredDataFromDatabase("All", "All");
+            getDistinctNameList();
         }
 
     }
@@ -178,43 +189,14 @@ public class PublicationsListActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
 
-                        getDataFromDatabase();
+//                        getDataFromDatabase();
+                        getAllCatSubCatFIlteredDataFromDatabase("All", "All");
+                        getDistinctNameList();
                     }
                 });
 
     }
-
-    private void getDataFromDatabase() {
-        publicationsListDetailsViewModel.getAllReportDetailsList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSubscriber<List<PublicationsListDetails>>() {
-                    @Override
-                    public void onNext(List<PublicationsListDetails> publicationsListDetails) {
-                        if (publicationsListDetails == null) {
-                            ToastUtils.showShortToast("No data found");
-                        } else {
-                            Log.d(TAG, "onNext: " + publicationsListDetails.size());
-                            Log.d(TAG, "onNext: " + publicationsListDetails.get(0).toString());
-
-                            ((PublicationsListItemAdapter) recyclerViewPublicationList.getAdapter()).replaceData(publicationsListDetails);
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
+    
     @Override
     public void onStart() {
         super.onStart();
@@ -238,4 +220,169 @@ public class PublicationsListActivity extends AppCompatActivity {
 
         ToastUtils.showShortToast(name);
     }
+
+
+
+    @OnClick(R.id.fab_filter)
+    public void onViewClicked() {
+        final Dialog dialog = new Dialog(PublicationsListActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.inventory_filter_dialog_layout);
+
+
+        TextView text = (TextView) dialog.findViewById(R.id.tv_message);
+        Spinner spnCategory = (Spinner) dialog.findViewById(R.id.spn_category_type);
+        Spinner spnSubCategory = (Spinner) dialog.findViewById(R.id.spn_sub_category_type);
+        dialogSpinnerSetup(spnCategory, spnSubCategory);
+
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        Button btnSearch = (Button) dialog.findViewById(R.id.btn_search);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                getAllCatSubCatFIlteredDataFromDatabase(spnCategory.getSelectedItem().toString(), spnSubCategory.getSelectedItem().toString());
+            }
+        });
+
+        dialog.show();
+    }
+
+    ArrayAdapter<String> nameAdapter, typeAdapter;
+    private void dialogSpinnerSetup(Spinner spnCategory, Spinner spnSubCategory){
+        if(categoryName != null) {
+            nameAdapter = new ArrayAdapter<String>(PublicationsListActivity.this,
+                    R.layout.item_spinner, categoryName);
+            nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCategory.setAdapter(nameAdapter);
+
+            spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    // your code here
+
+                    publicationsListDetailsViewModel.getDistinctTypeLIstFromName(spnCategory.getSelectedItem().toString())
+                            .observeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new DisposableSubscriber<List<String>>() {
+                                @Override
+                                public void onNext(List<String> strings) {
+                                    subCategoryName = new ArrayList<String>();
+                                    subCategoryName.add("All");
+                                    for (int i = 0 ; i<strings.size() ; i++){
+                                        if(strings.get(i)!= null){
+                                            subCategoryName.add(strings.get(i));
+
+                                        }
+                                    }
+                                    Log.d(TAG, "getDistinctCategoryList: " + subCategoryName.size());
+                                    if(subCategoryName != null) {
+                                        typeAdapter = new ArrayAdapter<String>(PublicationsListActivity.this,
+                                                R.layout.item_spinner, subCategoryName);
+                                        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        spnSubCategory.setAdapter(typeAdapter);
+                                    }
+                                }
+
+
+
+                                @Override
+                                public void onError(Throwable t) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+
+                                }
+                            });
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
+        }
+
+    }
+
+    private void getAllCatSubCatFIlteredDataFromDatabase(String category, String subCategory) {
+
+        Log.d(TAG, "getAllCatSubCatFIlteredDataFromDatabase: "+category +" , "+subCategory);
+
+
+
+        publicationsListDetailsViewModel.getNameTypeWiseList(category, subCategory)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<List<PublicationsListDetails>>() {
+                    @Override
+                    public void onNext(List<PublicationsListDetails> publicationsListDetails) {
+                        ((PublicationsListItemAdapter) recyclerViewPublicationList.getAdapter()).replaceData(publicationsListDetails);
+                        Log.d(TAG, "getAllCatSubCatFIlteredDataFromDatabase size: " + publicationsListDetails.size());
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+
+    private void getDistinctNameList() {
+        publicationsListDetailsViewModel.getDistinctNameList()
+                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<List<String>>() {
+                    @Override
+                    public void onNext(List<String> strings) {
+                        categoryName = new ArrayList<String>();
+                        categoryName.add("All");
+                        for (int i = 0 ; i<strings.size() ; i++){
+                            if(strings.get(i)!= null){
+                                categoryName.add(strings.get(i));
+
+                            }
+                        }
+                        Log.d(TAG, "getDistinctCategoryCategoryList: " + categoryName.size());
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+
 }

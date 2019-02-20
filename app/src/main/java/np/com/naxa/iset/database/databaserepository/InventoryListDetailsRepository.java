@@ -17,7 +17,7 @@ import np.com.naxa.iset.inventory.model.InventoryListDetails;
 
 public class InventoryListDetailsRepository {
     private InventoryListDetailsDao mDao;
-    Flowable<List<InventoryListDetails>> mAllPublicationslsList;
+    Flowable<List<InventoryListDetails>> mAllInventoryList;
     Flowable<List<InventoryListDetails>> mAllCategoryWiseList;
     Flowable<List<InventoryListDetails>> mAllSubCategoryWiseList;
     Flowable<List<InventoryListDetails>> mAllCatSubCatWiseList;
@@ -28,7 +28,7 @@ public class InventoryListDetailsRepository {
     public InventoryListDetailsRepository(Application application) {
         ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
         mDao = db.inventoryListDetailsDao();
-        mAllPublicationslsList = mDao.getAllInventoryListDetailsList();
+        mAllInventoryList = mDao.getAllInventoryListDetailsList();
         mAllDistinctCatName = mDao.getDistinctCategoryList();
         mAllDistinctSubCatName = mDao.getDistinctSubCategoryist();
 
@@ -37,7 +37,7 @@ public class InventoryListDetailsRepository {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
     public Flowable<List<InventoryListDetails>> getAllInventoryListDetailsList() {
-        return mAllPublicationslsList;
+        return mAllInventoryList;
     }
 
     public Flowable<List<String>> getDistinctCategoryList() {

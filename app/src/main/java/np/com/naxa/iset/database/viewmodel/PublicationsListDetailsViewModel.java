@@ -16,14 +16,22 @@ public class PublicationsListDetailsViewModel extends AndroidViewModel {
 
     private PublicationsListDetailsRepository mRepository;
     private Flowable<List<PublicationsListDetails>> mAllPublicationsListtDetailsList;
-    private Flowable<List<PublicationsListDetails>> mCategoryWiseList;
+    private Flowable<List<PublicationsListDetails>> mAllNameWiseList;
+
+    Flowable<List<PublicationsListDetails>> mAllTypeWiseList;
+    Flowable<List<PublicationsListDetails>> mAllNameTypeWiseList;
+    Flowable<List<String>> mAllDistinctName;
+    Flowable<List<String>> mAllDistinctType;
+    Flowable<List<String>> mAllDistinctTypeFromName;
 
     public PublicationsListDetailsViewModel(@NonNull Application application) {
         super(application);
 
         mRepository = new PublicationsListDetailsRepository(application);
 
-        mAllPublicationsListtDetailsList = mRepository.getAllReportDetailsList();
+        mAllPublicationsListtDetailsList = mRepository.getAllPublicationslsList();
+        mAllDistinctName = mRepository.getDistinctNameList();
+        mAllDistinctType = mRepository.getDistinctTypeist();
 
     }
 
@@ -31,9 +39,46 @@ public class PublicationsListDetailsViewModel extends AndroidViewModel {
         return mAllPublicationsListtDetailsList;
     }
 
-    public Flowable<List<PublicationsListDetails>> getCategoryWiseList(String key) {
-        mCategoryWiseList = mRepository.getCategoryWiseList(key);
-        return mCategoryWiseList;
+    public Flowable<List<String>> getDistinctTypeist() {
+        return mAllDistinctType;
+    }
+    public Flowable<List<String>> getDistinctNameList() {
+        return mAllDistinctName;
+    }
+
+    public Flowable<List<PublicationsListDetails>> getNameWiseList(String name) {
+        mAllNameWiseList = mRepository.getNameWiseList(name);
+        return mAllNameWiseList;
+    }
+
+    public Flowable<List<String>> getDistinctTypeLIstFromName(String name) {
+        mAllDistinctTypeFromName = mRepository.getDistinctTypeLIstFromName(name);
+
+        return mAllDistinctTypeFromName;
+    }
+
+
+    public Flowable<List<PublicationsListDetails>> getTypeWiseList(String type) {
+        mAllTypeWiseList = mRepository.getTypeWiseList(type);
+
+        return mAllTypeWiseList;
+    }
+
+    public Flowable<List<PublicationsListDetails>> getNameTypeWiseList(String name, String type) {
+
+        if(name.equals("All") && type.equals("All")){
+            mAllNameTypeWiseList = mRepository.getAllPublicationslsList();
+        }
+
+        if(!name.equals("All") && type.equals("All")){
+            mAllNameTypeWiseList = mRepository.getNameWiseList(name);
+        }
+
+        if(!name.equals("All") && !type.equals("All")){
+            mAllNameTypeWiseList = mRepository.getNameTypeWiseList(name, type);
+        }
+
+        return mAllNameTypeWiseList;
     }
 
     public void deleteSpecificRow(String unique_id) {

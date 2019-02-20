@@ -3,7 +3,6 @@ package np.com.naxa.iset.inventory;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,10 +34,8 @@ import np.com.naxa.iset.inventory.model.InventoryListResponse;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
-import np.com.naxa.iset.report.DisasterReportActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.NetworkUtils;
-import np.com.naxa.iset.utils.SharedPreferenceUtils;
 
 public class InventoryActivity extends AppCompatActivity {
 
@@ -72,7 +68,7 @@ public class InventoryActivity extends AppCompatActivity {
             fetchDataFromServer();
         } else {
             getAllCatSubCatFIlteredDataFromDatabase("All", "All");
-            getDistinctCategorySubCategoryList();
+            getDistinctCategoryList();
         }
 
     }
@@ -106,7 +102,7 @@ public class InventoryActivity extends AppCompatActivity {
                         if (inventoryListResponse.getError() == 0) {
                             if (inventoryListResponse.getData() != null) {
                                 inventoryListDetailsViewModel.insertAll(inventoryListResponse.getData());
-                                getDistinctCategorySubCategoryList();
+                                getDistinctCategoryList();
                                 ((InventoryListAdapter) recyclerViewInventoryList.getAdapter()).replaceData(inventoryListResponse.getData());
 
                             }
@@ -141,7 +137,7 @@ public class InventoryActivity extends AppCompatActivity {
 
     }
 
-    private void getDistinctCategorySubCategoryList() {
+    private void getDistinctCategoryList() {
         inventoryListDetailsViewModel.getDistinctCategoryList()
                 .observeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -238,7 +234,7 @@ public class InventoryActivity extends AppCompatActivity {
 
                                         }
                                     }
-                                    Log.d(TAG, "getDistinctCategorySubCategoryList: " + subCategoryName.size());
+                                    Log.d(TAG, "getDistinctCategoryList: " + subCategoryName.size());
                                     if(subCategoryName != null) {
                                         subCategoryAdapter = new ArrayAdapter<String>(InventoryActivity.this,
                                                 R.layout.item_spinner, subCategoryName);

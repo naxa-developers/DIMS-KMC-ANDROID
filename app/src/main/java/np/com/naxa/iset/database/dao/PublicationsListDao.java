@@ -22,7 +22,22 @@ public interface PublicationsListDao {
 
 
     @Query("SELECT * from PublicationsListDetails WHERE type LIKE :type")
-    Flowable<List<PublicationsListDetails>> getCategoryWiseList(String type);
+    Flowable<List<PublicationsListDetails>> getTypeWiseList(String type);
+
+    @Query("SELECT * from PublicationsListDetails WHERE name LIKE :name")
+    Flowable<List<PublicationsListDetails>> getNameWiseList(String name);
+
+    @Query("SELECT * from PublicationsListDetails WHERE name LIKE :name AND type LIKE :type")
+    Flowable<List<PublicationsListDetails>> getNameTypeWiseList(String name, String type);
+
+    @Query("SELECT DISTINCT name from PublicationsListDetails")
+    Flowable<List<String>> getDistinctNameList();
+
+    @Query("SELECT DISTINCT type from PublicationsListDetails")
+    Flowable<List<String>> getDistinctTypeist();
+
+    @Query("SELECT DISTINCT type from PublicationsListDetails WHERE name LIKE :name")
+    Flowable<List<String>> getDistinctTypeLIstFromName(String name);
 
 
     // We do not need a conflict strategy, because the word is our primary key, and you cannot

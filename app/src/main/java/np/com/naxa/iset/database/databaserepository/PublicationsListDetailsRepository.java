@@ -17,26 +17,61 @@ import np.com.naxa.iset.publications.entity.PublicationsListDetails;
 public class PublicationsListDetailsRepository {
     private PublicationsListDao mDao;
         Flowable<List<PublicationsListDetails>> mAllPublicationslsList;
-        Flowable<List<PublicationsListDetails>> mAllCategoryWiseList;
+        Flowable<List<PublicationsListDetails>> mAllNameWiseList;
+
+    Flowable<List<PublicationsListDetails>> mAllTypeWiseList;
+    Flowable<List<PublicationsListDetails>> mAllNameTypeWiseList;
+    Flowable<List<String>> mAllDistinctName;
+    Flowable<List<String>> mAllDistinctType;
+    Flowable<List<String>> mAllDistinctTypeFromName;
 
         public PublicationsListDetailsRepository(Application application) {
             ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
             mDao = db.publicationsListDao();
             mAllPublicationslsList = mDao.getAllPublicationslsList();
 
+            mAllDistinctName = mDao.getDistinctNameList();
+            mAllDistinctType = mDao.getDistinctTypeist();
+
         }
 
         // Room executes all queries on a separate thread.
         // Observed LiveData will notify the observer when the data has changed.
-        public Flowable<List<PublicationsListDetails>> getAllReportDetailsList() {
+        public Flowable<List<PublicationsListDetails>> getAllPublicationslsList() {
             return mAllPublicationslsList;
         }
 
-        public Flowable<List<PublicationsListDetails>> getCategoryWiseList(String type) {
-            mAllCategoryWiseList = mDao.getCategoryWiseList(type);
+        public Flowable<List<PublicationsListDetails>> getNameWiseList(String name) {
+            mAllNameWiseList = mDao.getNameWiseList(name);
 
-            return mAllCategoryWiseList;
+            return mAllNameWiseList;
         }
+
+    public Flowable<List<String>> getDistinctTypeist() {
+        return mAllDistinctType;
+    }
+    public Flowable<List<String>> getDistinctNameList() {
+        return mAllDistinctName;
+    }
+
+    public Flowable<List<String>> getDistinctTypeLIstFromName(String name) {
+        mAllDistinctTypeFromName = mDao.getDistinctTypeLIstFromName(name);
+
+        return mAllDistinctTypeFromName;
+    }
+
+
+    public Flowable<List<PublicationsListDetails>> getTypeWiseList(String type) {
+        mAllTypeWiseList = mDao.getTypeWiseList(type);
+
+        return mAllTypeWiseList;
+    }
+
+    public Flowable<List<PublicationsListDetails>> getNameTypeWiseList(String name, String type) {
+        mAllNameTypeWiseList = mDao.getNameTypeWiseList(name, type);
+
+        return mAllNameTypeWiseList;
+    }
 
 
         public void deleteSpecific(String unique_id){
