@@ -38,10 +38,10 @@ public class InventoryListAdapter extends BaseQuickAdapter<InventoryListDetails,
         LoadImageUtils.loadImageToViewFromSrc(imageView, item.getCategoryImage());
 
 
-        if(((helper.getLayoutPosition()+1) %2) == 0){
-            Log.d(TAG, "convert: "+helper.getLayoutPosition());
-            helper.setBackgroundColor(R.id.inventory_list_item_layout, relativeLayout.getContext().getResources().getColor(R.color.listItemSecondBG));
-        }
+//        if(((helper.getLayoutPosition()+1) %2) == 0){
+//            Log.d(TAG, "convert: "+helper.getLayoutPosition());
+//            helper.setBackgroundColor(R.id.inventory_list_item_layout, relativeLayout.getContext().getResources().getColor(R.color.listItemSecondBG));
+//        }
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

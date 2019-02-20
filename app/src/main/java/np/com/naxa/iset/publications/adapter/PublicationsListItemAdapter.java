@@ -37,10 +37,10 @@ public class PublicationsListItemAdapter extends BaseQuickAdapter<PublicationsLi
         LoadImageUtils.loadImageToViewFromSrc(imageView, item.getPhoto());
 
 
-        if(((helper.getLayoutPosition()+1) %2) == 0){
-            Log.d(TAG, "convert: "+helper.getLayoutPosition());
-            helper.setBackgroundColor(R.id.publication_item_layout, relativeLayout.getContext().getResources().getColor(R.color.listItemSecondBG));
-        }
+//        if(((helper.getLayoutPosition()+1) %2) == 0){
+//            Log.d(TAG, "convert: "+helper.getLayoutPosition());
+//            helper.setBackgroundColor(R.id.publication_item_layout, relativeLayout.getContext().getResources().getColor(R.color.listItemSecondBG));
+//        }
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

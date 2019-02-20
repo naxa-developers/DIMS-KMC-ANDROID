@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
-    android:background="@color/listItemFirstBG"
+    android:background="@color/listItemSecondBG"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingTop="@dimen/spacing_medium"
     android:paddingBottom="@dimen/spacing_medium"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin">
+   >
 
     <!--android:background="?android:selectableItemBackground"-->
 
@@ -36,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
+        android:maxLines="2"
         android:textColor="@android:color/black"
         android:textSize="@dimen/sp_14" />
 
@@ -58,5 +58,12 @@
         android:textColor="@color/dark_gray"/>
 
     </LinearLayout>
+
+    <View
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_below="@+id/img_publication_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_grey"/>
 
 </RelativeLayout>
