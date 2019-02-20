@@ -121,7 +121,7 @@ public class DisasterReportActivity extends AppCompatActivity {
     ReportDetailsViewModel reportDetailsViewModel;
     NetworkApiInterface apiInterface;
 
-    ArrayAdapter<String> wardAdapter, hazardAdapter, riskLevelAdapter, disasterStatusAdapter, infrastructureDamageAdapter;
+    ArrayAdapter<String> wardAdapter, hazardAdapter;
 
     String edited = "0";
     private int dbID;

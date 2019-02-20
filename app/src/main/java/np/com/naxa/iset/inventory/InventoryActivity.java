@@ -13,7 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,8 +36,10 @@ import np.com.naxa.iset.inventory.model.InventoryListResponse;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
+import np.com.naxa.iset.report.DisasterReportActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.NetworkUtils;
+import np.com.naxa.iset.utils.SharedPreferenceUtils;
 
 public class InventoryActivity extends AppCompatActivity {
 
@@ -47,7 +52,7 @@ public class InventoryActivity extends AppCompatActivity {
     RecyclerView recyclerViewInventoryList;
 
     List<String> categoryName = new ArrayList<String>();
-    List<String> subCategoryName = new ArrayList<String>();
+    List<String> subCategoryName;
     @BindView(R.id.fab_filter)
     FloatingActionButton fabFilter;
 
@@ -168,30 +173,15 @@ public class InventoryActivity extends AppCompatActivity {
                 .subscribe(new DisposableSubscriber<List<String>>() {
                     @Override
                     public void onNext(List<String> strings) {
-                        categoryName.addAll(strings);
+                        categoryName.add("All");
+                        for (int i = 0 ; i<strings.size() ; i++){
+                            if(strings.get(i)!= null){
+                                categoryName.add(strings.get(i));
+
+                            }
+                        }
                         Log.d(TAG, "getDistinctCategoryCategoryList: " + categoryName.size());
 
-                        inventoryListDetailsViewModel.getDistinctSubCategoryist()
-                                .observeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new DisposableSubscriber<List<String>>() {
-                                    @Override
-                                    public void onNext(List<String> strings) {
-                                        subCategoryName.addAll(strings);
-                                        Log.d(TAG, "getDistinctCategorySubCategoryList: " + subCategoryName.size());
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable t) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-
-
-                                    }
-                                });
                     }
 
                     @Override
@@ -216,12 +206,12 @@ public class InventoryActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.inventory_filter_dialog_layout);
 
-//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//        lp.copyFrom(dialog.getWindow().getAttributes());
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         TextView text = (TextView) dialog.findViewById(R.id.tv_message);
+        Spinner spnCategory = (Spinner) dialog.findViewById(R.id.spn_category_type);
+        Spinner spnSubCategory = (Spinner) dialog.findViewById(R.id.spn_sub_category_type);
+        dialogSpinnerSetup(spnCategory, spnSubCategory);
+
 
         Button btnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
         Button btnSearch = (Button) dialog.findViewById(R.id.btn_search);
@@ -229,6 +219,7 @@ public class InventoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                getAllDataFromDatabase();
             }
         });
 
@@ -236,12 +227,107 @@ public class InventoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+
+                getAllCatSubCatFIlteredDataFromDatabase(spnCategory.getSelectedItem().toString(), spnSubCategory.getSelectedItem().toString());
             }
         });
 
-//        dialog.getWindow().setAttributes(lp);
         dialog.show();
-//            return dialog;
-//        }
+
     }
+
+    ArrayAdapter<String> categoryAdapter, subCategoryAdapter;
+    private void dialogSpinnerSetup(Spinner spnCategory, Spinner spnSubCategory){
+        if(categoryName != null) {
+            categoryAdapter = new ArrayAdapter<String>(InventoryActivity.this,
+                    R.layout.item_spinner, categoryName);
+            categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCategory.setAdapter(categoryAdapter);
+
+            spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    // your code here
+
+                    inventoryListDetailsViewModel.getDistinctSubCategoryistFromCategory(spnCategory.getSelectedItem().toString())
+                            .observeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new DisposableSubscriber<List<String>>() {
+                                @Override
+                                public void onNext(List<String> strings) {
+                                    subCategoryName = new ArrayList<String>();
+                                    subCategoryName.add("All");
+                                    for (int i = 0 ; i<strings.size() ; i++){
+                                        if(strings.get(i)!= null){
+                                            subCategoryName.add(strings.get(i));
+
+                                        }
+                                    }
+                                    Log.d(TAG, "getDistinctCategorySubCategoryList: " + subCategoryName.size());
+                                    if(subCategoryName != null) {
+                                        subCategoryAdapter = new ArrayAdapter<String>(InventoryActivity.this,
+                                                R.layout.item_spinner, subCategoryName);
+                                        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        spnSubCategory.setAdapter(subCategoryAdapter);
+                                    }
+                                }
+
+
+
+                                @Override
+                                public void onError(Throwable t) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+
+                                }
+                            });
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
+        }
+
+    }
+
+    private void getAllCatSubCatFIlteredDataFromDatabase(String category, String subCategory) {
+
+        Log.d(TAG, "getAllCatSubCatFIlteredDataFromDatabase: "+category +" , "+subCategory);
+
+
+
+        inventoryListDetailsViewModel.getCatSubCatWiseList(category, subCategory)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSubscriber<List<InventoryListDetails>>() {
+                    @Override
+                    public void onNext(List<InventoryListDetails> inventoryListDetails) {
+                        ((InventoryListAdapter) recyclerViewInventoryList.getAdapter()).replaceData(inventoryListDetails);
+                        Log.d(TAG, "getAllCatSubCatFIlteredDataFromDatabase size: " + inventoryListDetails.size());
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+
 }

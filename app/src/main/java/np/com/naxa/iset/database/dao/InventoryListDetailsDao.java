@@ -16,7 +16,7 @@ public interface InventoryListDetailsDao {
     @Query("SELECT * from InventoryListDetails ORDER BY iId ASC")
     Flowable<List<InventoryListDetails>> getAllInventoryListDetailsList();
 
-    @Query("SELECT * from InventoryListDetails WHERE categorySlug LIKE :category AND subCatSlug LIKE :subCategory")
+    @Query("SELECT * from InventoryListDetails WHERE categoryName LIKE :category AND subcatName LIKE :subCategory")
     Flowable<List<InventoryListDetails>> getCatSubCatWiseInventoryList(String category, String subCategory);
 
     @Query("SELECT * from InventoryListDetails WHERE categoryName LIKE :category")
@@ -30,6 +30,9 @@ public interface InventoryListDetailsDao {
 
     @Query("SELECT DISTINCT subcatName from InventoryListDetails")
     Flowable<List<String>> getDistinctSubCategoryist();
+
+    @Query("SELECT DISTINCT subcatName from InventoryListDetails WHERE categoryName LIKE :category")
+    Flowable<List<String>> getDistinctSubCategoryistFromCategory(String category);
 
     // We do not need a conflict strategy, because the word is our primary key, and you cannot
     // add two items with the same primary key to the database. If the table has more than one

@@ -23,6 +23,7 @@ public class InventoryListDetailsRepository {
     Flowable<List<InventoryListDetails>> mAllCatSubCatWiseList;
     Flowable<List<String>> mAllDistinctCatName;
     Flowable<List<String>> mAllDistinctSubCatName;
+    Flowable<List<String>> mAllDistinctSubCatNameFromCategory;
 
     public InventoryListDetailsRepository(Application application) {
         ISETRoomDatabase db = ISETRoomDatabase.getDatabase(application);
@@ -45,6 +46,12 @@ public class InventoryListDetailsRepository {
 
     public Flowable<List<String>> getDistinctSubCategoryist() {
         return mAllDistinctSubCatName;
+    }
+
+    public Flowable<List<String>> getDistinctSubCategoryistFromCategory(String category) {
+        mAllDistinctSubCatNameFromCategory = mDao.getDistinctSubCategoryistFromCategory(category);
+
+        return mAllDistinctSubCatNameFromCategory;
     }
 
     public Flowable<List<InventoryListDetails>> getCategoryWiseList(String category) {

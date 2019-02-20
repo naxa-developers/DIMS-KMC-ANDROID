@@ -21,6 +21,7 @@ public class InventoryListDetailsViewModel extends AndroidViewModel {
     private Flowable<List<InventoryListDetails>> mCatSubCatWiseList;
     private Flowable<List<String>> mAllDistinctCatName;
     private Flowable<List<String>> mAllDistinctSubCatName;
+    private Flowable<List<String>> mAllDistinctSubCatNameFromCategory;
 
     public InventoryListDetailsViewModel(@NonNull Application application) {
         super(application);
@@ -45,6 +46,12 @@ public class InventoryListDetailsViewModel extends AndroidViewModel {
         return mAllDistinctSubCatName;
     }
 
+    public Flowable<List<String>> getDistinctSubCategoryistFromCategory(String category) {
+        mAllDistinctSubCatNameFromCategory = mRepository.getDistinctSubCategoryistFromCategory(category);
+
+        return mAllDistinctSubCatNameFromCategory;
+    }
+
     public Flowable<List<InventoryListDetails>> getCategoryWiseList(String category) {
         mCategoryWiseList = mRepository.getCategoryWiseList(category);
         return mCategoryWiseList;
@@ -56,7 +63,17 @@ public class InventoryListDetailsViewModel extends AndroidViewModel {
     }
 
     public Flowable<List<InventoryListDetails>> getCatSubCatWiseList(String category, String subCategory) {
-        mCatSubCatWiseList = mRepository.getCatSubCatWiseList(category, subCategory);
+        if(category.equals("All") && subCategory.equals("All")){
+            mCatSubCatWiseList = mRepository.getAllInventoryListDetailsList();
+        }
+
+        if(!category.equals("All") && subCategory.equals("All")){
+            mCatSubCatWiseList = mRepository.getCategoryWiseList(category);
+        }
+
+        if(!category.equals("All") && !subCategory.equals("All")){
+            mCatSubCatWiseList = mRepository.getCatSubCatWiseList(category, subCategory);
+        }
         return mCatSubCatWiseList;
     }
 
