@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -452,6 +453,54 @@ public final class DialogFactory {
 
             }
         });
+        return dialog;
+    }
+
+
+    public static Dialog createQuizAnsElaborationDialog(@NonNull Context context, @NonNull String questionProgress,
+                                                        @NonNull String questionStatus, @NonNull String questionDetails,
+                                                        @NonNull String questionElaboration, @NonNull CustomDialogListener listener) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.quiz_answer_elaboration_dialog_layout);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+        TextView tvQuestionProgress = (TextView) dialog.findViewById(R.id.tv_question_progress);
+        TextView tvQuestionStatus = (TextView) dialog.findViewById(R.id.tv_question_status);
+        LinearLayout lLQuestionLayout = (LinearLayout) dialog.findViewById(R.id.questionLayout);
+        lLQuestionLayout.setVisibility(View.GONE);
+        TextView tvQuestionDetails = (TextView) dialog.findViewById(R.id.tv_question_details);
+        TextView tvQuestionElaboration = (TextView) dialog.findViewById(R.id.tv_answer_elaboration);
+
+        tvQuestionProgress.setText(questionProgress);
+        tvQuestionStatus.setText(questionStatus);
+        tvQuestionDetails.setText(questionDetails);
+        tvQuestionElaboration.setText(questionElaboration);
+
+        Button btnSeeQuestion = (Button) dialog.findViewById(R.id.btn_dialog_see_question);
+        Button btnNextQuestion = (Button) dialog.findViewById(R.id.btn_dialog_next_question);
+        btnSeeQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lLQuestionLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        btnNextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setAttributes(lp);
         return dialog;
     }
 
