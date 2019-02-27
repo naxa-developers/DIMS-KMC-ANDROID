@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/relativeLayout_3"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:background="@color/white"
+    >
+
+    <include layout="@layout/toolbar_purple"
+        android:id="@+id/toolbar">
+    </include>
+
+    <TextView
+        android:id="@+id/tv_question_lbl"
+        android:layout_below="@id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+        android:textColor="@color/black"
+        android:textSize="@dimen/material_text_headline"
+        android:text="Multiple Choice Test Question"/>
+
+
+
+    <!-- radio button input layout-->
+    <RadioGroup
+        android:id="@+id/radio_group_quiz_test"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:layout_marginTop="@dimen/spacing_xxlarge"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/radio_yes_quiz_test"
+            style="@style/radionbuttonMaChupBasdina"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/default_padding"
+            android:text="Yes"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/material_text_subhead"
+            android:layout_marginLeft="@dimen/spacing_xxlarge"/>
+
+        <RadioButton
+            android:id="@+id/radio_no_quiz_test"
+            style="@style/radionbuttonMaChupBasdina"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/default_padding"
+            android:text="No"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/material_text_subhead"
+            android:layout_marginRight="@dimen/spacing_xxlarge"/>
+        <!--android:onClick="onRadioButtonClicked"-->
+
+
+    </RadioGroup>
+
+
+
+    <!-- mcq options group layout-->
+    <LinearLayout
+        android:id="@+id/mcq_group_quiz_test"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin"
+        >
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/item_card"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="5dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/isetPurple"
+                    android:text="A"
+                    android:textSize="@dimen/material_text_headline"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/answer_1"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Option 1"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/spacing_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/isetPurple"
+                    android:textSize="@dimen/material_text_caption"
+                    app:backgroundTint="@color/transparent"
+                    app:cornerRadius="8dp"
+                    app:rippleColor="#33AAAAAA"
+                  />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/item_card1"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="5dp"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/isetPurple"
+                    android:text="B"
+                    android:textSize="@dimen/material_text_headline"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/answer_2"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Option 2"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/spacing_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/isetPurple"
+                    android:textSize="@dimen/material_text_caption"
+                    app:backgroundTint="@color/transparent"
+                    app:cornerRadius="8dp"
+                    app:rippleColor="#33AAAAAA"
+                   />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/item_card2"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="5dp"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/isetPurple"
+                    android:text="C"
+                    android:textSize="@dimen/material_text_headline"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/answer_3"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Option 3"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/spacing_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/isetPurple"
+                    android:textSize="@dimen/material_text_caption"
+                    app:backgroundTint="@color/transparent"
+                    app:cornerRadius="8dp"
+                    app:rippleColor="#33AAAAAA"
+                   />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/item_card3"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="5dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/isetPurple"
+                    android:text="D"
+                    android:textSize="@dimen/material_text_headline"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/answer_4"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Option 4"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/spacing_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/isetPurple"
+                    android:textSize="@dimen/material_text_caption"
+                    app:backgroundTint="@color/transparent"
+                    app:cornerRadius="8dp"
+                    app:rippleColor="#33AAAAAA"
+                    />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

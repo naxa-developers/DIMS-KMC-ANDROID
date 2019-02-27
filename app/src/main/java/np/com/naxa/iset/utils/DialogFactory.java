@@ -468,7 +468,7 @@ public final class DialogFactory {
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         TextView tvQuestionProgress = (TextView) dialog.findViewById(R.id.tv_question_progress);
         TextView tvQuestionStatus = (TextView) dialog.findViewById(R.id.tv_question_status);
