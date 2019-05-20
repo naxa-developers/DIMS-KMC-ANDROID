@@ -37,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.viewmodel.PublicationsListDetailsViewModel;
+import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.event.PublicationListItemEvent;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
@@ -105,13 +106,15 @@ public class PublicationsListActivity extends AppCompatActivity {
     }
 
     private void fetchPublicationsDetails() {
-
+        Dialog dialog = DialogFactory.createProgressDialog(PublicationsListActivity.this, "Loading...");
+        dialog.show();
         apiInterface.getPublicationsListDetailsResponse(UrlClass.API_ACCESS_TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PublicationsListResponse>() {
                     @Override
                     public void onNext(PublicationsListResponse publicationsListResponse) {
+                        dialog.dismiss();
                         if (publicationsListResponse.getError() == 1) {
                             DialogFactory.createCustomErrorDialog(PublicationsListActivity.this, publicationsListResponse.getMessage(), new DialogFactory.CustomDialogListener() {
                                 @Override
@@ -136,6 +139,7 @@ public class PublicationsListActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        dialog.dismiss();
                         DialogFactory.createCustomErrorDialog(PublicationsListActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
                             @Override
                             public void onClick() {
@@ -146,7 +150,7 @@ public class PublicationsListActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-
+                        dialog.dismiss();
                     }
                 });
 

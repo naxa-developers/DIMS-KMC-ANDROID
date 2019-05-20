@@ -76,7 +76,7 @@ dependencies {
 //    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
 //    login integration libs
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     //debug libs
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
@@ -113,7 +113,7 @@ dependencies {
 
 //    sudur gradle libs
 //    implementation 'com.google.android.gms:play-services-gcm:10.2.1'
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.daimajia.slider:library:1.1.5@aar'

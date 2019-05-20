@@ -110,6 +110,8 @@ public class SectionGridHomeActivity extends AppCompatActivity {
     private RecyclerViewType recyclerViewType;
     private RecyclerView recyclerView;
 
+    boolean isLoginBtnClick = false;
+
     private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
     private TextView txtName, txtWebsite;
@@ -389,6 +391,7 @@ public class SectionGridHomeActivity extends AppCompatActivity {
                         return true;
 
                         case R.id.nav_login:
+                            isLoginBtnClick = true;
                             DialogFactory.createGmailLoginDialog(SectionGridHomeActivity.this).show();
                             return true;
                     default:
@@ -508,37 +511,41 @@ public class SectionGridHomeActivity extends AppCompatActivity {
                 .subscribe(new DisposableObserver<LoginResponse>() {
                     @Override
                     public void onNext(LoginResponse loginResponse) {
-                        if(loginResponse.getError() == 0){
-                          DialogFactory.createCustomDialog(SectionGridHomeActivity.this, loginResponse.getMessage(), new DialogFactory.CustomDialogListener() {
-                              @Override
-                              public void onClick() {
-                                  sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_DETAILS, JsonGsonConverterUtils.getJsonFromGson(loginResponse.getData()));
-                                  sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, true);
-                                  sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_LOGGED_IN, true);
+                        if(isLoginBtnClick) {
+                            if (loginResponse.getError() == 0) {
+                                DialogFactory.createCustomDialog(SectionGridHomeActivity.this, loginResponse.getMessage(), new DialogFactory.CustomDialogListener() {
+                                    @Override
+                                    public void onClick() {
+                                        sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_DETAILS, JsonGsonConverterUtils.getJsonFromGson(loginResponse.getData()));
+                                        sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_REGISTERED, true);
+                                        sharedPreferenceUtils.setValue(SharedPreferenceUtils.USER_ALREADY_LOGGED_IN, true);
 
-                              }
-                          }).show();
-                        }
+                                    }
+                                }).show();
+                            }
 
-                        if(loginResponse.getError() == 1){
-                            DialogFactory.createCustomErrorDialog(SectionGridHomeActivity.this, loginResponse.getMessage(), new DialogFactory.CustomDialogListener() {
-                                @Override
-                                public void onClick() {
+                            if (loginResponse.getError() == 1) {
+                                DialogFactory.createCustomErrorDialog(SectionGridHomeActivity.this, loginResponse.getMessage(), new DialogFactory.CustomDialogListener() {
+                                    @Override
+                                    public void onClick() {
 
-                                    startActivity(new Intent(SectionGridHomeActivity.this, MyCircleProfileActivity.class));
-                                }
-                            }).show();
+                                        startActivity(new Intent(SectionGridHomeActivity.this, MyCircleProfileActivity.class));
+                                    }
+                                }).show();
+                            }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        DialogFactory.createCustomErrorDialog(SectionGridHomeActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
-                            @Override
-                            public void onClick() {
+                        if(isLoginBtnClick) {
+                            DialogFactory.createCustomErrorDialog(SectionGridHomeActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
+                                @Override
+                                public void onClick() {
 
-                            }
-                        }).show();
+                                }
+                            }).show();
+                        }
                     }
 
                     @Override

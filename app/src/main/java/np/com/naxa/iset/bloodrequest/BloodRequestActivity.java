@@ -40,7 +40,7 @@ import np.com.naxa.iset.utils.SharedPreferenceUtils;
 
 public class BloodRequestActivity extends AppCompatActivity {
 
-    private static final String TAG = "BloodRequestActivity";
+    private static final String TAG = " ";
     @BindView(R.id.toolbar_general)
     Toolbar toolbar;
     @BindView(R.id.tvChooseBloodLBL)

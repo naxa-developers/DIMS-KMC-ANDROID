@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.viewmodel.InventoryListDetailsViewModel;
+import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.inventory.model.InventoryListDetails;
 import np.com.naxa.iset.inventory.model.InventoryListResponse;
 import np.com.naxa.iset.network.UrlClass;
@@ -91,14 +92,15 @@ public class InventoryActivity extends AppCompatActivity {
 
 
     private void fetchDataFromServer() {
-
+        Dialog dialog = DialogFactory.createProgressDialog(InventoryActivity.this, "Loading...");
+        dialog.show();
         apiInterface.getInventoryListResponse(UrlClass.API_ACCESS_TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<InventoryListResponse>() {
                     @Override
                     public void onNext(InventoryListResponse inventoryListResponse) {
-
+                        dialog.dismiss();
                         if (inventoryListResponse.getError() == 0) {
                             if (inventoryListResponse.getData() != null) {
                                 inventoryListDetailsViewModel.insertAll(inventoryListResponse.getData());
@@ -121,6 +123,7 @@ public class InventoryActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        dialog.dismiss();
                         DialogFactory.createCustomErrorDialog(InventoryActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
                             @Override
                             public void onClick() {
@@ -131,7 +134,7 @@ public class InventoryActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-
+                        dialog.dismiss();
                     }
                 });
 
