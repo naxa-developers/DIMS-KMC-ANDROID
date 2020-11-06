@@ -1,7 +1,6 @@
 package np.com.naxa.iset.publications.adapter;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;

@@ -37,7 +37,6 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.viewmodel.PublicationsListDetailsViewModel;
-import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.event.PublicationListItemEvent;
 import np.com.naxa.iset.network.UrlClass;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;

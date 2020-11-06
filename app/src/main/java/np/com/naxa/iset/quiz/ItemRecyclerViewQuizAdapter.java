@@ -2,30 +2,22 @@ package np.com.naxa.iset.quiz;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
+
+import androidx.core.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
-import java.util.Random;
 
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.event.EmergenctContactCallEvent;
 import np.com.naxa.iset.quiz.quiznew.McqQuizTestActivity;
 import np.com.naxa.iset.utils.colorutils.ColorList;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -47,6 +47,8 @@
 
 
 
+
+
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_hazards"
         android:layout_width="match_parent"
@@ -68,4 +70,4 @@
         />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.ConstraintLayout>

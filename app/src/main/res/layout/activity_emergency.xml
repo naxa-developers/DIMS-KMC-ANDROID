@@ -9,7 +9,7 @@
 
     <include layout="@layout/toolbar_purple" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -111,5 +111,5 @@
                 android:visibility="visible" />
         </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.ConstraintLayout>
 </LinearLayout>

@@ -39,13 +39,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
+            <androidx.core.view.ViewPager
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 >
-            </android.support.v4.view.ViewPager>
+            </androidx.core.view.ViewPager>
             <com.viewpagerindicator.CirclePageIndicator
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"

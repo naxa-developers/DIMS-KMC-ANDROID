@@ -36,7 +36,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".quiz.quiznew.McqQuizTestActivity"></activity>
         <activity android:name=".inventory.InventoryActivity" />
         <activity

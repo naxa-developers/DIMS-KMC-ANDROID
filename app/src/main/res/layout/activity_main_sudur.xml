@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout
+<androidx.core.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -74,4 +74,4 @@ android:orientation="vertical">
         app:itemIconTint="@color/accent"
         app:itemTextColor="#333"
         app:menu="@menu/navigation_view_items" />
-</android.support.v4.widget.DrawerLayout>
+</androidx.core.widget.DrawerLayout>

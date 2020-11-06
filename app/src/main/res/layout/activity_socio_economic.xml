@@ -10,7 +10,7 @@ android:layout_height="match_parent">
     android:id="@+id/toolbar"
     layout="@layout/toolbar_purple"></include>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.core.widget.SwipeRefreshLayout
         android:layout_below="@+id/toolbar"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
@@ -32,7 +32,7 @@ android:layout_height="match_parent">
 
         </LinearLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.core.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
 

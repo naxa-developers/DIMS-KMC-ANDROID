@@ -2,7 +2,7 @@ package np.com.naxa.iset.disasterinfo.imagesliderviewpager;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import androidx.core.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.utils.imageutils.CircleTransform;
 
 public class ImageSliderViewPagerAdapter extends PagerAdapter {
     private Context context;

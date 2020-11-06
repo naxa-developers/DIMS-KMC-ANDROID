@@ -8,7 +8,7 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_purple"></include>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.core.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainerNews"
         android:layout_width="match_parent"
@@ -22,5 +22,5 @@
             android:background="@color/transparent"
             android:scrollbars="none" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.core.widget.SwipeRefreshLayout>
 </LinearLayout>

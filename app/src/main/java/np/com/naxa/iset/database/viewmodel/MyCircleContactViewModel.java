@@ -1,8 +1,9 @@
 package np.com.naxa.iset.database.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.util.Log;
+
+import androidx.lifecycle.AndroidViewModel;
 
 import java.util.List;
 
