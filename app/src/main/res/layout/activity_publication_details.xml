@@ -16,7 +16,7 @@
         android:layout_below="@id/toolbar_layout_header"
         android:layout_above="@+id/btn_view_files_video">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/spacing_medium"
@@ -59,7 +59,7 @@
                     />
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </ScrollView>
 
     <!--<RelativeLayout-->

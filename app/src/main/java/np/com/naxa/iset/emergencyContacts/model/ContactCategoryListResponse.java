@@ -1,7 +1,7 @@
 
 package np.com.naxa.iset.emergencyContacts.model;
 
-import android.arch.persistence.room.Entity;
+import androidx.room.Entity;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

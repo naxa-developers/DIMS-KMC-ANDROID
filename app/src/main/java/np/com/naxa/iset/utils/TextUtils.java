@@ -1,6 +1,6 @@
 package np.com.naxa.iset.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 public class TextUtils {

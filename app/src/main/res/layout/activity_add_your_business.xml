@@ -231,7 +231,7 @@
 
 
             <!--&lt;!&ndash;get Gps Location House hold&ndash;&gt;-->
-            <!--<android.support.v7.widget.CardView-->
+            <!--<androidx.cardview.widget.CardView-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--app:cardBackgroundColor="@color/nliveo_white"-->
@@ -276,7 +276,7 @@
 
 
             <!--</LinearLayout>-->
-            <!--</android.support.v7.widget.CardView>-->
+            <!--</androidx.cardview.widget.CardView>-->
 
             <ImageView
                 android:layout_width="match_parent"

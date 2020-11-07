@@ -59,9 +59,9 @@ dependencies {
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
 
     //helping libs
-    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:10.2.3'
     implementation 'com.android.support:support-v4:28.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.44'
     implementation 'pub.devrel:easypermissions:2.0.0'
     implementation 'com.github.safetysystemtechnology:location-tracker-background:v1.3'

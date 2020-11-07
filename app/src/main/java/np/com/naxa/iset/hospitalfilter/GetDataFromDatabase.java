@@ -1,8 +1,8 @@
 package np.com.naxa.iset.hospitalfilter;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;

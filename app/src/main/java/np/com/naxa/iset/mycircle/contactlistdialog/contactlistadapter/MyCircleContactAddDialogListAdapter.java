@@ -1,6 +1,6 @@
 package np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ToggleButton;

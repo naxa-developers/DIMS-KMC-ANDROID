@@ -1,7 +1,7 @@
 package np.com.naxa.iset.mapboxmap.mapboxutils;
 
 import android.location.Location;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 

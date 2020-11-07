@@ -1,6 +1,6 @@
 package np.com.naxa.iset.mycircle;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import np.com.naxa.iset.R;

@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_purple"></include>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <!--<android.support.v7.widget.CardView-->
+                    <!--<androidx.cardview.widget.CardView-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content"-->
                     <!--android:layout_gravity="center"-->
@@ -73,7 +73,7 @@
                         android:layout_marginTop="10dp"
                         android:text=""
                         android:textColor="@color/nliveo_black" />
-                    <!--</android.support.v7.widget.CardView>-->
+                    <!--</androidx.cardview.widget.CardView>-->
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -205,5 +205,5 @@
             </LinearLayout>
         </ScrollView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

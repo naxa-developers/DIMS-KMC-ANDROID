@@ -1,6 +1,6 @@
 package np.com.naxa.iset.database.combinedentity;
 
-import android.arch.persistence.room.Embedded;
+import androidx.room.Embedded;
 
 import np.com.naxa.iset.database.entity.CommonPlacesAttrb;
 import np.com.naxa.iset.database.entity.EducationalInstitutes;

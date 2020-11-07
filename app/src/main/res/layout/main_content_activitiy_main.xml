@@ -1,4 +1,4 @@
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/tools"
@@ -90,7 +90,7 @@
         app:layout_anchorGravity="right|top"
         app:srcCompat="@drawable/ic_options_24dp" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_location_toggle"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -102,7 +102,7 @@
         app:layout_anchor="@+id/iv_options_hamburger"
         app:layout_anchorGravity="right|top" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_map_layer"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -114,4 +114,4 @@
         app:layout_anchorGravity="right|top"
         app:srcCompat="@drawable/ic_layers_black_24dp" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
