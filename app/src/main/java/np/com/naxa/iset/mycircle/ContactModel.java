@@ -1,24 +1,57 @@
 package np.com.naxa.iset.mycircle;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class ContactModel implements Parcelable {
-    public String id;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "ContactModel")
+public class ContactModel {
+
+    @PrimaryKey(autoGenerate = true)
+    private int cid;
+
+    @ColumnInfo(name = "name")
+    @SerializedName("name")
+    @Expose
     public String name;
+
+    @ColumnInfo(name = "mobile_no")
+    @SerializedName("mobile_no")
+    @Expose
     public String mobileNumber;
-    public Bitmap photo;
-    public Uri photoURI;
 
-    public String getId() {
-        return id;
+    @ColumnInfo(name = "img_url")
+    @SerializedName("img_url")
+    @Expose
+    public String img_url;
+
+    @ColumnInfo(name = "registered")
+    @SerializedName("registered")
+    @Expose
+    public int registered;
+
+    @ColumnInfo(name = "add_to_circle")
+    @SerializedName("add_to_circle")
+    @Expose
+    public int addToCircle;
+
+    @SerializedName("token")
+    @Expose
+    public String token;
+
+
+    public ContactModel(String name, String mobileNumber, String img_url, int registered, int addToCircle, String token) {
+        this.name = name;
+        this.mobileNumber = mobileNumber;
+        this.img_url = img_url;
+        this.registered = registered;
+        this.addToCircle = addToCircle;
+        this.token = token;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -36,56 +69,51 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = mobileNumber;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
+//    public Bitmap getPhoto_name() {
+//        return photo;
+//    }
+//
+//    public void setPhoto_name(Bitmap photo) {
+//        this.photo = photo;
+//    }
+
+    public String getImg_url() {
+        return img_url;
     }
 
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 
-    public Uri getPhotoURI() {
-        return photoURI;
+    public int getCid() {
+        return cid;
     }
 
-    public void setPhotoURI(Uri photoURI) {
-        this.photoURI = photoURI;
+    public void setCid(int cid) {
+        this.cid = cid;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getRegistered() {
+        return registered;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.name);
-        dest.writeString(this.mobileNumber);
-        dest.writeParcelable(this.photo, flags);
-        dest.writeParcelable(this.photoURI, flags);
+    public void setRegistered(int registered) {
+        this.registered = registered;
     }
 
-    public ContactModel() {
+    public String getToken() {
+        return token;
     }
 
-    protected ContactModel(Parcel in) {
-        this.id = in.readString();
-        this.name = in.readString();
-        this.mobileNumber = in.readString();
-        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
-        this.photoURI = in.readParcelable(Uri.class.getClassLoader());
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public static final Parcelable.Creator<ContactModel> CREATOR = new Parcelable.Creator<ContactModel>() {
-        @Override
-        public ContactModel createFromParcel(Parcel source) {
-            return new ContactModel(source);
-        }
+    public int getAddToCircle() {
+        return addToCircle;
+    }
 
-        @Override
-        public ContactModel[] newArray(int size) {
-            return new ContactModel[size];
-        }
-    };
+    public void setAddToCircle(int addToCircle) {
+        this.addToCircle = addToCircle;
+    }
 }

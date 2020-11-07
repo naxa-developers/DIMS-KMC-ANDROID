@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/isetPurple"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_xlarge"
+        android:gravity="center_horizontal"
+        android:text="@string/login_with_your_gmail_account"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/material_text_title"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_xlarge"
+        android:background="@color/isetPurple"
+        android:src="@drawable/ic_custom_dialog"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/gmail_sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+    </com.google.android.gms.common.SignInButton>
+
+</LinearLayout>

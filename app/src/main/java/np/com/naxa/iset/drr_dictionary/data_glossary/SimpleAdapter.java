@@ -2,7 +2,7 @@ package np.com.naxa.iset.drr_dictionary.data_glossary;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
     private boolean isFiltered = false;
 
     private List<WordsWithDetailsModel> mData;
-    //    List<WordsWithDetailsModel> wordsWithDetailsList;
+    //    List<WordsWithDetailsModelNew> wordsWithDetailsList;
     private List<WordsWithDetailsModel> wordListFiltered;
 
     public void add(List<WordsWithDetailsModel> s, int position) {
@@ -66,13 +66,13 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
                     wordListFiltered = mData;
                 } else {
                     List<WordsWithDetailsModel> filteredList = new ArrayList<>();
-//                    for (WordsWithDetailsModel row : wordsWithDetailsList) {
+//                    for (WordsWithDetailsModelNew row : wordsWithDetailsList) {
                     for (WordsWithDetailsModel row : mData) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
 //                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) || row.getPhone().contains(charSequence)) {
-                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                        if (row.getWord().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
@@ -87,7 +87,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//                wordListFiltered = (ArrayList<WordsWithDetailsModel>) filterResults.values;
+//                wordListFiltered = (ArrayList<WordsWithDetailsModelNew>) filterResults.values;
                 wordListFiltered = (ArrayList<WordsWithDetailsModel>) filterResults.values;
                 notifyDataSetChanged();
             }
@@ -122,7 +122,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
 //        holder.title.setText(mData.get(position).getTitle().trim());
         if (isFiltered) {
 
-            holder.title.setText(wordListFiltered.get(position).getTitle());
+            holder.title.setText(wordListFiltered.get(position).getWord());
             holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -135,7 +135,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
                 }
             });
         } else {
-            holder.title.setText(mData.get(position).getTitle());
+            holder.title.setText(mData.get(position).getWord());
             holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

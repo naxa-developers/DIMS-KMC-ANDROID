@@ -53,7 +53,7 @@
     <string name="nntds_executive_commitee">नगरकोट नाल्दुम पर्यटन विकास समितिका कार्यकारीहरु </string>
     <string name="full_name"> पुरा नाम</string>
     <string name="contact_number"> सम्पर्क नम्बर</string>
-    <string name="photo">फोटो</string>
+    <string name="photo_name">फोटो</string>
     <string name="location">अवस्थिति</string>
     <string name="capture">खिच्निहोस</string>
     <string name="record">रेकर्ड</string>

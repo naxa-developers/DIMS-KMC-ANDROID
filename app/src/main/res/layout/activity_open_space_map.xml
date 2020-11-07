@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoPanelHeight="68dp"
+    sothree:umanoPanelHeight="0dp"
     sothree:umanoShadowHeight="4dp"
     sothree:umanoInitialState="collapsed"
     sothree:layout_collapseMode="parallax"
@@ -23,7 +23,7 @@
     <!-- SLIDING LAYOUT -->
 <include layout="@layout/openspace_map_activity_sliding_containt_layout"
     android:id="@+id/openspace_sliding_content"
-    android:visibility="gone"
+    android:visibility="visible"
     >
 </include>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

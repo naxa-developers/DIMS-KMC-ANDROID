@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ivContactPerson"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_nav_profile"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/tvContactPerson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_toLeftOf="@id/btnAddContactToCircle"
+        android:layout_toEndOf="@id/ivContactPerson"
+        android:layout_toRightOf="@id/ivContactPerson"
+        android:text="Contact person"
+        android:textColor="@color/slate_black"
+        android:textSize="@dimen/material_text_subhead" />
+
+    <Button
+        android:id="@+id/btnInviteContact"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/spacing_xxxlarge"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/button_rounded_purple"
+        android:text="Invite"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:layout_marginRight="@dimen/spacing_medium"
+        />
+
+</RelativeLayout>

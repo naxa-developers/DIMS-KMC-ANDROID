@@ -13,14 +13,16 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
         android:name="android.hardware.camera.flash"
-        android:required="false" />
+        android:required="true" />
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
@@ -33,7 +35,52 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+        <activity android:name=".quiz.quiznew.McqQuizTestActivity"></activity>
+        <activity android:name=".inventory.InventoryActivity" />
+        <activity
+            android:name=".report.DisasterReportActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".report.ReportCtegoryActivity" />
+        </activity>
+        <activity
+            android:name=".report.CivicReportActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".report.ReportCtegoryActivity" />
+        </activity>
+        <activity
+            android:name=".report.ReportCtegoryActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".newhomepage.SectionGridHomeActivity" />
+        </activity>
+
+        <provider
+            android:name=".home.GenericFileProvider"
+            android:authorities="@string/file_provider_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".publications.PublicationDetailsActivity" />
+        <activity android:name=".publications.PublicationsListActivity" />
+        <activity android:name=".report.wardstaff.UnverifiedReportFormListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true">
@@ -74,11 +121,11 @@
             android:label="@string/title_activity_home_new_new"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".emergencyContacts.ExpandableUseActivity"
+            android:name=".emergencyContacts.EmergencyContactsActivity"
             android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="np.com.naxa.iset.home.HomeActivity" />
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
         </activity>
         <activity
             android:name=".activity.ContactActivity"
@@ -107,11 +154,11 @@
                 android:value="np.com.naxa.iset.home.HomeActivity" />
         </activity>
         <activity
-            android:name=".youtubeplayer.YoutubePlayerActivity"
+            android:name=".publications.youtubeplayer.YoutubePlayerActivity"
             android:exported="true"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".youtubeplayer.YoutubeVideoListActivity"
+            android:name=".publications.youtubeplayer.YoutubeVideoListActivity"
             android:exported="true" />
         <activity
             android:name=".newhomepage.SectionGridHomeActivity"
@@ -139,21 +186,25 @@
         </activity>
         <activity
             android:name=".activity.MyCircleProfileActivity"
-            android:exported="true" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
         <activity
-            android:name=".activity.ReportActivity"
+            android:name=".report.ReportActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+                android:value=".report.ReportCtegoryActivity" />
         </activity>
         <activity
             android:name=".quiz.QuizTestActivity"
             android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+                android:value="np.com.naxa.iset.quiz.QuizHomeActivity" />
         </activity>
         <activity
             android:name=".drr_dictionary.data_glossary.GlossaryListActivity"
@@ -167,30 +218,74 @@
             android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+                android:value="np.com.naxa.iset.drr_dictionary.data_glossary.GlossaryListActivity" />
         </activity>
         <activity
             android:name=".disasterinfo.HazardInfoDetailsActivity"
-            android:exported="true" />
-        <activity android:name=".disasterinfo.HazardThingsToDoActivity" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.disasterinfo.HazardInfoActivity" />
+        </activity>
+        <activity android:name=".disasterinfo.HazardThingsToDoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.disasterinfo.HazardInfoDetailsActivity" />
+        </activity>
         <activity
             android:name=".profile.municipalityprofile.MunicipalityProfileActivity"
-            android:exported="true" />
-        <activity android:name=".profile.wardprofile.WardProfileActivity" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity android:name=".profile.wardprofile.WardProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.profile.municipalityprofile.MunicipalityProfileActivity" />
+        </activity>
         <activity
             android:name=".quiz.QuizHomeActivity"
-            android:exported="true" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
         <activity
             android:name=".settings.SettingsActivity"
-            android:exported="true" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
         <activity
             android:name=".bloodrequest.BloodRequestActivity"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
         <activity
             android:name=".mapboxmap.OpenSpaceMapActivity"
-            android:exported="true" />
-        <activity android:name=".TerminologiesActivity"></activity>
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity android:name=".TerminologiesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity android:name=".report.SavedFormListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="np.com.naxa.iset.newhomepage.SectionGridHomeActivity" />
+        </activity>
+        <activity android:name=".instroslider.WelcomeActivity" />
+        <activity android:name=".mycircle.LoginActivity" />
+        <activity android:name=".UserRegistrationActivity" />
     </application>
 
 </manifest>

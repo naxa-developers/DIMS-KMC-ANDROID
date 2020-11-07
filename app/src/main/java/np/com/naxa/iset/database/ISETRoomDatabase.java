@@ -1,21 +1,30 @@
 package np.com.naxa.iset.database;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+
+import java.io.File;
 
 import np.com.naxa.iset.database.dao.CommonPlacesAttrbDao;
+import np.com.naxa.iset.database.dao.ContactCategoryListDao;
 import np.com.naxa.iset.database.dao.ContactDao;
+import np.com.naxa.iset.database.dao.DisasterInfoDetailsDao;
 import np.com.naxa.iset.database.dao.EducationalInstitutesDao;
 import np.com.naxa.iset.database.dao.GeoJsonCategoryDao;
 import np.com.naxa.iset.database.dao.GeoJsonListDao;
 import np.com.naxa.iset.database.dao.HospitalFacilitiesDao;
+import np.com.naxa.iset.database.dao.InventoryListDetailsDao;
 import np.com.naxa.iset.database.dao.MessageHelperDao;
+import np.com.naxa.iset.database.dao.MyCircleContactDao;
 import np.com.naxa.iset.database.dao.OpenSpaceDao;
+import np.com.naxa.iset.database.dao.PublicationsListDao;
+import np.com.naxa.iset.database.dao.ReportDetailsDao;
 import np.com.naxa.iset.database.entity.CommonPlacesAttrb;
 import np.com.naxa.iset.database.entity.Contact;
 import np.com.naxa.iset.database.entity.EducationalInstitutes;
@@ -23,19 +32,28 @@ import np.com.naxa.iset.database.entity.GeoJsonCategoryEntity;
 import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
+import np.com.naxa.iset.database.entity.ReportDetailsEntity;
+import np.com.naxa.iset.disasterinfo.model.DisasterInfoDetailsEntity;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListDetails;
 import np.com.naxa.iset.firebase.MessageHelper;
+import np.com.naxa.iset.inventory.model.InventoryListDetails;
+import np.com.naxa.iset.mycircle.ContactModel;
+import np.com.naxa.iset.publications.entity.PublicationsListDetails;
+import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 /**
  * Created by samir on 4/22/2018.
  */
 
 @Database(entities = {Contact.class, OpenSpace.class, CommonPlacesAttrb.class, HospitalFacilities.class, EducationalInstitutes.class,
-        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class,
-}, version = 17, exportSchema = false)
+        GeoJsonCategoryEntity.class, GeoJsonListEntity.class, MessageHelper.class, ContactModel.class, ReportDetailsEntity.class,
+        DisasterInfoDetailsEntity.class, PublicationsListDetails.class, ContactCategoryListDetails.class, InventoryListDetails.class
+}, version = 27, exportSchema = false)
 
 public abstract class ISETRoomDatabase extends RoomDatabase {
 
     public abstract ContactDao contactDao();
+    public abstract MyCircleContactDao myCircleContactDao();
     public abstract MessageHelperDao messageHelperDao();
     public abstract OpenSpaceDao openSpaceDao();
     public abstract CommonPlacesAttrbDao commonPlacesAttrbDao();
@@ -43,15 +61,21 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     public abstract EducationalInstitutesDao educationalInstitutesDao();
     public abstract GeoJsonCategoryDao geoJsonCategoryDao();
     public abstract GeoJsonListDao geoJsonListDao();
+    public abstract ReportDetailsDao reportDetailsDao();
+    public abstract DisasterInfoDetailsDao disasterInfoDetailsDao();
+    public abstract PublicationsListDao publicationsListDao();
+    public abstract ContactCategoryListDao contactCategoryListDao();
+    public abstract InventoryListDetailsDao inventoryListDetailsDao();
 
     private static ISETRoomDatabase INSTANCE;
 
     public static ISETRoomDatabase getDatabase(final Context context) {
+        CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(context, CreateAppMainFolderUtils.appmainFolderName);
         if (INSTANCE == null) {
             synchronized (ISETRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            ISETRoomDatabase.class, "iset_database")
+                            ISETRoomDatabase.class, createAppMainFolderUtils.getAppDataFolderName()+File.separator+"iset_database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this codelab.
                             .fallbackToDestructiveMigration()
@@ -84,6 +108,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final ContactDao mContactDao;
+        private final MyCircleContactDao mMyCircleContactDao;
         private final MessageHelperDao mMessageHelperDao;
         private final OpenSpaceDao mOpenSpaceDao;
         private final CommonPlacesAttrbDao mCommonPlacesAttrbDao;
@@ -91,9 +116,15 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
         private final EducationalInstitutesDao mEducationalInstitutesDao;
         private final GeoJsonCategoryDao mGeoJsonCategoryDao;
         private final GeoJsonListDao mGeoJsonListDao;
+        private final ReportDetailsDao mReportDetailsDao;
+        private final DisasterInfoDetailsDao mDisasterInfoDetailsDao;
+        private final PublicationsListDao mPublicationsListDao;
+        private final ContactCategoryListDao mContactCategoryListDao;
+        private final InventoryListDetailsDao mInventoryListDetailsDao;
 
         PopulateDbAsync(ISETRoomDatabase db) {
             mContactDao = db.contactDao();
+            mMyCircleContactDao = db.myCircleContactDao();
             mMessageHelperDao = db.messageHelperDao();
             mOpenSpaceDao = db.openSpaceDao();
             mCommonPlacesAttrbDao = db.commonPlacesAttrbDao();
@@ -101,6 +132,11 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mEducationalInstitutesDao = db.educationalInstitutesDao();
             mGeoJsonCategoryDao = db.geoJsonCategoryDao();
             mGeoJsonListDao = db.geoJsonListDao();
+            mReportDetailsDao = db.reportDetailsDao();
+            mDisasterInfoDetailsDao = db.disasterInfoDetailsDao();
+            mPublicationsListDao = db.publicationsListDao();
+            mContactCategoryListDao = db.contactCategoryListDao();
+            mInventoryListDetailsDao = db.inventoryListDetailsDao();
 
         }
 
@@ -111,7 +147,7 @@ public abstract class ISETRoomDatabase extends RoomDatabase {
             mContactDao.deleteAll();
 //            mCommonPlacesAttrbDao.deleteAll();
 //            mHospitalFacilitiesDao.deleteAll();
-            insertContact();
+//            insertContact();
             return null;
         }
 

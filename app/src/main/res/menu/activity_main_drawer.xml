@@ -21,6 +21,15 @@
             android:title="@string/nav_report" />
 
         <item
+            android:id="@+id/nav_view_saved_report"
+            android:icon="@drawable/ic_nav_report"
+            android:title="@string/view_saved_forms" />
+        <item
+            android:id="@+id/nav_view_unverified_report"
+            android:icon="@drawable/ic_nav_report"
+            android:title="@string/view_unverified_forms" />
+
+        <item
             android:id="@+id/nav_notify_oithers"
             android:icon="@drawable/ic_nav_notify_others"
             android:title="@string/nav_Notify_others" />
@@ -44,6 +53,11 @@
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_nav_map"
             android:title="@string/nav_map" />
+
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_nav_profile"
+            android:title="@string/nav_login" />
     </group>
 
 </menu>

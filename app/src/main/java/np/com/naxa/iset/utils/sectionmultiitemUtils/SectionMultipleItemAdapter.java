@@ -18,7 +18,6 @@ import java.util.List;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 

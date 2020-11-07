@@ -25,13 +25,17 @@
         android:textColor="@color/slate_black"
         android:textSize="@dimen/material_text_subhead" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btnAddContactToCircle"
         android:layout_width="@dimen/spacing_xlarge"
         android:layout_height="@dimen/spacing_xlarge"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@drawable/ic_add_black_24dp"
-        android:backgroundTint="@color/isetPurple"/>
+        android:backgroundTint="@color/isetPurple"
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginRight="@dimen/spacing_medium"
+        />
 
 </RelativeLayout>

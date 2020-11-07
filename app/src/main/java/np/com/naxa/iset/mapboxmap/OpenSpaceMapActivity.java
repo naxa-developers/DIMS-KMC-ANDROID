@@ -7,17 +7,18 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.os.Handler;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +31,6 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -49,21 +49,33 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.detailspage.MarkerDetailedDisplayAdapter;
+import np.com.naxa.iset.detailspage.MarkerDetailsKeyValue;
 import np.com.naxa.iset.event.MapDataLayerListCheckEvent;
-import np.com.naxa.iset.event.MyCircleContactAddEvent;
-import np.com.naxa.iset.home.model.MapDataCategory;
+import np.com.naxa.iset.event.MarkerClickEvent;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawRouteOnMap;
+import np.com.naxa.iset.mapboxmap.mapboxutils.DrawRouteOnMap;
+import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mapboxmap.mapboxutils.MapboxBaseStyleUtils;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryListAdapter;
 import np.com.naxa.iset.mapboxmap.openspace.MapCategoryModel;
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.QueryBuildWithSplitter;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.DataServer;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
@@ -100,12 +112,13 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
     Button btnMapLayerData;
     @BindView(R.id.btnMapLayerSwitch)
     Button btnMapLayerSwitch;
+    @BindView(R.id.btnGoThere)
+    Button btnGoThere;
 
     private SlidingUpPanelLayout mLayout;
     private PermissionsManager permissionsManager;
     private MapView mapView;
     private MapboxMap mapboxMap;
-    int count = 0;
 
 
     String filename = "";
@@ -120,7 +133,6 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
     // variables for calculating and drawing a route
     private Point originPosition;
     private Point destinationPosition;
-    private DirectionsRoute currentRoute;
     private NavigationMapRoute navigationMapRoute;
     SharedPreferenceUtils sharedPreferenceUtils;
 
@@ -140,8 +152,8 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         sharedPreferenceUtils = new SharedPreferenceUtils(OpenSpaceMapActivity.this);
         setupToolBar();
-//        setupBottomSlidingPanel();
-//        setupListRecycler();
+        setupBottomSlidingPanel();
+        setupListMarkerDetailsRecycler();
         mData = DataServer.getMapDatacategoryList(OpenSpaceMapActivity.this);
 
 
@@ -192,6 +204,13 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
     }
 
+    private void setupListMarkerDetailsRecycler() {
+        MarkerDetailedDisplayAdapter markerDetailedDisplayAdapter = new MarkerDetailedDisplayAdapter(R.layout.marker_detailed_info_display_layout, null);
+        recyclerViewMapCategory.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMapCategory.setAdapter(markerDetailedDisplayAdapter);
+
+    }
+
     private void setupListRecycler() {
         MapCategoryListAdapter mapCategoryListAdapter = new MapCategoryListAdapter(R.layout.openspace_map_category_list_item_row_layout, null);
         recyclerViewMapCategory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -214,6 +233,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
 
     }
+
 
     private Dialog setupMapOptionsDialog() {
         // launch new intent instead of loading fragment
@@ -255,22 +275,102 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
             @Override
             public void onMetropolitanClick() {
-                filename = "kathmandu_boundary.json";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point , "");
+                filename = "kathmandu_boundary.geojson";
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
+                removeLayerFromMap("kathmandu_wards.geojson");
             }
 
             @Override
             public void onWardClick() {
-                filename = "kathmandu_wards.json";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                filename = "kathmandu_wards.geojson";
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
+                removeLayerFromMap("kathmandu_boundary.geojson");
+
 
             }
+
+            private void removeLayerFromMap(String filename) {
+
+                if(filename != null) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, false, "");
+
+                        }
+                    }, 50);
+                }
+            }
         });
+
+
     }
+
+    private Dialog setupMapDataLayerDialog(boolean isFirstTime) {
+
+        if (mapboxMap == null) {
+            Toast.makeText(this, "Your map is not ready yet", Toast.LENGTH_SHORT).show();
+        }
+
+        return DialogFactory.createMapDataLayerDialog(OpenSpaceMapActivity.this, mData, drawGeoJsonOnMap, isFirstTime, new MapDataLayerDialogCloseListen() {
+                    @Override
+                    public void onDialogClose() {
+                        drawGeoJsonOnMap();
+                    }
+
+                    @Override
+                    public void isFirstTime() {
+                        drawGeoJsonOnMap();
+
+                    }
+                }
+        );
+    }
+
+    private void drawGeoJsonOnMap() {
+
+        Observable.just(mapDataLayerListCheckedEventList)
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(new Function<List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>, Iterable<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>>() {
+                    @Override
+                    public Iterable<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> apply(List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCheckedEvents) throws Exception {
+                        return mapDataLayerListCheckedEvents;
+                    }
+                })
+                .map(new Function<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent, MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>() {
+                    @Override
+                    public MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent apply(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent mapDataLayerListCheckedEvent) throws Exception {
+                        return mapDataLayerListCheckedEvent;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>() {
+                    @Override
+                    public void onNext(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent mapDataLayerListCheckedEvent) {
+                        Log.d(TAG, "onNext: "+mapDataLayerListCheckedEvent.getMultiItemSectionModel().getData_key());
+                        Log.d(TAG, "onNext: "+mapDataLayerListCheckedEvent.getChecked());
+
+                        drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(mapDataLayerListCheckedEvent.getMultiItemSectionModel().getData_value(),
+                                mapDataLayerListCheckedEvent.getChecked(), mapDataLayerListCheckedEvent.getMultiItemSectionModel().getImage());
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -291,14 +391,9 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         this.mapboxMap = mapboxMap;
         setMapCameraPosition();
-
-//        mapboxMap.setStyleUrl("mapbox://styles/samirdangal/cjqc6swc681go2rpjwnpdtm7y");
-//        mapView.setStyleUrl("mapbox://styles/samirdangal/cjqc6swc681go2rpjwnpdtm7y");
-//        mapView.setStyleUrl("https://api.mapbox.com/styles/v1/samirdangal/cjqc6swc681go2rpjwnpdtm7y.html?fresh=true&title=true&access_token=pk.eyJ1Ijoic2FtaXJkYW5nYWwiLCJhIjoiY2pwZHNjaXNpMDJrNjNxbWFlaDZobnZ1MyJ9.ASQwLRwoQeTp3PkVqHh2hw#16.5/48.766736/2.329968/0");
-//        mapboxMap.setStyleUrl("https://api.mapbox.com/styles/v1/samirdangal/cjqc6swc681go2rpjwnpdtm7y.html?fresh=true&title=true&access_token=pk.eyJ1Ijoic2FtaXJkYW5nYWwiLCJhIjoiY2pwZHNjaXNpMDJrNjNxbWFlaDZobnZ1MyJ9.ASQwLRwoQeTp3PkVqHh2hw#16.5/48.766736/2.329968/0");
-
-
         mapboxMap.addOnMapClickListener(this);
+        mapboxMap.getUiSettings().setCompassFadeFacingNorth(false);
+        mapboxMap.getUiSettings().setCompassImage(getResources().getDrawable(R.drawable.direction_compas_icon));
 
 
         drawGeoJsonOnMap = new DrawGeoJsonOnMap(OpenSpaceMapActivity.this, mapboxMap, mapView);
@@ -306,19 +401,12 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
         mapboxBaseStyleUtils = new MapboxBaseStyleUtils(OpenSpaceMapActivity.this, mapboxMap, mapView);
         mapboxBaseStyleUtils.changeBaseColor();
 
-        if (sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == -1 ||
-                sharedPreferenceUtils.getIntValue(MAP_OVERLAY_LAYER, -1) == KEY_MUNICIPAL_BOARDER) {
-            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_boundary.json", true, "");
-            count = 2;
-        } else {
-            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap("kathmandu_wards.json", true, "");
-            count = 2;
-        }
         setupMapOptionsDialog();
-        DialogFactory.createMapDataLayerDialog(OpenSpaceMapActivity.this, mData, drawGeoJsonOnMap);
+
+        setupMapDataLayerDialog(true).hide();
 
         mapView.invalidate();
-        }
+    }
 
     public void setMapCameraPosition() {
 
@@ -339,7 +427,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapClick(@NonNull LatLng latLngPoint) {
 
-        if(point){
+        if (point) {
             return;
         }
 
@@ -354,6 +442,7 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
+            Toast.makeText(this, "Location Permission Required", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -505,56 +594,161 @@ public class OpenSpaceMapActivity extends AppCompatActivity implements OnMapRead
     ArrayList<LatLng> points = null;
     boolean point = false;
 
-    @OnClick({R.id.point, R.id.multipolygon, R.id.multiLineString, R.id.navigation, R.id.btnMapLayerData, R.id.btnMapLayerSwitch})
+    @OnClick({R.id.point, R.id.multipolygon, R.id.multiLineString, R.id.navigation, R.id.btnMapLayerData, R.id.btnMapLayerSwitch, R.id.btnGoThere})
     public void onViewClicked(View view) {
 
         switch (view.getId()) {
             case R.id.point:
                 filename = "financial_institution.geojson";
-                count++;
-                point = true;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "ic_marker_openspace");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "ic_marker_openspace");
                 break;
 
             case R.id.multipolygon:
                 filename = "wards.geojson";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
                 break;
 
             case R.id.multiLineString:
                 filename = "road_network.geojson";
-                count++;
-                point = false;
-                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, point, "");
+                drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(filename, true, "");
                 break;
 
             case R.id.navigation:
                 drawRouteOnMap.enableNavigationUiLauncher(OpenSpaceMapActivity.this);
+
+                navigation.setVisibility(View.GONE);
                 break;
 
             case R.id.btnMapLayerData:
-                if(mapboxMap == null){
+                if (mapboxMap == null) {
+                    Toast.makeText(this, "Your map is not ready yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                DialogFactory.createMapDataLayerDialog(OpenSpaceMapActivity.this, mData, drawGeoJsonOnMap).show();
+                mapboxMap.clear();
+                setupMapOptionsDialog();
+                mapDataLayerListCheckedEventList.clear();
+                setupMapDataLayerDialog(false).show();
                 break;
 
             case R.id.btnMapLayerSwitch:
                 setupMapOptionsDialog().show();
                 break;
+
+            case R.id.btnGoThere:
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+
+                    generateRouteToGoThere(selectedMarkerPosition);
+                } else {
+                    Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
+    private LatLng selectedMarkerPosition = new LatLng(0.0, 0.0);
+
+    public void generateRouteToGoThere(@NonNull LatLng latLngPoint) {
+
+        destinationCoord = latLngPoint;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            return;
+        }
+
+        try {
+
+            originCoord = new LatLng(originLocation.getLatitude(), originLocation.getLongitude());
+            originLocation = mapboxMap.getLocationComponent().getLocationEngine().getLastLocation();
+
+            destinationPosition = Point.fromLngLat(destinationCoord.getLongitude(), destinationCoord.getLatitude());
+            originPosition = Point.fromLngLat(originCoord.getLongitude(), originCoord.getLatitude());
+
+            if (originPosition == null) {
+                return;
+            }
+            if (destinationPosition == null) {
+                return;
+            }
+            drawRouteOnMap.getRoute(originPosition, destinationPosition);
+            navigation.setVisibility(View.VISIBLE);
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "Searching current location \nMake sure your GPS provider is enabled.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+    }
+
+
+    List<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent> mapDataLayerListCheckedEventList = new ArrayList<MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent>();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRVItemClick(MapDataLayerListCheckEvent.MapDataLayerListCheckedEvent itemClick) {
         String name = itemClick.getMultiItemSectionModel().getData_value();
 //        if(itemClick.getChecked()){
-            drawGeoJsonOnMap.readAndDrawGeoSonFileOnMap(itemClick.getMultiItemSectionModel().getData_value(), itemClick.getChecked(), itemClick.getMultiItemSectionModel().getImage());
-//        }
-        Toast.makeText(this, "add to your circle button clicked "+name, Toast.LENGTH_SHORT).show();
+        if (mapDataLayerListCheckedEventList.size() == 0) {
+            mapDataLayerListCheckedEventList.add(itemClick);
+
+//            hashMapDataLayer.put(itemClick.getMultiItemSectionModel().getData_key(), itemClick);
+
+        } else if (mapDataLayerListCheckedEventList.size() > 0) {
+            boolean alreadyExist = false;
+            int itemPosition = 0;
+            for (int i = 0; i < mapDataLayerListCheckedEventList.size(); i++) {
+                itemPosition = i;
+                if (mapDataLayerListCheckedEventList.get(i).getMultiItemSectionModel().getData_key().equals(itemClick.getMultiItemSectionModel().getData_key())) {
+                    alreadyExist = true;
+                    break;
+
+                } else {
+                    alreadyExist = false;
+                }
+            }
+
+            if (alreadyExist) {
+                if (!itemClick.getChecked()) {
+                    mapDataLayerListCheckedEventList.remove(itemPosition);
+                    mapDataLayerListCheckedEventList.add(itemClick);
+                    Log.d(TAG, "onRVItemClick: Item Removed");
+
+                }
+            }
+            if (!alreadyExist) {
+                if (itemClick.getChecked()) {
+                    mapDataLayerListCheckedEventList.add(itemClick);
+                    Log.d(TAG, "onRVItemClick: Item Added");
+                }
+            }
+
+        }
+//        Toast.makeText(this, "add to your circle button clicked " + name, Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMarkerItemClick(MarkerClickEvent.MarkerItemClick itemClick) {
+
+        List<MarkerDetailsKeyValue> markerDetailsKeyValueListCommn = new ArrayList<MarkerDetailsKeyValue>();
+        selectedMarkerPosition = itemClick.getLocation();
+        if (selectedMarkerPosition == null) {
+            btnGoThere.setVisibility(View.GONE);
+        } else {
+            btnGoThere.setVisibility(View.VISIBLE);
+        }
+
+        String markerPropertiesJson = itemClick.getMarkerProperties();
+        QueryBuildWithSplitter queryBuildWithSplitter = new QueryBuildWithSplitter();
+        markerDetailsKeyValueListCommn = queryBuildWithSplitter.splitedKeyValueList(
+                queryBuildWithSplitter.splitedStringList(markerPropertiesJson));
+
+        ((MarkerDetailedDisplayAdapter) recyclerViewMapCategory.getAdapter()).replaceData(markerDetailsKeyValueListCommn);
+
+        mLayout.setAnchorPoint(0.52f);
+        mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+
+        drawRouteOnMap.removeRoute();
 
     }
 

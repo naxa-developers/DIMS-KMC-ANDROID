@@ -2,11 +2,10 @@ package np.com.naxa.iset.drr_dictionary.data_glossary;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +23,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.drr_dictionary.JSONLoadImpl;
 import np.com.naxa.iset.utils.TextViewUtils;
+import np.com.naxa.iset.utils.imageutils.LoadImageUtils;
 
 public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
 
@@ -37,6 +37,8 @@ public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.imageViewGlossaryDetails)
     ImageView imageViewGlossaryDetails;
+    @BindView(R.id.tv_word_comment)
+    TextView tvWordComment;
     private WordsWithDetailsModel wordsWithDetailsModel;
 
 
@@ -53,8 +55,14 @@ public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
 
         initToolbar();
 
-        tvWordTitle.setText(wordsWithDetailsModel.getTitle().trim());
-        tvWordDesc.setText(wordsWithDetailsModel.getDesc());
+        tvWordTitle.setText(wordsWithDetailsModel.getWord().trim());
+        tvWordDesc.setText(wordsWithDetailsModel.getMeaning());
+        tvWordComment.setText(wordsWithDetailsModel.getComment());
+
+
+        if (wordsWithDetailsModel.getImage() != null && !wordsWithDetailsModel.getImage().equals("")) {
+            LoadImageUtils.loadImageToViewFromSrc(imageViewGlossaryDetails, wordsWithDetailsModel.getImage());
+        }
 
 
         JSONLoadImpl
@@ -68,7 +76,7 @@ public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
                 .flatMap(new Function<WordsWithDetailsModel, Observable<String>>() {
                     @Override
                     public Observable<String> apply(WordsWithDetailsModel wordsWithDetailsModel) throws Exception {
-                        return Observable.just(wordsWithDetailsModel.getTitle().trim());
+                        return Observable.just(wordsWithDetailsModel.getWord().trim());
                     }
                 })
                 .toList()
@@ -92,14 +100,14 @@ public class DataGlossaryWordDetailsActivity extends AppCompatActivity {
                 });
 
 
-        if (wordsWithDetailsModel.getTitle().trim().equalsIgnoreCase("Consent")) {
+        if (wordsWithDetailsModel.getWord().trim().equalsIgnoreCase("Consent")) {
 
-            videoURL = wordsWithDetailsModel.getVideo_URL();
-            btnWatchVideo.setVisibility(View.VISIBLE);
+//            videoURL = wordsWithDetailsModel.getVideo_URL();
+//            btnWatchVideo.setVisibility(View.VISIBLE);
         }
-        if (wordsWithDetailsModel.getTitle().trim().equalsIgnoreCase("No Consent")) {
-            videoURL = wordsWithDetailsModel.getVideo_URL();
-            btnWatchVideo.setVisibility(View.VISIBLE);
+        if (wordsWithDetailsModel.getWord().trim().equalsIgnoreCase("No Consent")) {
+//            videoURL = wordsWithDetailsModel.getVideo_URL();
+//            btnWatchVideo.setVisibility(View.VISIBLE);
         }
     }
 

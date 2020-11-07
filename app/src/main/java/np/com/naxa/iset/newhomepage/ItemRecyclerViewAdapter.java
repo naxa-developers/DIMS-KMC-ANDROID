@@ -3,8 +3,8 @@ package np.com.naxa.iset.newhomepage;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +17,15 @@ import java.util.ArrayList;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.activity.NotifyOthersActivity;
 import np.com.naxa.iset.activity.MyCircleProfileActivity;
-import np.com.naxa.iset.activity.ReportActivity;
+import np.com.naxa.iset.inventory.InventoryActivity;
+import np.com.naxa.iset.report.ReportActivity;
 import np.com.naxa.iset.disasterinfo.HazardInfoActivity;
 import np.com.naxa.iset.drr_dictionary.data_glossary.GlossaryListActivity;
-import np.com.naxa.iset.emergencynumbers.EmergencyNumbersActivity;
+import np.com.naxa.iset.emergencyContacts.EmergencyContactsActivity;
 import np.com.naxa.iset.mapboxmap.OpenSpaceMapActivity;
+import np.com.naxa.iset.publications.PublicationsListActivity;
 import np.com.naxa.iset.quiz.QuizHomeActivity;
+import np.com.naxa.iset.report.ReportCtegoryActivity;
 import np.com.naxa.iset.utils.DialogFactory;
 
 /**
@@ -91,14 +94,14 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 break;
 
             case "Report an incident":
-                DialogFactory.createCustomDialog(context,
-                        "If you want to submit a detailed report, fill the following form.",
-                        new DialogFactory.CustomDialogListener() {
-                            @Override
-                            public void onClick() {
-                                context.startActivity(new Intent(context, ReportActivity.class));
-                            }
-                        }).show();
+//                DialogFactory.createCustomDialog(context,
+//                        "If you want to submit a detailed report, fill the following form.",
+//                        new DialogFactory.CustomDialogListener() {
+//                            @Override
+//                            public void onClick() {
+                                context.startActivity(new Intent(context, ReportCtegoryActivity.class));
+//                            }
+//                        }).show();
                 break;
             case "Report":
                 context.startActivity(new Intent(context, ReportActivity.class));
@@ -113,7 +116,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 break;
 
             case "EMERGENCY NUMBERS":
-                context.startActivity(new Intent(context, EmergencyNumbersActivity.class));
+                context.startActivity(new Intent(context, EmergencyContactsActivity.class));
                 break;
 
             case "HAZARD INFO":
@@ -128,7 +131,12 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 context.startActivity(new Intent(context, GlossaryListActivity.class));
                 break;
 
-            case "Library":
+            case "Emergency materials":
+                context.startActivity(new Intent(context, InventoryActivity.class));
+                break;
+
+            case "Multimedia":
+                context.startActivity(new Intent(context, PublicationsListActivity.class));
                 break;
 
             case "MAP":

@@ -3,6 +3,8 @@
     <string name="app_name">Kathmandu Metropolitan DIMS</string>
     <string name="search_hint">Search Places</string>
 
+    <string name="file_provider_authority" translatable="false">np.com.naxa.iset.fileprovider</string>
+
     <string name="speech_prompt">Say Something</string>
     <string name="speech_not_supported">speech to text doesn\'t seems supported</string>
     <string name="menu.clear">clear</string>
@@ -57,7 +59,7 @@
     <string name="nntds_executive_commitee">NNTDS\'s Executive Committee</string>
     <string name="full_name">Full Name</string>
     <string name="contact_number">Contact Number</string>
-    <string name="photo">Photo</string>
+    <string name="photo_name">Photo</string>
     <string name="location">Location</string>
     <string name="capture">Capture</string>
     <string name="record">Record</string>
@@ -137,7 +139,7 @@
     cheese caerphilly bavarian bergkase cheese and biscuits mascarpone. Cheeseburger swiss bavarian
     bergkase cream cheese fromage frais cheesy feet port-salut airedale.</string>
     <string name="form_sent_np">फारम पठाइयो</string>
-    <string name="form_not_sent_np">Unexpected error occured. </string>
+    <string name="form_not_sent_np">Unexpected data occured. </string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="about_us">About Us</string>
     <string name="expand">पुरा पढ्नुहोस</string>
@@ -212,14 +214,67 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
     </string-array>
 
     <string-array name="hazard_type">
-        <item>Hazard Type</item>
+        <item>Select Disaster Type</item>
         <item>Flood</item>
         <item>Landslide</item>
         <item>Fire</item>
         <item>Gas</item>
+    </string-array>
+
+    <string-array name="civic_problem_type">
+        <item>Select Problem Type</item>
+        <item>Waste</item>
+        <item>Drainage Problem</item>
+        <item>Road Damage</item>
+        <item>Water Problem</item>
+    </string-array>
+
+    <string-array name="risk_level">
+        <item>Select Risk Level</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
+
+    <string-array name="disaster_status">
+        <item>Select Disaster Status</item>
+        <item>Pending</item>
+        <item>Solved</item>
+    </string-array>
+
+    <string-array name="infrastructure_damage">
+        <item>Select Infrastructure Damage</item>
+        <item>Full</item>
+        <item>Partial</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -273,6 +328,64 @@
     <string name="request_for_blood">Request for blood</string>
     <string name="map_option">Map Option</string>
     <string name="icon_explanation">Icon Explanation</string>
+    <string name="go_there">Go There</string>
+    <string name="no_response">No response</string>
+    <string name="login_with_your_gmail_account">Login with your Gmail Account</string>
+
+
+    <string-array name="array_blood_group">
+        <item>Select your Blood Group</item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+        <item>O+</item>
+        <item>O-</item>
+    </string-array>
+
+
+    <!-- intro slider start-->
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Disaster Ready!</string>
+    <string name="slide_1_desc">Prepared yourself for disaster!</string>
+
+    <string name="slide_2_title">Report Disaster Events</string>
+    <string name="slide_2_desc">Know what is happening around you!</string>
+
+    <string name="slide_3_title">Report Quickly</string>
+    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+
+    <string name="slide_4_title">Get Connected</string>
+    <string name="slide_4_desc">A bridge between public and local government!</string>
+
+    <string name="slide_5_title">Registration</string>
+    <string name="slide_5_desc">Register for more services!</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+    <string name="nav_login">Login</string>
+
+    <string name="get_location">Record Location</string>
+    <string name="getting_location">Loading Location</string>
+    <string name="please_wait_long">Please wait. This could take a few minutes.</string>
+    <string name="save_point">Save GeoPoint</string>
+    <string name="get_point">Start GeoPoint</string>
+    <string name="geopoint_view_read_only">View GeoPoint</string>
+    <string name="cancel_location">Cancel</string>
+    <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
+    <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
+    <string name="location_accuracy">Accuracy is %f$s m</string>
+    <string name="location_metadata">Satellites available: %1$d/24\n\nTime elapsed: %2$s</string>
+    <string name="view_saved_forms">View saved forms</string>
+    <string name="view_unverified_forms">View Unverified Forms</string>
+
+
+    <!--intro slider end-->
 
 
 </resources>

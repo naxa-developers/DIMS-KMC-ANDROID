@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginTop="@dimen/spacing_medium"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ivPeopleInMyCircle"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_nav_profile" />
+
+    <TextView
+        android:id="@+id/tvPeopleInMyCircleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/btnMyCirclePeopleStatus"
+        android:layout_toEndOf="@id/ivPeopleInMyCircle"
+        android:gravity="left"
+        android:padding="@dimen/default_padding"
+        android:text="Hari Krishna Parajuli"
+        android:textSize="@dimen/material_text_subhead" />
+
+
+    <Button
+        android:id="@+id/btnMyCirclePeopleStatus"
+        android:layout_width="90dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/btnDeletePeopleInMyCircle"
+        android:background="@color/dividerColor"
+        android:padding="@dimen/spacing_medium"
+        android:text="@string/no_response"
+        android:textSize="@dimen/material_text_small_caption"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btnDeletePeopleInMyCircle"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_delete_grey_24dp" />
+
+
+</RelativeLayout>

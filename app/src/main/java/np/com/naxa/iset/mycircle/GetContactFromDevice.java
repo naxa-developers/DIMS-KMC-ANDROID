@@ -12,16 +12,21 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.TextUtils;
 
 public class GetContactFromDevice {
+    private static final String TAG  = "GetContactFromDevice";
 
-    public List<ContactModel> getContacts(Context context, Dialog progressDialog) {
-        ArrayList<ContactModel> list = new ArrayList<>();
+    public ArrayList<MyCircleContactListData> getContacts(Context context) {
+        ArrayList<MyCircleContactListData> list = new ArrayList<>();
+        ArrayList<String> contactNoList = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         if (cursor.getCount() > 0) {
@@ -41,15 +46,18 @@ public class GetContactFromDevice {
                         photo = BitmapFactory.decodeStream(inputStream);
                     }
                     while (cursorInfo.moveToNext()) {
-                        ContactModel info = new ContactModel();
-                        info.id = id;
+
+                        MyCircleContactListData info = new MyCircleContactListData("", "", "", "", false);
+//                        info.id = id;
                         info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        info.mobileNumber = cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        info.photo = photo;
-                        info.photoURI= pURI;
+                        info.mobileNumber = TextUtils.validatePhoneNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+
+                        info.imgUrl= pURI.toString();
                         list.add(info);
+                        contactNoList.add(info.mobileNumber);
 
                         Log.d("GetContactFromDevice", "getContacts: " + info.name);
+                        Log.d("GetContactFromDevice", "getContacts: " + info.mobileNumber);
                     }
 
                     cursorInfo.close();
@@ -57,11 +65,6 @@ public class GetContactFromDevice {
             }
             cursor.close();
         }
-
-        if(progressDialog.isShowing() && progressDialog != null){
-            progressDialog.dismiss();
-        }
-        DialogFactory.createContactListDialog(context, list).show();
         return list;
     }
 

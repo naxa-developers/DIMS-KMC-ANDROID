@@ -1,12 +1,12 @@
 package np.com.naxa.iset.firebase;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.home.HomeActivity;
-import np.com.naxa.iset.viewmodel.MessageHelperViewModel;
+import np.com.naxa.iset.database.viewmodel.MessageHelperViewModel;
 
 public class MessageActivity extends AppCompatActivity {
 

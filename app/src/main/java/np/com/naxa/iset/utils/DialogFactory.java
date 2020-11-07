@@ -11,31 +11,38 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.android.gms.common.SignInButton;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import np.com.naxa.iset.R;
+import np.com.naxa.iset.event.GmailLoginEvent;
+import np.com.naxa.iset.event.MyCircleContactEvent;
+import np.com.naxa.iset.inventory.InventoryActivity;
 import np.com.naxa.iset.mapboxmap.mapboxutils.DrawGeoJsonOnMap;
+import np.com.naxa.iset.mapboxmap.mapboxutils.MapDataLayerDialogCloseListen;
 import np.com.naxa.iset.mycircle.ContactModel;
-import np.com.naxa.iset.mycircle.MyCircleContactListAdapter;
+import np.com.naxa.iset.mycircle.contactlistdialog.contactlistadapter.MyCircleContactAddDialogListAdapter;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItem;
 import np.com.naxa.iset.utils.sectionmultiitemUtils.SectionMultipleItemAdapter;
 
@@ -150,7 +157,31 @@ public final class DialogFactory {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setContentView(R.layout.custom_dialog_success);
+
+        TextView text = (TextView) dialog.findViewById(R.id.tv_message);
+        text.setText(message);
+
+        Button btnOk = (Button) dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        return dialog;
+    }
+
+
+    public interface CustomDialogListener {
+        void onClick();
+    }
+
+    public static Dialog createCustomErrorDialog(@NonNull Context context, @NonNull String message, @NonNull CustomDialogListener listener) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_dialog_error);
 
         TextView text = (TextView) dialog.findViewById(R.id.tv_message);
         text.setText(message);
@@ -164,10 +195,6 @@ public final class DialogFactory {
             }
         });
         return dialog;
-    }
-
-    public interface CustomDialogListener {
-        void onClick();
     }
 
 
@@ -310,7 +337,7 @@ public final class DialogFactory {
     }
 
 
-    public static Dialog createContactListDialog(@NonNull Context context, ArrayList<ContactModel> contactModelArrayList) {
+    public static Dialog createContactListDialog(@NonNull Context context, List<ContactModel> contactModelArrayList) {
 
 
         final Dialog dialog = new Dialog(context);
@@ -331,22 +358,25 @@ public final class DialogFactory {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventBus.getDefault().post(new MyCircleContactEvent.MyCircleContactDialogCloseClick());
                 dialog.dismiss();
+
             }
         });
 
-        MyCircleContactListAdapter myCircleContactListAdapter = new MyCircleContactListAdapter(R.layout.contact_dialog_row_item_layout, contactModelArrayList);
+        MyCircleContactAddDialogListAdapter myCircleContactAddDialogListAdapter = new MyCircleContactAddDialogListAdapter(R.layout.contact_dialog_row_item_layout, contactModelArrayList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(myCircleContactListAdapter);
+        recyclerView.setAdapter(myCircleContactAddDialogListAdapter);
 
-//        ((MyCircleContactListAdapter) recyclerView.getAdapter()).replaceData(contactModelArrayList);
+//        ((MyCircleContactAddDialogListAdapter) recyclerView.getAdapter()).replaceData(contactModelArrayList);
 
 
         dialog.getWindow().setAttributes(lp);
         return dialog;
     }
 
-    public static Dialog createMapDataLayerDialog(@NonNull Context context, List<SectionMultipleItem> mapDataCategoryArrayList, DrawGeoJsonOnMap drawGeoJsonOnMap) {
+    public static Dialog createMapDataLayerDialog(@NonNull Context context, List<SectionMultipleItem> mapDataCategoryArrayList,
+                                                  DrawGeoJsonOnMap drawGeoJsonOnMap, boolean isFirsttime, @NonNull MapDataLayerDialogCloseListen listner) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -367,6 +397,7 @@ public final class DialogFactory {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listner.onDialogClose();
                 dialog.dismiss();
             }
         });
@@ -379,8 +410,7 @@ public final class DialogFactory {
                 switch (view.getId()) {
                     case R.id.card_view:
                         if (item.getMultiItemSectionModel() != null) {
-                            if (item.getMultiItemSectionModel().getData_value().equals("") || item.getMultiItemSectionModel().getData_value() == null)
-                            {
+                            if (item.getMultiItemSectionModel().getData_value().equals("") || item.getMultiItemSectionModel().getData_value() == null) {
                                 Log.d(TAG, "onItemChildClick: null value ");
                                 return;
                             }
@@ -397,11 +427,82 @@ public final class DialogFactory {
         });
         recyclerView.setAdapter(sectionAdapter);
 
+        if (isFirsttime) {
+            listner.isFirstTime();
+        }
+
 //        Toast.makeText(context, "createMapDataLayerDialog set adapter", Toast.LENGTH_SHORT).show();
 //        dialog.getWindow().setAttributes(lp);
         return dialog;
     }
 
+
+    public static Dialog createGmailLoginDialog(@NonNull Context context) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.gmail_login_custom_dialog);
+
+
+        SignInButton dialogButton = (SignInButton) dialog.findViewById(R.id.gmail_sign_in_button);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                EventBus.getDefault().post(new GmailLoginEvent.loginButtonClick());
+
+            }
+        });
+        return dialog;
+    }
+
+
+    public static Dialog createQuizAnsElaborationDialog(@NonNull Context context, @NonNull String questionProgress,
+                                                        @NonNull String questionStatus, @NonNull String questionDetails,
+                                                        @NonNull String questionElaboration, @NonNull CustomDialogListener listener) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.quiz_answer_elaboration_dialog_layout);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        TextView tvQuestionProgress = (TextView) dialog.findViewById(R.id.tv_question_progress);
+        TextView tvQuestionStatus = (TextView) dialog.findViewById(R.id.tv_question_status);
+        LinearLayout lLQuestionLayout = (LinearLayout) dialog.findViewById(R.id.questionLayout);
+        lLQuestionLayout.setVisibility(View.GONE);
+        TextView tvQuestionDetails = (TextView) dialog.findViewById(R.id.tv_question_details);
+        TextView tvQuestionElaboration = (TextView) dialog.findViewById(R.id.tv_answer_elaboration);
+
+        tvQuestionProgress.setText(questionProgress);
+        tvQuestionStatus.setText(questionStatus);
+        tvQuestionDetails.setText(questionDetails);
+        tvQuestionElaboration.setText(questionElaboration);
+
+        Button btnSeeQuestion = (Button) dialog.findViewById(R.id.btn_dialog_see_question);
+        Button btnNextQuestion = (Button) dialog.findViewById(R.id.btn_dialog_next_question);
+        btnSeeQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lLQuestionLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        btnNextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setAttributes(lp);
+        return dialog;
+    }
 
 
 }

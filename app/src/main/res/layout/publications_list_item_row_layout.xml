@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/publication_item_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/listItemSecondBG"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/spacing_medium"
+    android:paddingBottom="@dimen/spacing_medium"
+   >
+
+    <!--android:background="?android:selectableItemBackground"-->
+
+
+    <ImageView
+        android:id="@+id/img_publication_thumbnail"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_nav_profile"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/img_publication_thumbnail"
+        android:paddingLeft="@dimen/activity_horizontal_margin">
+
+    <TextView
+
+        android:id="@+id/publication_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:maxLines="2"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sp_14" />
+
+    <TextView
+        android:id="@+id/publication_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="909asdasdas"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sp_12"
+        android:maxLines="2"
+        />
+
+    <TextView
+        android:id="@+id/publication_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="type"
+        android:textSize="@dimen/sp_12"
+        android:textColor="@color/dark_gray"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_below="@+id/img_publication_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_grey"/>
+
+</RelativeLayout>

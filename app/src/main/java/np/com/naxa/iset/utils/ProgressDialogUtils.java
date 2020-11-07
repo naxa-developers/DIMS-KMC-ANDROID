@@ -2,7 +2,7 @@ package np.com.naxa.iset.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by Majestic on 3/16/2018.

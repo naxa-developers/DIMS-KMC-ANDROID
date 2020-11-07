@@ -16,7 +16,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_school"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -24,7 +24,7 @@
             android:layout_margin="@dimen/spacing_small"
             android:src="@drawable/ic_add_black_24dp" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_openspaces"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -33,7 +33,7 @@
             android:layout_below="@+id/floating_school"
             android:src="@drawable/ic_arrow_forward_black_24dp" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_hospital"
             android:layout_width="50dp"
             android:layout_height="50dp"

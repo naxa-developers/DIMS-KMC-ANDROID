@@ -1,18 +1,18 @@
 package np.com.naxa.iset.hospitalfilter;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -38,7 +38,7 @@ import np.com.naxa.iset.database.dao.HospitalFacilitiesDao;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.home.HomeActivity;
 import np.com.naxa.iset.utils.QueryBuildWithSplitter;
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
 
 
 public class HospitalFilterActivity extends AppCompatActivity implements OnFormElementValueChangedListener {
@@ -270,7 +270,7 @@ public class HospitalFilterActivity extends AppCompatActivity implements OnFormE
                                         String medicineStock, String bloodStock, String disasterPlan, String firstAid, String earthquakeResilient) {
         try {
             hospitalFacilitiesVewModel.getFilteredList(ward, hospital_type, bedCapacity, building_structure, available_facilities, excavation_plans,
-                    medicineStock, bloodStock, disasterPlan, firstAid, earthquakeResilient).observe(this, new android.arch.lifecycle.Observer<List<HospitalAndCommon>>() {
+                    medicineStock, bloodStock, disasterPlan, firstAid, earthquakeResilient).observe(this, new androidx.lifecycle.Observer<List<HospitalAndCommon>>() {
                 @Override
                 public void onChanged(@Nullable final List<HospitalAndCommon> hospitalFacilities) {
                     // Update the cached copy of the filtered HospitalAndCommon .

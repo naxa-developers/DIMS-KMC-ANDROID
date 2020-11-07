@@ -2,13 +2,14 @@ package np.com.naxa.iset.newhomepage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +28,13 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
 
     class SectionViewHolder extends RecyclerView.ViewHolder {
         private TextView sectionLabel, showAllButton;
-        private ImageView dottedViewLine, dottedViewHead;
+        private ImageView  dottedViewHead;
         private RecyclerView itemRecyclerView;
+        private RelativeLayout dottedViewLine;
 
         public SectionViewHolder(View itemView) {
             super(itemView);
-            dottedViewLine = (ImageView) itemView.findViewById(R.id.dottedView);
+            dottedViewLine = (RelativeLayout) itemView.findViewById(R.id.dottedView);
             dottedViewHead = (ImageView) itemView.findViewById(R.id.dottedLineHead);
             sectionLabel = (TextView) itemView.findViewById(R.id.section_label);
             showAllButton = (TextView) itemView.findViewById(R.id.section_show_all_button);

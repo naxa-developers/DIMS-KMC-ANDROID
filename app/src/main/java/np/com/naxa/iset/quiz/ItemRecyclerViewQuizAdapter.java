@@ -7,10 +7,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +26,7 @@ import java.util.Random;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.event.EmergenctContactCallEvent;
+import np.com.naxa.iset.quiz.quiznew.McqQuizTestActivity;
 import np.com.naxa.iset.utils.colorutils.ColorList;
 
 /**
@@ -88,7 +89,9 @@ public class ItemRecyclerViewQuizAdapter extends RecyclerView.Adapter<ItemRecycl
 //                startNewActivity(arrayList.get(position));
 //                EventBus.getDefault().post(new EmergenctContactCallEvent.ContactItemClick(arrayList.get(position)));
 
-                holder.item_bg.getContext().startActivity(new Intent(holder.item_bg.getContext(), QuizTestActivity.class));
+                Intent intent = new Intent(holder.item_bg.getContext(), McqQuizTestActivity.class);
+                intent.putExtra("OBJ", arrayList.get(position));
+                holder.item_bg.getContext().startActivity(intent);
 
             }
         });

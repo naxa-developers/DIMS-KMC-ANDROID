@@ -14,13 +14,20 @@ public class SharedPreferenceUtils {
     private SharedPreferences.Editor mSharedPreferencesEditor;
 
 
+    public static final String IS_APP_FIRST_TIME_LAUNCH = "is_app_first_time_launch";
+    public static final String HAS_CONTACT_LIST_LOCALLY = "has_contact_list_locally";
     public static final String IS_STORAGE_PERMISSION_GRANTED = "is_permission_granted";
     public static final String TOKEN_ID = "token_id";
+    public static final String USER_DETAILS = "user_details";
+    public static final String USER_ALREADY_REGISTERED = "user_already_registered";
+    public static final String USER_ALREADY_LOGGED_IN = "user_already_logged_in";
     public static final String IS_NOTIFY_ME = "notify_me";
     public static final String APP_LANGUAGE = "app_language";
     public static final String MAP_BASE_LAYER = "base_layer";
     public static final String MAP_OVERLAY_LAYER = "overlay_layer";
     public static final int KEY_STREET = 0 , KEY_SATELLITE = 1, KEY_OPENSTREET = 2, KEY_MUNICIPAL_BOARDER = 3, KEY_WARD = 4;
+
+    public static final String KEY_TERMINOLOGIES = "terminologies";
 
 
 

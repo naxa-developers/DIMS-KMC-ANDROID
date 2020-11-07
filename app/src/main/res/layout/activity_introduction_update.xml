@@ -22,7 +22,7 @@
             android:orientation="vertical">
 
             <!--bikash kshetra-->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
                 app:cardBackgroundColor="@color/white"
@@ -55,10 +55,10 @@
 
                 </FrameLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!--bikash aayog-->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
                 app:cardBackgroundColor="@color/white"
@@ -93,7 +93,7 @@
 
                 </FrameLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 

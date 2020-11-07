@@ -2,19 +2,19 @@ package np.com.naxa.iset.profile.wardprofile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import np.com.naxa.iset.R;
-import np.com.naxa.iset.profile.wardprofile.fragments.ManagementBoardFragment;
-import np.com.naxa.iset.profile.wardprofile.fragments.PeopleFragment;
-import np.com.naxa.iset.profile.wardprofile.fragments.RiskHazardFragment;
+import np.com.naxa.iset.profile.wardprofile.fragments.WardElectedRepresentativeFragment;
+import np.com.naxa.iset.profile.wardprofile.fragments.WardStaffFragment;
+import np.com.naxa.iset.profile.wardprofile.fragments.WardRiskProfileFragment;
 import np.com.naxa.iset.profile.wardprofile.fragments.ViewPagerAdapter;
-import np.com.naxa.iset.profile.wardprofile.fragments.WardProfileFragment;
+import np.com.naxa.iset.profile.wardprofile.fragments.WardMapFragment;
 
 public class WardProfileActivity extends AppCompatActivity {
 
@@ -57,10 +57,10 @@ public class WardProfileActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new WardProfileFragment(), "Ward Profile");
-        adapter.addFragment(new PeopleFragment(), "People");
-        adapter.addFragment(new ManagementBoardFragment(), "Management Board");
-        adapter.addFragment(new RiskHazardFragment(), "Risk Hazard");
+        adapter.addFragment(new WardMapFragment(), "Ward Map");
+        adapter.addFragment(new WardStaffFragment(), "Ward Staff");
+        adapter.addFragment(new WardElectedRepresentativeFragment(), "Elected Representative");
+        adapter.addFragment(new WardRiskProfileFragment(), "Risk Profile");
         viewPager.setAdapter(adapter);
     }
 }

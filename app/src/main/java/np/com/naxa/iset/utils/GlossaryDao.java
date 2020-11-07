@@ -44,7 +44,7 @@ public class GlossaryDao {
                 .filter(new Predicate<WordsWithDetailsModel>() {
                     @Override
                     public boolean test(WordsWithDetailsModel wordsWithDetailsModel) throws Exception {
-                        return wordsWithDetailsModel.getTitle().equalsIgnoreCase(searchString.trim());
+                        return wordsWithDetailsModel.getWord().equalsIgnoreCase(searchString.trim());
 
                     }
                 })

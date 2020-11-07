@@ -2,16 +2,15 @@ package np.com.naxa.iset.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -23,7 +22,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,8 +37,8 @@ import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.CommonPlacesAttrb;
 import np.com.naxa.iset.database.entity.GeoJsonCategoryEntity;
 import np.com.naxa.iset.database.entity.GeoJsonListEntity;
-import np.com.naxa.iset.home.HomeActivity;
 import np.com.naxa.iset.home.MapDataRepository;
+import np.com.naxa.iset.instroslider.WelcomeActivity;
 import np.com.naxa.iset.network.model.GeoJsonCategoryDetails;
 import np.com.naxa.iset.network.retrofit.NetworkApiClient;
 import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
@@ -48,13 +46,12 @@ import np.com.naxa.iset.newhomepage.SectionGridHomeActivity;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
-import np.com.naxa.iset.utils.imageutils.ImageSaveTask;
-import np.com.naxa.iset.viewmodel.CommonPlacesAttribViewModel;
-import np.com.naxa.iset.viewmodel.EducationalInstitutesViewModel;
-import np.com.naxa.iset.viewmodel.GeoJsonCategoryViewModel;
-import np.com.naxa.iset.viewmodel.GeoJsonListViewModel;
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
-import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
+import np.com.naxa.iset.database.viewmodel.CommonPlacesAttribViewModel;
+import np.com.naxa.iset.database.viewmodel.EducationalInstitutesViewModel;
+import np.com.naxa.iset.database.viewmodel.GeoJsonCategoryViewModel;
+import np.com.naxa.iset.database.viewmodel.GeoJsonListViewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
 import okhttp3.ResponseBody;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -121,6 +118,8 @@ public class SplashActivity extends AppCompatActivity {
             CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(SplashActivity.this,
                     appmainFolderName);
             createAppMainFolderUtils.createMainFolder();
+            createAppMainFolderUtils.createMediaFolder();
+            createAppMainFolderUtils.createDatabaseFolder();
 
 //            if(createAppMainFolderUtils.isFolderExist("media")) {
 //                String[] image = {"https://tinyurl.com/ybu9syvj", Environment.getExternalStorageDirectory() + "/"+appmainFolderName+"/"+"media/"+"downloadTestImage.jpg"};
@@ -137,21 +136,31 @@ public class SplashActivity extends AppCompatActivity {
 //            String formattedDate = df.format(date);
             String formattedDate = date.toString();
 
+//            if(sharedPreference.getBoolanValue(SharedPreferenceUtils.IS_APP_FIRST_TIME_LAUNCH , true)){
+//                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+//                finish();
+//            }
+
 
             if (formattedDate.equals(sharedPreference.getStringValue("time", ""))) {
-                SectionGridHomeActivity.start(SplashActivity.this);
+//                SectionGridHomeActivity.start(SplashActivity.this);
+                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+
             } else {
                 SharedPreferenceUtils.getInstance(this).setValue("time", formattedDate);
                 if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
                     //we are connected to a network
 //                    fetchGeoJsonCategoryList();
-                    SectionGridHomeActivity.start(SplashActivity.this);
+//                    SectionGridHomeActivity.start(SplashActivity.this);
+                    startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
 
                 } else {
                     // redirect to homepage27.1.1
 //                    SectionGridHomeActivity.start(SplashActivity.this);
-                    startActivity(new Intent(SplashActivity.this, SectionGridHomeActivity.class));
+//                    startActivity(new Intent(SplashActivity.this, SectionGridHomeActivity.class));
+                    startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+
                 }
             }
 

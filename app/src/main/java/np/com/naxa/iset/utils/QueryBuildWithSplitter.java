@@ -202,6 +202,7 @@ public class QueryBuildWithSplitter {
         return splittedStringList;
     }
 
+
     public List<MarkerDetailsKeyValue> splitedKeyValueList(List<String> rawStringList) {
 
         List<MarkerDetailsKeyValue> splittedStringKeyValueList = new ArrayList<MarkerDetailsKeyValue>();

@@ -1,7 +1,7 @@
 package np.com.naxa.iset.activity;
 
 import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,9 +10,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +55,7 @@ import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
 import np.com.naxa.iset.utils.DialogFactory;
 import np.com.naxa.iset.utils.SharedPreferenceUtils;
 import np.com.naxa.iset.utils.ToastUtils;
-import np.com.naxa.iset.viewmodel.MessageHelperViewModel;
+import np.com.naxa.iset.database.viewmodel.MessageHelperViewModel;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -65,6 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
 import static np.com.naxa.iset.network.UrlClass.REQUEST_OK;
 import static np.com.naxa.iset.network.retrofit.NetworkApiClient.getAPIClient;
 
@@ -83,7 +84,7 @@ public class ReportActivityOld extends AppCompatActivity implements LocationList
     private boolean specifyOthers;
 
     public static final int GEOPOINT_RESULT_CODE = 1994;
-    public static final String LOCATION_RESULT = "LOCATION_RESULT";
+//    public static final String LOCATION_RESULT = "LOCATION_RESULT";
     double myLat = 0.0;
     double myLong = 0.0;
 

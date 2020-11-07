@@ -2,8 +2,8 @@ package np.com.naxa.iset.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.LiveDataReactiveStreams;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.LiveDataReactiveStreams;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,14 +22,15 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
@@ -126,7 +127,7 @@ import np.com.naxa.iset.database.entity.GeoJsonListEntity;
 import np.com.naxa.iset.database.entity.HospitalFacilities;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.detailspage.MarkerDetailsDisplayActivity;
-import np.com.naxa.iset.emergencyContacts.ExpandableUseActivity;
+import np.com.naxa.iset.emergencyContacts.EmergencyContactsActivity;
 import np.com.naxa.iset.firebase.MessageActivity;
 import np.com.naxa.iset.geojasonPojo.lineStringAndMultiLineString.lineString.LineStringFeature;
 import np.com.naxa.iset.geojasonPojo.lineStringAndMultiLineString.lineString.LineStringFeatureCollection;
@@ -151,16 +152,16 @@ import np.com.naxa.iset.utils.maputils.MapMarkerOverlayUtils;
 import np.com.naxa.iset.utils.maputils.MyLocationService;
 import np.com.naxa.iset.utils.maputils.PolygonMapUtils;
 import np.com.naxa.iset.utils.maputils.SortingDistance;
-import np.com.naxa.iset.viewmodel.CommonPlacesAttribViewModel;
-import np.com.naxa.iset.viewmodel.EducationalInstitutesViewModel;
-import np.com.naxa.iset.viewmodel.GeoJsonCategoryViewModel;
-import np.com.naxa.iset.viewmodel.GeoJsonListViewModel;
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
-import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
+import np.com.naxa.iset.database.viewmodel.CommonPlacesAttribViewModel;
+import np.com.naxa.iset.database.viewmodel.EducationalInstitutesViewModel;
+import np.com.naxa.iset.database.viewmodel.GeoJsonCategoryViewModel;
+import np.com.naxa.iset.database.viewmodel.GeoJsonListViewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static np.com.naxa.iset.activity.OpenSpaceActivity.LOCATION_RESULT;
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
 
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, LocationListener, MapEventsReceiver {
@@ -543,19 +544,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         viewSwitcherSlideLayout.setInAnimation(in);
     }
 
-    private void setupBottomBar() {
-        bnve.enableAnimation(false);
-        bnve.enableShiftingMode(false);
-        bnve.enableItemShiftingMode(false);
 
-        bnve.setOnNavigationItemSelectedListener(item -> {
+    private void setupBottomBar() {
+        try {
+
+
+            bnve.enableAnimation(false);
+            bnve.enableShiftingMode(false);
+            bnve.enableItemShiftingMode(false);
+
+            bnve.setOnNavigationItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.menu_ask_for_help:
                     ReportActivityOld.start(HomeActivity.this);
                     break;
                 case R.id.menu_emergency_contacts:
-                    ExpandableUseActivity.start(HomeActivity.this);
+                    EmergencyContactsActivity.start(HomeActivity.this);
                     break;
                 case R.id.menu_open_spaces:
                     if (NetworkUtils.isNetworkAvailable()) {
@@ -568,11 +573,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //                    HospitalFilterActivity.start(HomeActivity.this);
                     break;
             }
-            return true;
+                return true;
         });
-        int gridHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 550, getResources().getDisplayMetrics());
-        SlidingUpPanelLayout.LayoutParams params = new SlidingUpPanelLayout.LayoutParams(SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, gridHeight);
-        dragView.setLayoutParams(params);
+            int gridHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 550, getResources().getDisplayMetrics());
+            SlidingUpPanelLayout.LayoutParams params = new SlidingUpPanelLayout.LayoutParams(SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, gridHeight);
+            dragView.setLayoutParams(params);
+
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     private void toggleSliderHeight() {
@@ -834,11 +844,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -902,6 +908,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             EasyPermissions.requestPermissions(this, "Provide location permission.",
                     RESULT_LOCATION_PERMISSION, Manifest.permission.ACCESS_FINE_LOCATION);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
 

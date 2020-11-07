@@ -1,9 +1,9 @@
 package np.com.naxa.iset.activity;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.Contact;
-import np.com.naxa.iset.viewmodel.ContactViewModel;
+import np.com.naxa.iset.database.viewmodel.ContactViewModel;
 
 public class ContactActivity extends AppCompatActivity {
 

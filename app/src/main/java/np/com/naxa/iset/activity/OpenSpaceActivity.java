@@ -1,12 +1,12 @@
 package np.com.naxa.iset.activity;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +31,10 @@ import butterknife.OnClick;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.database.entity.OpenSpace;
 import np.com.naxa.iset.gps.GeoPointActivity;
-import np.com.naxa.iset.viewmodel.OpenSpaceViewModel;
+import np.com.naxa.iset.database.viewmodel.OpenSpaceViewModel;
+
+import static np.com.naxa.iset.report.ReportActivity.LOCATION_RESULT;
+
 
 public class OpenSpaceActivity extends AppCompatActivity {
 
@@ -51,7 +54,6 @@ public class OpenSpaceActivity extends AppCompatActivity {
 
 
     public static final int GEOPOINT_RESULT_CODE = 1994;
-    public static final String LOCATION_RESULT = "LOCATION_RESULT";
     double myLat = 0.0;
     double myLong = 0.0;
     Map<OpenSpace, Float> hashMapWithDistance;

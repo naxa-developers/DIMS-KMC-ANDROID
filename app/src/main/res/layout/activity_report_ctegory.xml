@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".report.ReportCtegoryActivity">
+
+    <include layout="@layout/toolbar_purple"
+        android:id="@+id/toolbar">
+    </include>
+
+    <LinearLayout
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/tvCivicForm"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Civic Issues"
+            android:textColor="@color/slate_black"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@color/listItemFirstBG"
+            android:textSize="@dimen/material_text_display1"
+            />
+
+        <Button
+            android:id="@+id/tvDisasterForm"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Disaster Incidents"
+            android:textColor="@color/slate_black"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@color/listItemSecondBG"
+            android:textSize="@dimen/material_text_display1"
+            />
+
+        <Button
+            android:id="@+id/tvWardForm"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Ward Form"
+            android:textColor="@color/slate_black"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="@dimen/material_text_display1"
+            android:background="@color/listItemFirstBG"/>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

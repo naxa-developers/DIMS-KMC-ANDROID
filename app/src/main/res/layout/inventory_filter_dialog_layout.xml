@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
+    >
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center_horizontal"
+        android:text="Search Emergency Material"
+        android:textColor="@color/slate_black"
+        android:textSize="@dimen/material_text_title"
+        android:textStyle="bold" />
+
+
+    <!--Category type-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:text="Select Category"
+        android:textColor="@color/slate_black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:background="@drawable/rectangle_rounded_light_purple"
+
+        android:padding="@dimen/spacing_medium">
+
+        <Spinner
+            android:id="@+id/spn_category_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white" />
+    </LinearLayout>
+    <!--Category type-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:text="Select Sub Category"
+        android:textColor="@color/slate_black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:background="@drawable/rectangle_rounded_light_purple"
+
+        android:padding="@dimen/spacing_medium">
+
+        <Spinner
+            android:id="@+id/spn_sub_category_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/isetPurple"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/isetPurple"
+            android:text="Cancel"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+        <Button
+            android:id="@+id/btn_search"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/isetPurple"
+            android:text="Search"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</LinearLayout>

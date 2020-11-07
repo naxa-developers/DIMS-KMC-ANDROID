@@ -1,14 +1,14 @@
 package np.com.naxa.iset.hospitalfilter;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import np.com.naxa.iset.viewmodel.HospitalFacilitiesVewModel;
+import np.com.naxa.iset.database.viewmodel.HospitalFacilitiesVewModel;
 
 public class GetDataFromDatabase {
     private static final String TAG = "GetDataFromDatabase";

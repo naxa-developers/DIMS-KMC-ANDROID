@@ -1,0 +1,389 @@
+package np.com.naxa.iset.emergencyContacts;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import androidx.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import android.util.Log;
+import android.util.Pair;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.franmontiel.localechanger.LocaleChanger;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import np.com.naxa.iset.R;
+import np.com.naxa.iset.database.viewmodel.ContactCategoryListViewModel;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListDetails;
+import np.com.naxa.iset.emergencyContacts.model.ContactCategoryListResponse;
+import np.com.naxa.iset.home.HomeActivity;
+import np.com.naxa.iset.network.UrlClass;
+import np.com.naxa.iset.network.retrofit.NetworkApiClient;
+import np.com.naxa.iset.network.retrofit.NetworkApiInterface;
+import np.com.naxa.iset.utils.DialogFactory;
+import np.com.naxa.iset.utils.NetworkUtils;
+import np.com.naxa.iset.utils.ToastUtils;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static np.com.naxa.iset.Permissions.RC_PHONE;
+
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
+public class EmergencyContactsActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+    RecyclerView mRecyclerView;
+    ExpandableItemAdapter adapter;
+    ArrayList<MultiItemEntity> list;
+
+    EmergencyContactsRepository repository;
+
+    String currentNumber = null;
+    int jsonPosition;
+    private static final String TAG = "EmergencyContacts";
+    @BindView(R.id.toolbar_general)
+    Toolbar toolbar;
+    @BindView(R.id.btnTollFreeNo1)
+    Button btnTollFreeNo1;
+    @BindView(R.id.btnTollFreeNo2)
+    Button btnTollFreeNo2;
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, EmergencyContactsActivity.class);
+        context.startActivity(intent);
+    }
+
+    ContactCategoryListViewModel contactCategoryListViewModel;
+    NetworkApiInterface apiInterface;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_expandable_item_use);
+        ButterKnife.bind(this);
+
+        contactCategoryListViewModel = ViewModelProviders.of(this).get(ContactCategoryListViewModel.class);
+        apiInterface = NetworkApiClient.getAPIClient().create(NetworkApiInterface.class);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+
+        repository = new EmergencyContactsRepository();
+
+        initToolbar();
+
+        getContactList(0);
+
+//        list = generateData();
+//
+//        adapter = new ExpandableItemAdapter(list);
+
+        final GridLayoutManager manager = new GridLayoutManager(this, 3);
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return adapter.getItemViewType(position) == ExpandableItemAdapter.TYPE_PERSON ? 1 : manager.getSpanCount();
+            }
+        });
+
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Level1Item item = (Level1Item) adapter.getItem(position);
+                currentNumber = item.subTitle;
+                checkPhonePermissionAndGo();
+            }
+        });
+
+        mRecyclerView.setAdapter(adapter);
+        // important! setLayoutManager should be called after setAdapter
+        mRecyclerView.setLayoutManager(manager);
+
+
+    }
+
+    private void initToolbar() {
+//        Toolbar toolbar = findViewById(R.id.toolbar_general);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(EmergencyContactsActivity.this.getResources().getString(R.string.emergency_contacts));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        if(NetworkUtils.isNetworkAvailable()) {
+            fetchContactCategoryListFromServer();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void makeCall() {
+        if (currentNumber == null) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + currentNumber));
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @AfterPermissionGranted(RC_PHONE)
+    private void checkPhonePermissionAndGo() {
+        String phonePerm = Manifest.permission.CALL_PHONE;
+        if (EasyPermissions.hasPermissions(this, phonePerm)) {
+            makeCall();
+        } else {
+            EasyPermissions.requestPermissions(this, "Allow phone permission to make call.",
+                    RC_PHONE, phonePerm);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == RC_PHONE) {
+            makeCall();
+        }
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == RC_PHONE) {
+            if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+                new AppSettingsDialog.Builder(this).build().show();
+            } else {
+                ToastUtils.showToast("Phone permission is required to make call.");
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_PHONE) {
+            checkPhonePermissionAndGo();
+        }
+    }
+
+
+    ArrayList<MultiItemEntity> res = new ArrayList<>();
+    Level0Item lv0 = null;
+    Level1Item lv1 = null;
+
+    private Level0Item getContactList(int position) {
+        Log.d(TAG, "onNext: " + position);
+
+        repository.getContactJsonString(position)
+                .subscribe(new Observer<Pair>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Pair pair) {
+                        String assetName = (String) pair.first;
+                        String fileContent = (String) pair.second;
+//                        Log.d(TAG, "onNext: "+fileContent);
+
+                        lv0 = new Level0Item(getContactCategoryName(position), "");
+                        Gson gson = new Gson();
+                        try {
+                            JSONArray jsonArray = new JSONArray(fileContent);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                lv1 = new Level1Item(jsonObject.getString("Name"),
+                                        (jsonObject.getString("Phone no.") == null) ? (" ") : (jsonObject.getString("Phone no.")),
+                                        jsonObject.getString("Post") + ", " + jsonObject.getString("Organization"),
+                                        jsonObject.getString("Address"));
+                                lv0.addSubItem(lv1);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(EmergencyContactsActivity.this, "An error occurred while loading json", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: " + jsonPosition);
+                        jsonPosition++;
+                        if (jsonPosition > 6) {
+                            list = res;
+                            adapter = new ExpandableItemAdapter(list);
+                            return;
+                        }
+                        res.add(lv0);
+                        getContactList(jsonPosition);
+
+                    }
+                });
+        return lv0;
+    }
+
+    private String getContactCategoryName(int position) {
+        String categoryName = "";
+        switch (position) {
+            case 0:
+                categoryName = getApplicationContext().getResources().getString(R.string.chairpersons_of_local_units);
+                break;
+            case 1:
+                categoryName = getApplicationContext().getResources().getString(R.string.chief_of_local_level_offices);
+                break;
+            case 2:
+                categoryName = getApplicationContext().getString(R.string.elected_representatives);
+                break;
+            case 3:
+                categoryName = getApplicationContext().getString(R.string.municipal_executive_members);
+                break;
+
+            case 4:
+                categoryName = getApplicationContext().getString(R.string.municipality_level_disaster_management);
+                break;
+            case 5:
+                categoryName = getApplicationContext().getString(R.string.nntds_executive_commitee);
+                break;
+        }
+        return categoryName;
+    }
+
+
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        newBase = LocaleChanger.configureBaseContext(newBase);
+//        super.attachBaseContext(newBase);
+//    }
+
+    @OnClick({R.id.btnTollFreeNo1, R.id.btnTollFreeNo2})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnTollFreeNo1:
+
+                currentNumber = "9898999986";
+                checkPhonePermissionAndGo();
+                break;
+            case R.id.btnTollFreeNo2:
+                currentNumber = "9898999999";
+                checkPhonePermissionAndGo();
+                break;
+        }
+    }
+
+
+    private void fetchContactCategoryListFromServer(){
+
+        apiInterface.getContactCategoryListResponse(UrlClass.API_ACCESS_TOKEN)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<ContactCategoryListResponse>() {
+                    @Override
+                    public void onNext(ContactCategoryListResponse contactCategoryListResponse) {
+
+                        if(contactCategoryListResponse.getError() == 1){
+                            DialogFactory.createCustomErrorDialog(EmergencyContactsActivity.this, contactCategoryListResponse.getMessage(),
+                                    new DialogFactory.CustomDialogListener() {
+                                        @Override
+                                        public void onClick() {
+
+                                        }
+                                    }).show();
+                        }
+                        if(contactCategoryListResponse.getError() == 0 && contactCategoryListResponse.getData() != null){
+                            saveContactCategoryListToDatabase(contactCategoryListResponse.getData());
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DialogFactory.createCustomErrorDialog(EmergencyContactsActivity.this, e.getMessage(), new DialogFactory.CustomDialogListener() {
+                                    @Override
+                                    public void onClick() {
+
+                                    }
+                                }).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    private void saveContactCategoryListToDatabase(List<ContactCategoryListDetails> contactCategoryListDetails){
+        Observable.just(contactCategoryListDetails)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapIterable(new Function<List<ContactCategoryListDetails>, Iterable<ContactCategoryListDetails>>() {
+                    @Override
+                    public Iterable<ContactCategoryListDetails> apply(List<ContactCategoryListDetails> contactCategoryListDetails) throws Exception {
+                        return contactCategoryListDetails;
+                    }
+                })
+                .map(new Function<ContactCategoryListDetails, ContactCategoryListDetails>() {
+                    @Override
+                    public ContactCategoryListDetails apply(ContactCategoryListDetails contactCategoryListDetails) throws Exception {
+                        return contactCategoryListDetails;
+                    }
+                })
+                .subscribe(new DisposableObserver<ContactCategoryListDetails>() {
+                    @Override
+                    public void onNext(ContactCategoryListDetails contactCategoryListDetails) {
+                        contactCategoryListViewModel.insert(contactCategoryListDetails);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+}

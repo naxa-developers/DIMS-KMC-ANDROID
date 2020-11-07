@@ -3,30 +3,48 @@ package np.com.naxa.iset.utils.imageutils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import android.text.Html;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.ExecutionException;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import np.com.naxa.iset.R;
 import np.com.naxa.iset.home.ISET;
 import np.com.naxa.iset.utils.CreateAppMainFolderUtils;
 
 public class LoadImageUtils {
+    private static final String TAG = "LoadImageUtils";
 
-    public static int getImageFromDrawable(Context context, String imageName){
+    public static int getImageFromDrawable(@NonNull Context context, String imageName){
         int drawableResourceId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
 
         return drawableResourceId;
     }
 
-    public static Icon getImageIconFromDrawable(Context context, String imageName){
+    public static Icon getImageIconFromDrawable(@NonNull Context context, String imageName){
 
         Bitmap bitmap = BitmapFactory.decodeResource(
                 context.getResources(), getImageFromDrawable(context, imageName));
@@ -39,7 +57,7 @@ public class LoadImageUtils {
         return  icon;
     }
 
-    public static Bitmap getImageBitmapFromDrawable(Context context, String imageName){
+    public static Bitmap getImageBitmapFromDrawable(@NonNull Context context, String imageName){
 
         Bitmap bitmap = BitmapFactory.decodeResource(
                 context.getResources(), getImageFromDrawable(context, imageName));
@@ -54,7 +72,7 @@ public class LoadImageUtils {
      * @param imgIn - Source image. It will be released, and should not be used more
      * @return a copy of imgIn, but muttable.
      */
-    public static Bitmap convertToMutable(Context context, Bitmap imgIn, String imageName, int outHeight, int outWidth) {
+    public static Bitmap convertToMutable(Context context, @NonNull Bitmap imgIn, String imageName, int outHeight, int outWidth) {
         CreateAppMainFolderUtils createAppMainFolderUtils = new CreateAppMainFolderUtils(context, CreateAppMainFolderUtils.appmainFolderName);
         try {
             //this is the file going to use temporally to save the bytes.
@@ -104,4 +122,100 @@ public class LoadImageUtils {
         return imgIn;
     }
 
+
+    public static void imageSaveFileToSpecificDirectory(Bitmap imageToSave, String fileName, String filePath) {
+
+        File file = new File(new File(filePath), fileName+".jpg");
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadImageToViewFromSrc(@NonNull ImageView imageView, String imageSrc){
+        if(!TextUtils.isEmpty(imageSrc)) {
+            Glide
+                    .with(imageView.getContext())
+                    .load(imageSrc)
+                    .fitCenter()
+                    .into(imageView);
+        }
+    }
+
+
+    public static class ImageGetter implements Html.ImageGetter {
+
+        public Drawable getDrawable(String source) {
+            final int[] id = new int[1];
+            final Bitmap[] bitmap = {null};
+
+            if (!source.equals("")) {
+                Observable.just(source)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe(new DisposableObserver<String>() {
+                            @Override
+                            public void onNext(String s) {
+                                try {
+                                    File file = new File(Glide.with(ISET.getInstance())
+                                            .load(new File(source))
+                                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                                            .get(), ".jpg");
+
+                                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                                    bmOptions.inJustDecodeBounds = true;
+                                    bitmap[0] = BitmapFactory.decodeFile(file.getAbsoluteFile().getAbsolutePath(),bmOptions);
+                                    Log.d(TAG, "onNext: "+bitmap[0].getByteCount());
+//                    if(bmOptions.outWidth != -1 && bmOptions.outHeight != -1){
+
+//                    }
+
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                id[0] = R.drawable.earthquake;
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+
+                            @Override
+                            public void onComplete() {
+                            }
+                        });
+            }
+
+
+
+            else {
+                return null;
+            }
+
+//            Drawable d = ISET.getInstance().getResources().getDrawable(id);
+//            d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
+//            return d;
+
+            BitmapDrawable drawable = new BitmapDrawable(ISET.getInstance().getResources(), bitmap[0]);
+            drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+            return drawable;
+
+        }
+
+        public String getSrc(String source){
+            String source1 = null;
+            return source1;
+        }
+
+
+    }
 }

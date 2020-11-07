@@ -2,7 +2,7 @@ package np.com.naxa.iset.drr_dictionary;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.RawRes;
+import androidx.annotation.RawRes;
 
 
 import java.io.BufferedReader;
